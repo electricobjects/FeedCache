@@ -8,6 +8,7 @@
 
 import UIKit
 import XCTest
+import FeedKit
 
 class FeedKitTests: XCTestCase {
     
@@ -21,8 +22,7 @@ class FeedKitTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
+    func testFeed() {
         XCTAssert(true, "Pass")
     }
     
