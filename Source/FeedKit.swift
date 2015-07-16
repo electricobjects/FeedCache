@@ -57,83 +57,45 @@ public class Controller {
     }
 }
 
-protocol FeedItem {
-    var sortableReference: SortableReference { get }
+public protocol FeedItem {
+     var sortableReference: SortableReference { get }
 }
 
 
-protocol FeedKitType{
+public protocol FeedKitType{
     var cacheName: String {get}
     
     func fetchItems(page: Int, itemsPerPage: Int, success:(newItems:[FeedItem])->(), failure:(error: NSError)->())
     
 }
 
-struct SortableReference: Hashable, Equatable {
+public struct SortableReference: Hashable, Equatable {
     let reference: FeedItem
-    init ( reference: FeedItem, hashValue: Int) {
+
+    public init ( reference: FeedItem, hashValue: Int) {
         self.reference = reference
         self.hashValue = hashValue
     }
     
-    var hashValue: Int
+    public var hashValue: Int
 }
-func ==(lhs: SortableReference, rhs: SortableReference)->Bool {
+public func ==(lhs: SortableReference, rhs: SortableReference)->Bool {
     return lhs.hashValue == rhs.hashValue
 }
 
 
-enum MyFeedTypes: FeedKitType {
-    case Test
-    
-    var cacheName : String {
-        switch self {
-        case Test:
-            return "test"
-        }
-    }
-    
-    func fetchItems(page: Int, itemsPerPage: Int, success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
-        switch self {
-        case Test:
-            let items: [FeedItem] = [TestItem(name: "Foo"), TestItem(name: "Bar"), TestItem(name: "Baz")]
-            success(newItems: items)
-        }
-    }
-}
-
-struct TestItem: FeedItem {
-    var name: String?
-    
-    init(name: String){
-        self.name = name
-    }
-    
-    var sortableReference: SortableReference {
-        return SortableReference(reference: self, hashValue: self.hashValue)
-    }
-    
-    var hashValue : Int {
-        if let name = name {
-            return name.hashValue
-        }
-        else {
-            return 0
-        }
-    }
-}
 
 public class Cache {
     
     public init() {}
     
-    var cachedItems: [FeedItem] = []
+    public var cachedItems: [FeedItem] = []
     
-    func addItems(items: [FeedItem]){
+    public func addItems(items: [FeedItem]){
         cachedItems += items
     }
     
-    func clearCache() {
+    public func clearCache() {
         cachedItems.removeAll()
     }
 }
