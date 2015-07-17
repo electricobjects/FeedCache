@@ -8,22 +8,23 @@
 
 import Foundation
 
-protocol FeedKitDelegate {
+public protocol FeedKitDelegate {
     func fetchItemsComplete()
 }
 
-public class Controller {
-    var items: [FeedItem]! = []
-    var delegate: FeedKitDelegate?
-    var feedType: FeedKitType!
+public class FeedController {
+    public var items: [FeedItem]! = []
+    public var delegate: FeedKitDelegate?
+    private(set) var  feedType: FeedKitType!
+    var cacheData: Bool = true
     var caches: [String : Cache]?
-    var cache: Cache? {
+    public var cache: Cache? {
         return caches?[feedType.cacheName]
     }
     
-    init(feedType: FeedKitType){ self.feedType = feedType }
+    public init(feedType: FeedKitType){ self.feedType = feedType }
     
-    func loadCache(){
+    public func loadCache(){
         if let cache = cache {
             items = cache.cachedItems
         }
@@ -33,7 +34,7 @@ public class Controller {
         self.items = self.items + items
     }
     
-    func fetchItems(pageNumber: Int, itemsPerPage: Int){
+    public func fetchItems(pageNumber: Int, itemsPerPage: Int){
         feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, success: {
             [weak self](newItems) -> () in
             self?._processNewItems(newItems, pageNumber: pageNumber)
@@ -53,14 +54,12 @@ public class Controller {
                 
             }
         }
-        
     }
 }
 
 public protocol FeedItem {
      var sortableReference: SortableReference { get }
 }
-
 
 public protocol FeedKitType{
     var cacheName: String {get}
@@ -79,23 +78,9 @@ public struct SortableReference: Hashable, Equatable {
     
     public var hashValue: Int
 }
+
 public func ==(lhs: SortableReference, rhs: SortableReference)->Bool {
     return lhs.hashValue == rhs.hashValue
 }
 
 
-
-public class Cache {
-    
-    public init() {}
-    
-    public var cachedItems: [FeedItem] = []
-    
-    public func addItems(items: [FeedItem]){
-        cachedItems += items
-    }
-    
-    public func clearCache() {
-        cachedItems.removeAll()
-    }
-}

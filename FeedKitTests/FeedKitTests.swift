@@ -10,6 +10,49 @@ import UIKit
 import XCTest
 import FeedKit
 
+
+enum TestFeedKitType: FeedKitType {
+    case TestFeedType
+    
+    var cacheName : String {
+        return "test"
+    }
+    
+    func fetchItems(page: Int, itemsPerPage: Int, success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
+        let items: [FeedItem] = [TestItem(name: "Foo"), TestItem(name: "Bar"), TestItem(name: "Baz")]
+        success(newItems: items)
+    }
+}
+
+class TestItem: FeedItem, NSCoding {
+    var name: String?
+    
+    init(name: String){
+        self.name = name
+    }
+    
+    @objc required init(coder aDecoder: NSCoder){
+        name = aDecoder.decodeObjectForKey("name") as? String
+    }
+    
+    @objc func encodeWithCoder(aCoder: NSCoder){
+        aCoder.encodeObject(name, forKey: "name")
+    }
+    
+    var sortableReference: SortableReference {
+        return SortableReference(reference: self, hashValue: self.hashValue)
+    }
+    
+    var hashValue : Int {
+        if let name = name {
+            return name.hashValue
+        }
+        else {
+            return 0
+        }
+    }
+}
+
 class FeedKitTests: XCTestCase {
     
     override func setUp() {
@@ -23,6 +66,8 @@ class FeedKitTests: XCTestCase {
     }
     
     func testFeed() {
+        let fk = FeedKit.FeedController(feedType: TestFeedKitType.TestFeedType)
+        
         XCTAssert(true, "Pass")
     }
     

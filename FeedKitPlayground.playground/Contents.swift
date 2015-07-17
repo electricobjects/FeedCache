@@ -25,7 +25,7 @@ enum MyFeedTypes: FeedKitType {
     }
 }
 
-struct TestItem: FeedItem {
+class TestItem: FeedItem {
     var name: String?
     
     init(name: String){
@@ -46,15 +46,13 @@ struct TestItem: FeedItem {
     }
 }
 
-
 let testCache = Cache()
 testCache.addItems([TestItem(name: "Uno"), TestItem(name: "Dos"), TestItem(name: "Foo")])
 let caches = ["test" : testCache]
 
-
-//var fk = Controller(feedType: MyFeedTypes.Test as FeedKitType)
+var fk = FeedKit.FeedController(feedType: MyFeedTypes.Test as FeedKitType)
 //fk.caches = caches
-//fk.loadCache()
+fk.loadCache()
 
 //fk.fetchItems(1, itemsPerPage: 10)
 //fk.items
