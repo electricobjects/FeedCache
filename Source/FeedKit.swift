@@ -18,6 +18,8 @@ public class FeedController {
     private(set) var  feedType: FeedKitType!
     var cacheData: Bool = true
     var caches: [String : Cache]?
+    var redundantItemsAllowed : Bool = false //TODO implement this
+    
     public var cache: Cache? {
         return caches?[feedType.cacheName]
     }

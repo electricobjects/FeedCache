@@ -19,7 +19,14 @@ enum TestFeedKitType: FeedKitType {
     }
     
     func fetchItems(page: Int, itemsPerPage: Int, success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
-        let items: [FeedItem] = [TestItem(name: "Foo"), TestItem(name: "Bar"), TestItem(name: "Baz")]
+        var items: [FeedItem] = []
+        if page == 1 {
+            items = [TestItem(name: "Foo"), TestItem(name: "Bar"), TestItem(name: "Baz")]
+        }
+        else if page == 2 {
+            items = [TestItem(name: "Baz"), TestItem(name: "Bing"), TestItem(name: "Boo")]
+        }
+    
         success(newItems: items)
     }
 }
@@ -44,15 +51,6 @@ class TestItem: FeedItem, NSCoding {
     var sortableReference: SortableReference {
         return SortableReference(reference: self, hashValue: self.hashValue)
     }
-    
-    /*var hashValue : Int {
-        if let name = name {
-            return name.hashValue
-        }
-        else {
-            return 0
-        }
-    }*/
 }
 
 class FeedKitTests: XCTestCase {
@@ -69,7 +67,7 @@ class FeedKitTests: XCTestCase {
         super.tearDown()
     }
     
-    func testAddItemsToCache() {
+    func test_001_addItemsToCache() {
         let cache = Cache(name: TestFeedKitType.TestFeedType.cacheName)
   
         let expectation = self.expectationWithDescription("Save cache expectation")
@@ -87,11 +85,39 @@ class FeedKitTests: XCTestCase {
         }
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
+    func test_005_fetchItemsFromCache() {
+        
+        //Test success is dependent on there already being items in the cache
+        
+        let cache = Cache(name: TestFeedKitType.TestFeedType.cacheName)
+        let expectation = self.expectationWithDescription("Load cache expectation")
+        var testSuccess = false
+        cache.loadCache { (success) -> () in
+            testSuccess = success && cache.items.count > 0
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1) { (error) -> Void in
+            XCTAssert(testSuccess, "Load cache test")
         }
     }
+    
+    func test_010_clearCache() {
+        //This test is dependent on the cache state being set by previous tests.
+        //If the cache were already empty before this test was run it would 
+        //succeed even if it were not operating correctly
+        
+        let cache = Cache(name: TestFeedKitType.TestFeedType.cacheName)
+        cache.loadCache { (success) -> () in
+           print(success)
+        }
+        cache.synchronize()
+        cache.clearCache()
+        cache.synchronize()
+
+        XCTAssert(cache.items.count == 0, "Cache is Empty")
+    }
+    
+
     
 }
