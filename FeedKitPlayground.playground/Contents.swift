@@ -25,29 +25,40 @@ enum MyFeedTypes: FeedKitType {
     }
 }
 
-class TestItem: FeedItem {
+@objc
+class TestItem: FeedItem, NSCoding {
     var name: String?
     
     init(name: String){
+        super.init()
         self.name = name
+    }
+    
+    @objc required init(coder aDecoder: NSCoder){
+        name = aDecoder.decodeObjectForKey("name") as? String
+    }
+    
+    @objc func encodeWithCoder(aCoder: NSCoder){
+        aCoder.encodeObject(name, forKey: "name")
     }
     
     var sortableReference: SortableReference {
         return SortableReference(reference: self, hashValue: self.hashValue)
     }
     
-    var hashValue : Int {
-        if let name = name {
-            return name.hashValue
-        }
-        else {
-            return 0
-        }
+    /*var hashValue : Int {
+    if let name = name {
+    return name.hashValue
     }
+    else {
+    return 0
+    }
+    }*/
 }
 
-let testCache = Cache()
-testCache.addItems([TestItem(name: "Uno"), TestItem(name: "Dos"), TestItem(name: "Foo")])
+let testCache = Cache(name: "Foo")
+let items = [TestItem(name: "Uno"), TestItem(name: "Dos"), TestItem(name: "Foo")]
+testCache.addItems(items, forPageNumber: 1)
 let caches = ["test" : testCache]
 
 var fk = FeedKit.FeedController(feedType: MyFeedTypes.Test as FeedKitType)

@@ -25,9 +25,9 @@ public class FeedController {
     public init(feedType: FeedKitType){ self.feedType = feedType }
     
     public func loadCache(){
-        if let cache = cache {
-            items = cache.cachedItems
-        }
+//        if let cache = cache {
+//            items = cache.cachedItems
+//        }
     }
     
     private func _addItems(items: [FeedItem]){
@@ -57,8 +57,11 @@ public class FeedController {
     }
 }
 
-public protocol FeedItem {
-     var sortableReference: SortableReference { get }
+public class FeedItem: NSObject {
+    
+    var sortableReference: SortableReference {
+        assert(false, "This must be overridden")
+    }
 }
 
 public protocol FeedKitType{

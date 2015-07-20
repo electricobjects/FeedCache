@@ -8,25 +8,34 @@
 
 import Foundation
 
-public class Cache {
+public class Cache{
+    
     let name: String!
     let saveOperationQueue = NSOperationQueue()
+    let apiCacheFolderName = "FeedKitCache"
+    public var saved = false
     
-    public init(name: String) {self.name = name}
-    
-    public var cachedItems: [FeedItem] = []
-    
-    public func addItems(items: [FeedItem], forPageNumber: Int){
-        //cachedItems += items
+    public init(name: String) {
+        self.name = name
+        
         
     }
     
-    public func removeAll() {
-        cachedItems.removeAll()
+    //public var cachedItems: [FeedItems] = []
+    
+    public func addItems(items: [FeedItem], forPageNumber pageNumber: Int){
+        
+        self.saved = false
+        let data = NSKeyedArchiver.archivedDataWithRootObject(items)
+        saveData(pageNumber, data: data)
     }
     
-    func cacheData(pageNumber: Int, data : NSData){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+    public func removeAll() {
+//        cachedItems.removeAll()
+    }
+    
+    func saveData(pageNumber: Int, data : NSData){
+        saveOperationQueue.addOperationWithBlock {
             [weak self]() -> Void in
             
             if let
@@ -34,20 +43,20 @@ public class Cache {
                 folderName = strongSelf.name
             {
                 let folderPath = strongSelf.folderPathFromFolderName(folderName, insideCacheFolder: true)
-                do {
-                    try strongSelf.createFolderIfNeeded(folderPath)
-                }
-                catch _ {
-                    return
-                }
+                print(folderPath)
+                strongSelf.createFolderIfNeeded(folderPath)
+                
                 let filename = "\(pageNumber)"
                 if let
                     filePath = folderPath.stringByAppendingPathComponent(filename).stringByAppendingPathExtension(".archived")
                 {
                     data.writeToFile(filePath, atomically: true)
+                    if strongSelf.saveOperationQueue.operationCount == 1 {
+                        strongSelf.saved = true
+                    }
                 }
             }
-        })
+        }
     }
     
     func getCachedData(pageNumber: Int, completion: (NSData?)->()){
@@ -58,7 +67,7 @@ public class Cache {
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+        saveOperationQueue.addOperationWithBlock {
             [weak self]() -> Void in
 
             if let
@@ -81,26 +90,30 @@ public class Cache {
             else {
                 mainQueueCompletion(nil)
             }
-        })
+        }
     }
     
-    let apiCacheFolderName = "apiCache"
     
-    func folderPathFromFolderName(folderName : String, insideCacheFolder: Bool) -> String{
+    func folderPathFromFolderName(folderName : String, insideCacheFolder: Bool) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
         var documentsDirectory: AnyObject = paths[0]
         
         if insideCacheFolder {
             documentsDirectory = documentsDirectory.stringByAppendingPathComponent(apiCacheFolderName)
         }
+        
         let folderPath = documentsDirectory.stringByAppendingPathComponent(folderName)
         return folderPath
-        
     }
     
-    func createFolderIfNeeded(folderPath: String) throws {
+    func createFolderIfNeeded(folderPath: String)  {
         if (!NSFileManager.defaultManager().fileExistsAtPath(folderPath)) {
-            try NSFileManager.defaultManager().createDirectoryAtPath(folderPath, withIntermediateDirectories: false, attributes: nil)
+            do {
+                try NSFileManager.defaultManager().createDirectoryAtPath(folderPath, withIntermediateDirectories: true, attributes: nil)
+            }
+            catch let error as NSError {
+                print(error)
+            }
         }
     }
 

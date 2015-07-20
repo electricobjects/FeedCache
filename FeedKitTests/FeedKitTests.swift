@@ -24,10 +24,12 @@ enum TestFeedKitType: FeedKitType {
     }
 }
 
+@objc
 class TestItem: FeedItem, NSCoding {
     var name: String?
     
     init(name: String){
+        super.init()
         self.name = name
     }
     
@@ -43,17 +45,19 @@ class TestItem: FeedItem, NSCoding {
         return SortableReference(reference: self, hashValue: self.hashValue)
     }
     
-    var hashValue : Int {
+    /*var hashValue : Int {
         if let name = name {
             return name.hashValue
         }
         else {
             return 0
         }
-    }
+    }*/
 }
 
 class FeedKitTests: XCTestCase {
+    
+    let testItems : [FeedItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
     
     override func setUp() {
         super.setUp()
@@ -65,10 +69,22 @@ class FeedKitTests: XCTestCase {
         super.tearDown()
     }
     
-    func testFeed() {
-        let fk = FeedKit.FeedController(feedType: TestFeedKitType.TestFeedType)
+    func testAddItemsToCache() {
+        let cache = Cache(name: TestFeedKitType.TestFeedType.cacheName)
+  
+        let expectation = self.expectationWithDescription("Save cache expectation")
         
-        XCTAssert(true, "Pass")
+        cache.addItems(testItems, forPageNumber: 1)
+        
+        let delay = 1.0
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
+        dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+            expectation.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(5) { (error) -> Void in
+            XCTAssert(cache.saved, "Is Cache saved")
+        }
     }
     
     func testPerformanceExample() {
