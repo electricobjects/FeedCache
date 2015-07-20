@@ -51,6 +51,13 @@ class TestItem: FeedItem, NSCoding {
     var sortableReference: SortableReference {
         return SortableReference(reference: self, hashValue: self.hashValue)
     }
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        if let object = object as? TestItem {
+            return name == object.name
+        }
+        return false
+    }
 }
 
 class FeedKitTests: XCTestCase {
@@ -72,7 +79,7 @@ class FeedKitTests: XCTestCase {
   
         let expectation = self.expectationWithDescription("Save cache expectation")
         
-        cache.addItems(testItems, forPageNumber: 1)
+        cache.addItems(testItems)
         
         let delay = 1.0
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
@@ -111,12 +118,30 @@ class FeedKitTests: XCTestCase {
         cache.loadCache { (success) -> () in
            print(success)
         }
-        cache.synchronize()
+        cache.waitUntilSynchronized()
         cache.clearCache()
-        cache.synchronize()
+        cache.waitUntilSynchronized()
 
         XCTAssert(cache.items.count == 0, "Cache is Empty")
     }
+    
+    func test_015_addMoreItems() {
+        let cache = Cache(name: TestFeedKitType.TestFeedType.cacheName)
+        cache.clearCache()
+        let items1 : [FeedItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
+        let items2 : [FeedItem] = [TestItem(name: "test2"), TestItem(name: "test3"), TestItem(name: "test4")]
+
+        cache.addItems(items1)
+        cache.loadCache()
+        cache.waitUntilSynchronized()
+        XCTAssert(cache.items.count == 3, "add more items")
+
+        cache.addItems(items2)
+        cache.loadCache()
+        cache.waitUntilSynchronized()
+        XCTAssert(cache.items.count == 6, "add more items")
+    }
+    
     
 
     

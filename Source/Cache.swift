@@ -25,22 +25,22 @@ public class Cache{
     
     //public var cachedItems: [FeedItems] = []
     
-    public func addItems(items: [FeedItem], forPageNumber pageNumber: Int){
+    public func addItems(items: [FeedItem]){
         self.saved = false
         self.items = self.items + items
         let data = NSKeyedArchiver.archivedDataWithRootObject(self.items)
-        _saveData(pageNumber, data: data)
+        _saveData(data)
     }
     
     // Completion will fire on main queue
-    public func loadCache(completion: (success: Bool)->()){
+    public func loadCache(completion: ( (success: Bool)->() )? = nil){
         
         // Once background queue is exited, synchronize will unblock
         // thus completion will fire **after** synchronize unblocks
         let mainQueueCompletion : (success: Bool) -> () = {
             (success: Bool) -> () in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                completion(success: success)
+                completion?(success: success)
             })
         }
         
@@ -48,7 +48,6 @@ public class Cache{
             if let data = data {
                 let unarchivedItems = NSKeyedUnarchiver.unarchiveObjectWithData(data)
                 if let unarchivedItems = unarchivedItems as? [FeedItem] {
-
                     objc_sync_enter(self.items)
                     self.items = unarchivedItems
                     objc_sync_exit(self.items)
@@ -68,7 +67,7 @@ public class Cache{
     }
     
     // Wait until operation queue is empty
-    public func synchronize(){
+    public func waitUntilSynchronized(){
         print(saveOperationQueue.operationCount)
         saveOperationQueue.waitUntilAllOperationsAreFinished()
         print(saveOperationQueue.operationCount)
@@ -86,7 +85,7 @@ public class Cache{
         }
     }
     
-    private func _saveData(pageNumber: Int, data : NSData){
+    private func _saveData(data : NSData){
         saveOperationQueue.addOperationWithBlock {
             [weak self]() -> Void in
             

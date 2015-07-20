@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum FeedItemsChangedType {
+    case ItemsAdded
+    case ItemsDeleted
+    case ItemsAddedAndDeleted
+}
+
 public protocol FeedKitDelegate {
     func fetchItemsComplete()
 }
@@ -40,7 +46,6 @@ public class FeedController {
         feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, success: {
             [weak self](newItems) -> () in
             self?._processNewItems(newItems, pageNumber: pageNumber)
-            
             }) { (error) -> () in
         }
     }
@@ -63,6 +68,11 @@ public class FeedItem: NSObject {
     
     var sortableReference: SortableReference {
         assert(false, "This must be overridden")
+    }
+    
+    public override func isEqual(object: AnyObject?) -> Bool {
+        assert(false, "This must be overridden")
+        return false
     }
 }
 
