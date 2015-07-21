@@ -10,7 +10,7 @@ import Foundation
 
 
 public protocol FeedKitDelegate {
-    func itemsUpdated(itemsAdded: [FeedItem], itemsDeleted: [FeedItem])
+    func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
 }
 
 public class FeedController {
@@ -18,7 +18,7 @@ public class FeedController {
     public var delegate: FeedKitDelegate?
     private(set) var  feedType: FeedKitType!
     var cachingOn: Bool = true
-    var cache: Cache?
+    public var cache: Cache?
     var redundantItemsAllowed : Bool = false //TODO implement this
     let section: Int!
     
@@ -32,7 +32,7 @@ public class FeedController {
         }
     }
     
-    public func loadCache(){
+    public func loadCacheSynchronously(){
         cache?.loadCache()
         cache?.waitUntilSynchronized()
         _processCacheLoad()
@@ -46,7 +46,7 @@ public class FeedController {
         feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: parameters, success: {
             [weak self](newItems) -> () in
             if pageNumber == 0 {
-                self?._processNewItemsForPageZero(newItems)
+                self?._processNewItemsForPageOne(newItems)
             }
             else {
                 self?._addNewItems(newItems)
@@ -61,20 +61,25 @@ public class FeedController {
         }
     }
     
-    private func _processNewItemsForPageZero(newItems: [FeedItem]){
+    private func _processNewItemsForPageOne(newItems: [FeedItem]){
         if newItems == items {
             return
         }
-        let new = Set(newItems)
-        let old = Set(items)
+        let newSet = Set(newItems)
+        let oldSet = Set(items)
         
-        let insertSet = new.subtract(old)
-        let deleteSet = old.subtract(new)
+        let insertSet = newSet.subtract(oldSet)
+        let deleteSet = oldSet.subtract(newSet)
         
+        items = newItems
         
-        let indexPathsForInsertion = _indexesForItems(insertSet)
-        let indexPathsForDeletion = _indexesForItems(insertSet)
+        cache?.clearCache()
+        cache?.addItems(items)
         
+        let indexPathsForInsertion = _indexesForItems(insertSet, inArray: items)
+        let indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
+        
+        delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
     }
     
     private func _addNewItems(newItems: [FeedItem]) {
@@ -82,7 +87,7 @@ public class FeedController {
         cache?.addItems(newItems)
     }
     
-    private func _indexesForItems(itemsToFind: Set<FeedItem>) -> [NSIndexPath]{
+    private func _indexesForItems(itemsToFind: Set<FeedItem>, inArray: [FeedItem]) -> [NSIndexPath]{
         var returnPaths: [NSIndexPath] = []
         
         for item in itemsToFind {
