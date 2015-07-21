@@ -8,7 +8,7 @@
 
 import UIKit
 import XCTest
-import FeedKit
+@testable import FeedKit
 
 
 
@@ -24,7 +24,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
     
     override func setUp() {
         super.setUp()
-        feedController = FeedController(feedType: TestFeedKitType.TestFeedType, cachingOn: true, section: 0)
+        feedController = FeedController(feedType: TestFeedKitType.TestFeedType, cacheOn: true, section: 0)
         feedController.delegate = self
         feedController.cache?.addItems(self.testItems)
         feedController.cache?.waitUntilSynchronized()
@@ -94,6 +94,21 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         }
     }
     
+    func test_noCache(){
+        let testItem = TestItem(name: "No Cache")
+        MockService.mockResponseItems = [testItem]
+        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+
+        let cachelessFc = FeedController(feedType: TestFeedKitType.TestFeedType, cacheOn: false, section: 0)
+        cachelessFc.delegate = self
+        
+        cachelessFc.fetchItems(1, itemsPerPage: 10, parameters: nil)
+        
+        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
+            XCTAssert(cachelessFc.items == [testItem])
+        }
+
+    }
     
     
     //MARK: FeedKit Delegate methods

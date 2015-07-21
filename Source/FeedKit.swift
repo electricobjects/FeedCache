@@ -14,22 +14,28 @@ public protocol FeedKitDelegate {
 }
 
 public class FeedController {
-    public var items: [FeedItem]! = []
+    private(set) public var items: [FeedItem]! = []
     public var delegate: FeedKitDelegate?
     private(set) var  feedType: FeedKitType!
-    var cachingOn: Bool = true
     public var cache: Cache?
     var redundantItemsAllowed : Bool = false //TODO implement this
     let section: Int!
     
+    var cacheOn: Bool {
+        get {
+            return cache == nil ? false : true
+        }
+        set (on) {
+            cache = on ? Cache(name: feedType.cacheName) : nil
+        }
+    }
+
     
-    public init(feedType: FeedKitType, cachingOn: Bool, section: Int){
+    
+    public init(feedType: FeedKitType, cacheOn: Bool, section: Int){
         self.section = section
         self.feedType = feedType
-        self.cachingOn = cachingOn
-        if cachingOn {
-            cache = Cache(name: feedType.cacheName)
-        }
+        self.cacheOn = cacheOn
     }
     
     public func loadCacheSynchronously(){
