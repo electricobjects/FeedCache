@@ -8,60 +8,93 @@
 
 import Foundation
 
-enum FeedItemsChangedType {
-    case ItemsAdded
-    case ItemsDeleted
-    case ItemsAddedAndDeleted
-}
 
 public protocol FeedKitDelegate {
-    func fetchItemsComplete()
+    func itemsUpdated(itemsAdded: [FeedItem], itemsDeleted: [FeedItem])
 }
 
 public class FeedController {
     public var items: [FeedItem]! = []
     public var delegate: FeedKitDelegate?
     private(set) var  feedType: FeedKitType!
-    var cacheData: Bool = true
-    var caches: [String : Cache]?
+    var cachingOn: Bool = true
+    var cache: Cache?
     var redundantItemsAllowed : Bool = false //TODO implement this
+    let section: Int!
     
-    public var cache: Cache? {
-        return caches?[feedType.cacheName]
+    
+    public init(feedType: FeedKitType, cachingOn: Bool, section: Int){
+        self.section = section
+        self.feedType = feedType
+        self.cachingOn = cachingOn
+        if cachingOn {
+            cache = Cache(name: feedType.cacheName)
+        }
     }
     
-    public init(feedType: FeedKitType){ self.feedType = feedType }
-    
     public func loadCache(){
-//        if let cache = cache {
-//            items = cache.cachedItems
-//        }
+        cache?.loadCache()
+        cache?.waitUntilSynchronized()
+        _processCacheLoad()
     }
     
     private func _addItems(items: [FeedItem]){
         self.items = self.items + items
     }
     
-    public func fetchItems(pageNumber: Int, itemsPerPage: Int){
-        feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, success: {
+    public func fetchItems(pageNumber: Int, itemsPerPage: Int, parameters: [String: AnyObject]){
+        feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: parameters, success: {
             [weak self](newItems) -> () in
-            self?._processNewItems(newItems, pageNumber: pageNumber)
+            if pageNumber == 0 {
+                self?._processNewItemsForPageZero(newItems)
+            }
+            else {
+                self?._addNewItems(newItems)
+            }
             }) { (error) -> () in
         }
     }
     
-    private func _processNewItems(newItems: [FeedItem], pageNumber: Int){
-        let currentReferences = self.items.map({$0.sortableReference})
-        let newReferences = newItems.map({$0.sortableReference})
-        if pageNumber == 1{
-            if currentReferences != newReferences {
-                self.items = newItems
-            }
-            else{
-                
-            }
+    private func _processCacheLoad(){
+        if let cache = cache {
+            items = cache.items
         }
     }
+    
+    private func _processNewItemsForPageZero(newItems: [FeedItem]){
+        if newItems == items {
+            return
+        }
+        let new = Set(newItems)
+        let old = Set(items)
+        
+        let insertSet = new.subtract(old)
+        let deleteSet = old.subtract(new)
+        
+        
+        let indexPathsForInsertion = _indexesForItems(insertSet)
+        let indexPathsForDeletion = _indexesForItems(insertSet)
+        
+    }
+    
+    private func _addNewItems(newItems: [FeedItem]) {
+        items = items + newItems
+        cache?.addItems(newItems)
+    }
+    
+    private func _indexesForItems(itemsToFind: Set<FeedItem>) -> [NSIndexPath]{
+        var returnPaths: [NSIndexPath] = []
+        
+        for item in itemsToFind {
+            if let index = items.indexOf(item){
+                returnPaths.append(NSIndexPath(forRow: index, inSection: section))
+            }
+        }
+        
+        return returnPaths
+    }
+    
+    
 }
 
 public class FeedItem: NSObject {
@@ -79,7 +112,7 @@ public class FeedItem: NSObject {
 public protocol FeedKitType{
     var cacheName: String {get}
     
-    func fetchItems(page: Int, itemsPerPage: Int, success:(newItems:[FeedItem])->(), failure:(error: NSError)->())
+    func fetchItems(pageNumber: Int, itemsPerPage: Int, parameters: [String : AnyObject], success:(newItems:[FeedItem])->(), failure:(error: NSError)->())
     
 }
 
