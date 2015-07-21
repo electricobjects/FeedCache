@@ -98,19 +98,22 @@ public class FeedController {
         
         return returnPaths
     }
-    
-    
 }
 
 public class FeedItem: NSObject {
     
-    var sortableReference: SortableReference {
-        assert(false, "This must be overridden")
-    }
+//    var sortableReference: SortableReference {
+//        assert(false, "This must be overridden")
+//    }
     
     public override func isEqual(object: AnyObject?) -> Bool {
         assert(false, "This must be overridden")
         return false
+    }
+    
+    public override var hashValue : Int{
+        assert(false, "This must be overridden")
+        return 0
     }
 }
 
@@ -121,19 +124,19 @@ public protocol FeedKitType{
     
 }
 
-public struct SortableReference: Hashable, Equatable {
-    let reference: FeedItem
-
-    public init ( reference: FeedItem, hashValue: Int) {
-        self.reference = reference
-        self.hashValue = hashValue
-    }
-    
-    public var hashValue: Int
-}
-
-public func ==(lhs: SortableReference, rhs: SortableReference)->Bool {
-    return lhs.hashValue == rhs.hashValue
-}
+//public struct SortableReference: Hashable, Equatable {
+//    let reference: FeedItem
+//
+//    public init ( reference: FeedItem, hashValue: Int) {
+//        self.reference = reference
+//        self.hashValue = hashValue
+//    }
+//    
+//    public var hashValue: Int
+//}
+//
+//public func ==(lhs: SortableReference, rhs: SortableReference)->Bool {
+//    return lhs.hashValue == rhs.hashValue
+//}
 
 

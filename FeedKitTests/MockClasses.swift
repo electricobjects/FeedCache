@@ -17,15 +17,7 @@ enum TestFeedKitType: FeedKitType {
     }
     
     func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject]?, success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
-        var items: [FeedItem] = []
-        if page == 1 {
-            items = [TestItem(name: "Foo"), TestItem(name: "Bar"), TestItem(name: "Baz")]
-        }
-        else if page == 2 {
-            items = [TestItem(name: "Baz"), TestItem(name: "Bing"), TestItem(name: "Boo")]
-        }
-        
-        success(newItems: items)
+        MockService.fetchItems(page, itemsPerPage: itemsPerPage, parameters: parameters, success: success, failure: failure)
     }
 }
 
@@ -46,16 +38,23 @@ class TestItem: FeedItem, NSCoding {
         aCoder.encodeObject(name, forKey: "name")
     }
     
-    var sortableReference: SortableReference {
-        return SortableReference(reference: self, hashValue: self.hashValue)
-    }
     
     override func isEqual(object: AnyObject?) -> Bool {
         if let object = object as? TestItem {
-            return name == object.name
+            return hashValue == object.hashValue
         }
         return false
     }
+    
+    override var hashValue : Int{
+        var h: Int = 0
+        if let name = name {
+            h ^= name.hash
+        }
+        return h
+    }
+    
+    override var description: String { return name! }
 }
 
 class MockService {
