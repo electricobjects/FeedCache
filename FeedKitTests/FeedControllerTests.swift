@@ -77,6 +77,23 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         }
     }
     
+    func test_addPages(){
+        MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
+        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        feedController.fetchItems(2, itemsPerPage: 10, parameters: nil)
+        
+        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
+            if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
+                XCTAssert(itemsAdded.count == 3)
+                XCTAssert(itemsDeleted.count == 0)
+            }
+            else {
+                XCTAssert(false)
+            }
+            XCTAssert(self.feedController.items.count == 6)
+        }
+    }
+    
     //MARK: FeedKit Delegate methods
     
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){

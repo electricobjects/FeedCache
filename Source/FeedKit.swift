@@ -85,6 +85,8 @@ public class FeedController {
     private func _addNewItems(newItems: [FeedItem]) {
         items = items + newItems
         cache?.addItems(newItems)
+        let itemsAdded = _indexesForItems(Set(newItems), inArray: items)
+        delegate?.itemsUpdated(itemsAdded, itemsDeleted: [])
     }
     
     private func _indexesForItems(itemsToFind: Set<FeedItem>, inArray array: [FeedItem]) -> [NSIndexPath]{

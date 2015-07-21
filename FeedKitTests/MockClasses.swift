@@ -48,9 +48,7 @@ class TestItem: FeedItem, NSCoding {
     
     override var hashValue : Int{
         var h: Int = 0
-        if let name = name {
-            h ^= name.hash
-        }
+        if let name = name { h ^= name.hash }
         return h
     }
     
