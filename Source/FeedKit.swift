@@ -42,10 +42,10 @@ public class FeedController {
         self.items = self.items + items
     }
     
-    public func fetchItems(pageNumber: Int, itemsPerPage: Int, parameters: [String: AnyObject]){
+    public func fetchItems(pageNumber: Int, itemsPerPage: Int, parameters: [String: AnyObject]?){
         feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: parameters, success: {
             [weak self](newItems) -> () in
-            if pageNumber == 0 {
+            if pageNumber == 1 {
                 self?._processNewItemsForPageOne(newItems)
             }
             else {
@@ -71,13 +71,13 @@ public class FeedController {
         let insertSet = newSet.subtract(oldSet)
         let deleteSet = oldSet.subtract(newSet)
         
+        let indexPathsForInsertion = _indexesForItems(insertSet, inArray: newItems)
+        let indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
+        
         items = newItems
         
         cache?.clearCache()
         cache?.addItems(items)
-        
-        let indexPathsForInsertion = _indexesForItems(insertSet, inArray: items)
-        let indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
         
         delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
     }
@@ -87,11 +87,11 @@ public class FeedController {
         cache?.addItems(newItems)
     }
     
-    private func _indexesForItems(itemsToFind: Set<FeedItem>, inArray: [FeedItem]) -> [NSIndexPath]{
+    private func _indexesForItems(itemsToFind: Set<FeedItem>, inArray array: [FeedItem]) -> [NSIndexPath]{
         var returnPaths: [NSIndexPath] = []
         
         for item in itemsToFind {
-            if let index = items.indexOf(item){
+            if let index = array.indexOf(item){
                 returnPaths.append(NSIndexPath(forRow: index, inSection: section))
             }
         }
@@ -117,7 +117,7 @@ public class FeedItem: NSObject {
 public protocol FeedKitType{
     var cacheName: String {get}
     
-    func fetchItems(pageNumber: Int, itemsPerPage: Int, parameters: [String : AnyObject], success:(newItems:[FeedItem])->(), failure:(error: NSError)->())
+    func fetchItems(pageNumber: Int, itemsPerPage: Int, parameters: [String : AnyObject]?, success:(newItems:[FeedItem])->(), failure:(error: NSError)->())
     
 }
 

@@ -17,38 +17,56 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
     
     let testItems : [FeedItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
     var delegateResponseExpectation: XCTestExpectation?
-    var feedController: FeedController?
+    var feedController: FeedController!
+    
+    var itemsAdded: [NSIndexPath]?
+    var itemsDeleted: [NSIndexPath]?
     
     override func setUp() {
         super.setUp()
         feedController = FeedController(feedType: TestFeedKitType.TestFeedType, cachingOn: true, section: 0)
-        feedController?.cache?.addItems(testItems)
-        feedController?.cache?.waitUntilSynchronized()
+        feedController.delegate = self
+        feedController.cache?.addItems(self.testItems)
+        feedController.cache?.waitUntilSynchronized()
+        feedController.loadCacheSynchronously()
     }
     
     override func tearDown() {
-        feedController?.cache?.clearCache()
-        feedController?.cache?.waitUntilSynchronized()
+        feedController.cache?.clearCache()
+        feedController.cache?.waitUntilSynchronized()
         super.tearDown()
     }
 
     
     func test_feedKitCacheLoad() {
-        if let feedController = feedController {
-            feedController.loadCacheSynchronously()
-            XCTAssert(feedController.items.count > 0)
-        }
-        else {
-            XCTAssert(false)
-        }
+        feedController.loadCacheSynchronously()
+        XCTAssert(feedController.items.count > 0)
     }
 
-
+    func test_fetchPageOne(){
+        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        feedController.fetchItems(1, itemsPerPage: 10, parameters: nil)
+        
+        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
+            if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
+                XCTAssert(itemsAdded.count == 3)
+                XCTAssert(itemsDeleted.count == 3)
+            }
+            else {
+                XCTAssert(false)
+            }
+        }
+    }
     
+    
+    
+
     
     //MARK: FeedKit Delegate methods
     
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
-        
+        self.itemsAdded = itemsAdded
+        self.itemsDeleted = itemsDeleted
+        self.delegateResponseExpectation?.fulfill()
     }
 }

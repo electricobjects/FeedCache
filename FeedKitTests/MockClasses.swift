@@ -16,7 +16,7 @@ enum TestFeedKitType: FeedKitType {
         return "test"
     }
     
-    func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject], success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
+    func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject]?, success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
         var items: [FeedItem] = []
         if page == 1 {
             items = [TestItem(name: "Foo"), TestItem(name: "Bar"), TestItem(name: "Baz")]
