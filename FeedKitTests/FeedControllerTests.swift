@@ -43,7 +43,9 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         XCTAssert(feedController.items.count > 0)
     }
 
-    func test_fetchPageOne(){
+    func test_allNewItems(){
+        MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
+        
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
         feedController.fetchItems(1, itemsPerPage: 10, parameters: nil)
         
@@ -58,9 +60,22 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         }
     }
     
-    
-    
-
+    func test_oneNewItem(){
+        MockService.mockResponseItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "baz")]
+        
+        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        feedController.fetchItems(1, itemsPerPage: 10, parameters: nil)
+        
+        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
+            if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
+                XCTAssert(itemsAdded.count == 1)
+                XCTAssert(itemsDeleted.count == 1)
+            }
+            else {
+                XCTAssert(false)
+            }
+        }
+    }
     
     //MARK: FeedKit Delegate methods
     

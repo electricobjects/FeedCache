@@ -58,3 +58,11 @@ class TestItem: FeedItem, NSCoding {
     }
 }
 
+class MockService {
+    static var mockResponseItems: [TestItem]?
+    
+    class func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject]?, success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
+        success(newItems: MockService.mockResponseItems!)
+    }
+}
+
