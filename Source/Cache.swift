@@ -76,7 +76,7 @@ public class Cache{
     private func _deleteCache() {
         let folderName = name
         let folderPath = _folderPathFromFolderName(folderName, insideCacheFolder: true)
-        let filePath = folderPath.stringByAppendingPathComponent(archiveName)
+        let filePath = (folderPath as NSString).stringByAppendingPathComponent(archiveName)
         do {
             try NSFileManager.defaultManager().removeItemAtPath(filePath)
         }
@@ -97,7 +97,7 @@ public class Cache{
                 print(folderPath)
                 strongSelf._createFolderIfNeeded(folderPath)
                 
-                let filePath = folderPath.stringByAppendingPathComponent(strongSelf.archiveName)
+                let filePath = (folderPath as NSString).stringByAppendingPathComponent(strongSelf.archiveName)
                 
                 data.writeToFile(filePath, atomically: true)
                 if strongSelf.saveOperationQueue.operationCount == 1 {
@@ -117,7 +117,7 @@ public class Cache{
             {
                 let folderPath = strongSelf._folderPathFromFolderName(folderName, insideCacheFolder: true)
 
-                let filePath = folderPath.stringByAppendingPathComponent(strongSelf.archiveName)
+                let filePath = (folderPath as NSString).stringByAppendingPathComponent(strongSelf.archiveName)
                 let data = NSData(contentsOfFile: filePath)
                 completion(data)
             }
