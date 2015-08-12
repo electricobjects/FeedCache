@@ -14,9 +14,10 @@ class CacheTests: XCTestCase {
     let cache = Cache(name: TestFeedKitType.TestFeedType.cacheName)
     
     override func setUp() {
-        super.setUp()
-        
         cache.addItems(testItems)
+        cache.waitUntilSynchronized()
+        
+        super.setUp()
     }
     
     override func tearDown() {
