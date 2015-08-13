@@ -9,12 +9,34 @@
 import UIKit
 import FeedKit
 
-class PeopleFeedItem : FeedKit.FeedItem {
+class PeopleFeedItem : FeedKit.FeedItem, NSCoding {
     var name: String!
     var id: Int!
     
     init(name: String, id: Int){
         self.name = name
         self.id = id
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        name = aDecoder.decodeObjectForKey("name") as? String
+        id = aDecoder.decodeObjectForKey("id") as? Int
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(name, forKey: "name")
+        aCoder.encodeObject(id, forKey: "id")
+    }
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        if let object = object as? PeopleFeedItem {
+            return object.name == self.name && object.id == self.id
+        }
+        return false
+    }
+    
+    override var hashValue : Int{
+        let h: Int = name.hash ^ id.hashValue
+        return h
     }
 }

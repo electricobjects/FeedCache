@@ -38,11 +38,17 @@ class MockAPIService {
 
     }
     
-    func fetchFeed(minID: Int, maxID: Int, count: Int, success:([PeopleFeedItem])->()) {
-        let results = mockFeed.filter({$0.id < maxID && $0.id > minID} )
-        let delayTime = Double(arc4random_uniform(100)) / 100.0
-        _delay(delayTime) { () -> () in
-            success(results)
+    func fetchFeed(minId: Int?, maxId: Int?, count: Int, success:([PeopleFeedItem])->()) {
+        if let minId = minId {
+            let maxId = maxId != nil ? maxId! : Int.max
+            let filteredResults = mockFeed.filter({$0.id < maxId && $0.id > minId})
+            let limit = min(filteredResults.count, count)
+            let truncatedResults = Array(filteredResults[0...limit])
+        
+            let delayTime = Double(arc4random_uniform(100)) / 100.0
+            _delay(delayTime, closure: { () -> () in
+                success(truncatedResults)
+            })
         }
     }
     

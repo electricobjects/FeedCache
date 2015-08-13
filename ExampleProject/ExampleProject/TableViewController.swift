@@ -7,20 +7,18 @@
 //
 
 import UIKit
+import FeedKit
 
-class TableViewController: UITableViewController {
+class TableViewController: UITableViewController, FeedKitDelegate {
 
-    var items = [PeopleFeedItem]()
+    var feedController: FeedKit.FeedController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let service = MockAPIService.sharedService
-        service.fetchFeed(0, maxID: 25, count: 15, success: {
-            (items) ->() in
-            self.items = items
-            self.tableView.reloadData()
-        })
+        feedController = FeedController(feedType: FeedTypes.PeopleFeed, cacheOn: true, section: 0)
+        feedController?.loadCacheSynchronously()
+        feedController?.fetchItems(isFirstPage: true, minId: 0, itemsPerPage: 25)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,19 +35,23 @@ class TableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return items.count
+        return feedController.items.count
     }
 
   
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
 
-        let item = items[indexPath.row]
-        cell.textLabel?.text = item.name
+        if let item = feedController.items[indexPath.row] as? PeopleFeedItem{
+            cell.textLabel?.text = item.name
+        }
 
         return cell
     }
 
+    func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
+        tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
+    }
 
     /*
     // Override to support conditional editing of the table view.
