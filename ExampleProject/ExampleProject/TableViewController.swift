@@ -12,29 +12,26 @@ import FeedKit
 class TableViewController: UITableViewController, FeedKitDelegate {
 
     var feedController: FeedKit.FeedController!
+    let itemsPerPage = 25
+    var currentPage = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         feedController = FeedController(feedType: FeedTypes.PeopleFeed, cacheOn: true, section: 0)
+        feedController.delegate = self
         feedController?.loadCacheSynchronously()
-        feedController?.fetchItems(isFirstPage: true, minId: 0, itemsPerPage: 25)
+        feedController?.fetchItems(isFirstPage: true, minId: 0, itemsPerPage: itemsPerPage)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return feedController.items.count
     }
 
@@ -44,58 +41,24 @@ class TableViewController: UITableViewController, FeedKitDelegate {
 
         if let item = feedController.items[indexPath.row] as? PeopleFeedItem{
             cell.textLabel?.text = item.name
+            
+            if indexPath.row == itemsPerPage * currentPage - 1 {
+                if let lastItem = feedController.items.last as? PeopleFeedItem{
+                    feedController?.fetchItems(isFirstPage: false, minId: 0, maxId: lastItem.id, itemsPerPage: itemsPerPage)
+                }
+                currentPage++
+            }
         }
 
+        
+        
         return cell
     }
 
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
         tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
+        tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
     }
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
