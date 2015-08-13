@@ -56,8 +56,10 @@ class TableViewController: UITableViewController, FeedKitDelegate {
     }
 
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
+        tableView.beginUpdates()
         tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
         tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
+        tableView.endUpdates()
     }
 
 

@@ -31,6 +31,13 @@ class MockAPIService {
                     count++
                 }
                 mockFeed = mockFeed.reverse()
+                
+                //Swap two items to test insertion and deletion after loading cache
+                let randomIndex = Int(arc4random_uniform(10)) + 1
+                let item = mockFeed[randomIndex]
+                let testItem = PeopleFeedItem(name: "John Doe", id: item.id)
+                mockFeed[randomIndex] = testItem
+                
             } catch let error as NSError {
                 assert(false, "There was a problem initializing the mock feed:\n\n \(error)")
             }
