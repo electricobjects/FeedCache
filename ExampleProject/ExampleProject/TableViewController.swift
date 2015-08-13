@@ -10,7 +10,7 @@ import UIKit
 
 class TableViewController: UITableViewController {
 
-    var items = [FeedItem]()
+    var items = [PeopleFeedItem]()
     
     override func viewDidLoad() {
         super.viewDidLoad()

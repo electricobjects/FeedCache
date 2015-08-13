@@ -10,7 +10,7 @@ import Foundation
 
 class MockAPIService {
     static let sharedService = MockAPIService()
-    var mockFeed = [FeedItem]()
+    var mockFeed = [PeopleFeedItem]()
     
     init(){
         _initializeMockFeed()
@@ -26,7 +26,7 @@ class MockAPIService {
                 let list = fileContents.componentsSeparatedByString("\n")
                 var count = 1
                 for name in list {
-                    let item = FeedItem(name: name, id: count)
+                    let item = PeopleFeedItem(name: name, id: count)
                     mockFeed.append(item)
                     count++
                 }
@@ -38,7 +38,7 @@ class MockAPIService {
 
     }
     
-    func fetchFeed(minID: Int, maxID: Int, count: Int, success:([FeedItem])->()) {
+    func fetchFeed(minID: Int, maxID: Int, count: Int, success:([PeopleFeedItem])->()) {
         let results = mockFeed.filter({$0.id < maxID && $0.id > minID} )
         let delayTime = Double(arc4random_uniform(100)) / 100.0
         _delay(delayTime) { () -> () in

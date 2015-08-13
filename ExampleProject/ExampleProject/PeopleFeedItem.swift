@@ -6,9 +6,10 @@
 //  Copyright © 2015 Electric Objects. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import FeedKit
 
-class FeedItem {
+class PeopleFeedItem : FeedKit.FeedItem {
     var name: String!
     var id: Int!
     

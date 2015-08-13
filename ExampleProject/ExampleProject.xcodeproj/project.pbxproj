@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		D47B38A71B7BEB320052A299 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38A61B7BEB320052A299 /* TableViewController.swift */; };
 		D47B38A91B7BEBEB0052A299 /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38A81B7BEBEB0052A299 /* MockAPIService.swift */; };
-		D47B38AB1B7BED000052A299 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38AA1B7BED000052A299 /* FeedItem.swift */; };
+		D47B38AB1B7BED000052A299 /* PeopleFeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38AA1B7BED000052A299 /* PeopleFeedItem.swift */; };
 		D47B38AD1B7BEF180052A299 /* name_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = D47B38AC1B7BEF180052A299 /* name_list.txt */; };
+		D47B38AF1B7BFABE0052A299 /* FeedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D47B38AE1B7BFABE0052A299 /* FeedKit.framework */; };
 		D4F3A6691B5FE31A009D38C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F3A6681B5FE31A009D38C5 /* AppDelegate.swift */; };
 		D4F3A66E1B5FE31A009D38C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4F3A66C1B5FE31A009D38C5 /* Main.storyboard */; };
 		D4F3A6701B5FE31A009D38C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4F3A66F1B5FE31A009D38C5 /* Assets.xcassets */; };
@@ -39,8 +40,9 @@
 /* Begin PBXFileReference section */
 		D47B38A61B7BEB320052A299 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		D47B38A81B7BEBEB0052A299 /* MockAPIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockAPIService.swift; sourceTree = "<group>"; };
-		D47B38AA1B7BED000052A299 /* FeedItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
+		D47B38AA1B7BED000052A299 /* PeopleFeedItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleFeedItem.swift; sourceTree = "<group>"; };
 		D47B38AC1B7BEF180052A299 /* name_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = name_list.txt; sourceTree = "<group>"; };
+		D47B38AE1B7BFABE0052A299 /* FeedKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedKit.framework; path = "../../../../Library/Developer/Xcode/DerivedData/FeedKit-farobqtflxnvyrgiywygnedxqmdi/Build/Products/Debug-iphoneos/FeedKit.framework"; sourceTree = "<group>"; };
 		D4F3A6651B5FE31A009D38C5 /* ExampleProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4F3A6681B5FE31A009D38C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4F3A66D1B5FE31A009D38C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D47B38AF1B7BFABE0052A299 /* FeedKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +86,7 @@
 		D4F3A65C1B5FE31A009D38C5 = {
 			isa = PBXGroup;
 			children = (
+				D47B38AE1B7BFABE0052A299 /* FeedKit.framework */,
 				D4F3A6671B5FE31A009D38C5 /* ExampleProject */,
 				D4F3A67C1B5FE31A009D38C5 /* ExampleProjectTests */,
 				D4F3A6871B5FE31A009D38C5 /* ExampleProjectUITests */,
@@ -105,7 +109,7 @@
 			children = (
 				D4F3A6681B5FE31A009D38C5 /* AppDelegate.swift */,
 				D47B38A81B7BEBEB0052A299 /* MockAPIService.swift */,
-				D47B38AA1B7BED000052A299 /* FeedItem.swift */,
+				D47B38AA1B7BED000052A299 /* PeopleFeedItem.swift */,
 				D47B38A61B7BEB320052A299 /* TableViewController.swift */,
 				D4F3A66C1B5FE31A009D38C5 /* Main.storyboard */,
 				D4F3A66F1B5FE31A009D38C5 /* Assets.xcassets */,
@@ -265,7 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D47B38AB1B7BED000052A299 /* FeedItem.swift in Sources */,
+				D47B38AB1B7BED000052A299 /* PeopleFeedItem.swift in Sources */,
 				D47B38A91B7BEBEB0052A299 /* MockAPIService.swift in Sources */,
 				D47B38A71B7BEB320052A299 /* TableViewController.swift in Sources */,
 				D4F3A6691B5FE31A009D38C5 /* AppDelegate.swift in Sources */,
