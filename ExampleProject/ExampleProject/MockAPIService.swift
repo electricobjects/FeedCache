@@ -22,7 +22,7 @@ class MockAPIService {
         {
             let url = NSURL(fileURLWithPath: path)
             do {
-                let fileContents = try NSString(contentsOfURL: url, encoding: 0)
+                let fileContents = try NSString(contentsOfURL: url, encoding: NSUTF8StringEncoding)
                 let list = fileContents.componentsSeparatedByString("\n")
                 var count = 1
                 for name in list {
