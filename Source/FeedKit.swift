@@ -48,17 +48,48 @@ public class FeedController {
         self.items = self.items + items
     }
     
-    public func fetchItems(pageNumber: Int, itemsPerPage: Int, parameters: [String: AnyObject]?){
-        feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: parameters, success: {
-            [weak self](newItems) -> () in
-            if pageNumber == 1 {
-                self?._processNewItemsForPageOne(newItems)
-            }
-            else {
-                self?._addNewItems(newItems)
-            }
-            }) { (error) -> () in
-        }
+    public func fetchItems(
+        isFirstPage isFirstPage: Bool,
+        pageNumber: Int? = nil,
+        itemsPerPage: Int? = nil,
+        minId: Int? = nil,
+        maxId: Int? = nil,
+        maxTimeStamp: Int? = nil,
+        minTimeStamp: Int? = nil)
+    {
+        feedType.fetchItems(
+            isFirstPage,
+            pageNumber: pageNumber,
+            itemsPerPage: itemsPerPage,
+            minId: minId,
+            maxId: maxId,
+            maxTimeStamp: maxTimeStamp,
+            minTimeStamp: minTimeStamp,
+            success: {
+                [weak self](newItems) -> () in
+                if let strongSelf = self {
+                    if isFirstPage {
+                        strongSelf._processNewItemsForPageOne(newItems)
+                    }
+                    else {
+                        strongSelf._addNewItems(newItems)
+                    }
+                }
+            },
+            failure: {
+                (error) -> () in
+                
+        })
+//        feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: parameters, success: {
+//            [weak self](newItems) -> () in
+//            if pageNumber == 1 {
+//                self?._processNewItemsForPageOne(newItems)
+//            }
+//            else {
+//                self?._addNewItems(newItems)
+//            }
+//            }) { (error) -> () in
+//        }
     }
     
     private func _processCacheLoad(){
@@ -124,7 +155,19 @@ public class FeedItem: NSObject {
 public protocol FeedKitType{
     var cacheName: String {get}
     
-    func fetchItems(pageNumber: Int, itemsPerPage: Int, parameters: [String : AnyObject]?, success:(newItems:[FeedItem])->(), failure:(error: NSError)->())
+    func fetchItems(
+        firstPage: Bool,
+        pageNumber: Int?,
+        itemsPerPage: Int?,
+        minId: Int?,
+        maxId: Int?,
+        maxTimeStamp: Int?,
+        minTimeStamp: Int?,
+        success:(newItems:[FeedItem])->(),
+        failure:(error: NSError)->()
+    )
+    
+    
     
 }
 

@@ -47,7 +47,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
         
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        feedController.fetchItems(1, itemsPerPage: 10, parameters: nil)
+        feedController.fetchItems(isFirstPage: true, pageNumber: 1, itemsPerPage: 10)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
             if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
@@ -64,7 +64,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         MockService.mockResponseItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "baz")]
         
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        feedController.fetchItems(1, itemsPerPage: 10, parameters: nil)
+        feedController.fetchItems(isFirstPage: true, pageNumber: 1, itemsPerPage: 10)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
             if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
@@ -80,7 +80,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
     func test_addPages(){
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        feedController.fetchItems(2, itemsPerPage: 10, parameters: nil)
+        feedController.fetchItems(isFirstPage: false, pageNumber: 2, itemsPerPage: 10)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
             if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
@@ -102,7 +102,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         let cachelessFc = FeedController(feedType: TestFeedKitType.TestFeedType, cacheOn: false, section: 0)
         cachelessFc.delegate = self
         
-        cachelessFc.fetchItems(1, itemsPerPage: 10, parameters: nil)
+        cachelessFc.fetchItems(isFirstPage: true, pageNumber: 1, itemsPerPage: 10)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
             XCTAssert(cachelessFc.items == [testItem])

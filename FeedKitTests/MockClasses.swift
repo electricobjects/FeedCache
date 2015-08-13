@@ -16,8 +16,21 @@ enum TestFeedKitType: FeedKitType {
         return "test"
     }
     
-    func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject]?, success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
-        MockService.fetchItems(page, itemsPerPage: itemsPerPage, parameters: parameters, success: success, failure: failure)
+    func fetchItems(
+        firstPage: Bool,
+        pageNumber: Int?,
+        itemsPerPage: Int?,
+        minId: Int?,
+        maxId: Int?,
+        maxTimeStamp: Int?,
+        minTimeStamp: Int?,
+        success:(newItems:[FeedItem])->(),
+        failure:(error: NSError)->()
+        ) {
+
+        if let pageNumber = pageNumber, itemsPerPage = itemsPerPage {
+            MockService.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: success, failure: failure)
+        }
     }
 }
 
