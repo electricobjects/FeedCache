@@ -11,12 +11,19 @@ import FeedKit
 
 class TableViewController: UITableViewController, FeedKitDelegate {
 
+    //var refreshControl: UIRefreshControl!
     var feedController: FeedKit.FeedController!
     let itemsPerPage = 25
     var currentPage = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        MockAPIService.sharedService.startFeedUdpateSimulation()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        //self.tableView.addSubview(refreshControl)
 
         feedController = FeedController(feedType: FeedTypes.PeopleFeed, cacheOn: true, section: 0)
         feedController.delegate = self
@@ -49,10 +56,13 @@ class TableViewController: UITableViewController, FeedKitDelegate {
                 currentPage++
             }
         }
-
-        
-        
         return cell
+    }
+    
+    func refresh(sender: AnyObject){
+        currentPage = 1
+        feedController.fetchItems(isFirstPage: true, minId: 0, itemsPerPage: itemsPerPage)
+        refreshControl?.endRefreshing()
     }
 
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){

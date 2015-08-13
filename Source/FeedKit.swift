@@ -80,16 +80,6 @@ public class FeedController {
                 (error) -> () in
                 
         })
-//        feedType.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: parameters, success: {
-//            [weak self](newItems) -> () in
-//            if pageNumber == 1 {
-//                self?._processNewItemsForPageOne(newItems)
-//            }
-//            else {
-//                self?._addNewItems(newItems)
-//            }
-//            }) { (error) -> () in
-//        }
     }
     
     private func _processCacheLoad(){

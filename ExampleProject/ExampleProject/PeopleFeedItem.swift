@@ -39,4 +39,8 @@ class PeopleFeedItem : FeedKit.FeedItem, NSCoding {
         let h: Int = name.hash ^ id.hashValue
         return h
     }
+    
+    override var description : String {
+        return "\(id), \(name)"
+    }
 }

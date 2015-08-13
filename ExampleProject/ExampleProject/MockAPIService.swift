@@ -11,45 +11,57 @@ import Foundation
 class MockAPIService {
     static let sharedService = MockAPIService()
     var mockFeed = [PeopleFeedItem]()
+    var refreshItems = [PeopleFeedItem]()
     
     init(){
         _initializeMockFeed()
+        startFeedUdpateSimulation()
     }
     
-    func _initializeMockFeed(){
+    private func _initializeMockFeed(){
 
         if let path = NSBundle.mainBundle().pathForResource("name_list", ofType: "txt")
         {
             let url = NSURL(fileURLWithPath: path)
             do {
+                var feedItems = [PeopleFeedItem]()
                 let fileContents = try NSString(contentsOfURL: url, encoding: NSUTF8StringEncoding)
                 let list = fileContents.componentsSeparatedByString("\n")
                 var count = 1
                 for name in list {
                     let item = PeopleFeedItem(name: name, id: count)
-                    mockFeed.append(item)
+                    feedItems.append(item)
                     count++
                 }
-                mockFeed = mockFeed.reverse()
+                feedItems = feedItems.reverse()
                 
-                //Swap two items to test insertion and deletion after loading cache
-                let randomIndex = Int(arc4random_uniform(10)) + 1
-                let item = mockFeed[randomIndex]
-                let testItem = PeopleFeedItem(name: "John Doe", id: item.id)
-                mockFeed[randomIndex] = testItem
+                let numRefreshItems = 100
+                refreshItems = Array(feedItems[0...numRefreshItems-1])
+                mockFeed = Array(feedItems[numRefreshItems...feedItems.count-1])
                 
             } catch let error as NSError {
                 assert(false, "There was a problem initializing the mock feed:\n\n \(error)")
             }
         }
-
+    }
+    
+    func startFeedUdpateSimulation(){
+        _delay(2, closure: { [weak self]()->() in self?._updateFeed() })
+    }
+    
+    private func _updateFeed(){
+        if refreshItems.count > 0 {
+            let item = refreshItems.removeLast()
+            mockFeed.insert(item, atIndex: 0)
+            _delay(4, closure: { self._updateFeed() })
+        }
     }
     
     func fetchFeed(minId: Int?, maxId: Int?, count: Int, success:([PeopleFeedItem])->()) {
         if let minId = minId {
             let maxId = maxId != nil ? maxId! : Int.max
             let filteredResults = mockFeed.filter({$0.id < maxId && $0.id > minId})
-            let limit = min(filteredResults.count-1, count)
+            let limit = min(filteredResults.count-1, count-1)
             var truncatedResults = [PeopleFeedItem]()
             if limit > 0 {
                 truncatedResults = Array(filteredResults[0...limit])
@@ -62,7 +74,7 @@ class MockAPIService {
     }
     
     
-    func _delay(delay:Double, closure:()->()) {
+    private func _delay(delay:Double, closure:()->()) {
         dispatch_after(
             dispatch_time(
                 DISPATCH_TIME_NOW,
