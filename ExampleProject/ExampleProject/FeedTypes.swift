@@ -9,22 +9,42 @@
 import Foundation
 import FeedKit
 
-enum FeedTypes: FeedKitType {
-    case PeopleFeed
+struct PeopleFeedRequest: FeedKitFetchRequest {
+    var isFirstPage: Bool
+    var maxId: Int?
+    var minId: Int!
+    var count: Int!
     
-    var cacheName : String {
-        return "people"
+    init(isFirstPage: Bool, count: Int, minId: Int, maxId: Int? = nil){
+        self.isFirstPage = isFirstPage
+        self.count = count
+        self.minId = minId
+        self.maxId = maxId
     }
     
-    func fetchItems(firstPage: Bool, pageNumber: Int?, itemsPerPage: Int?, minId: Int?, maxId: Int?, maxTimeStamp: Int?, minTimeStamp: Int?, success: (newItems: [FeedItem]) -> (), failure: (error: NSError) -> ()) {
-        
-        assert(minId != nil && itemsPerPage != nil, "did not define necessary parameters")
-        if let itemsPerPage = itemsPerPage {
-            MockAPIService.sharedService.fetchFeed(minId, maxId: maxId, count: itemsPerPage) { (items) -> () in
-                success(newItems: items)
-            }
+    func fetchItems(success success: ([FeedItem])->(), failure:(NSError)->()){
+
+        MockAPIService.sharedService.fetchFeed(minId, maxId: maxId, count: count) { (items) -> () in
+            success(items)
+        }
+    }
+}
+
+
+enum ExampleCachePreferences : CachePreferences{
+    case CacheOn
+    case CacheOff
+    
+    var cacheOn: Bool {
+        switch self {
+        case .CacheOn :
+            return true
+        default:
+            return false
         }
     }
     
-
+    var cacheName: String {
+        return "people"
+    }
 }

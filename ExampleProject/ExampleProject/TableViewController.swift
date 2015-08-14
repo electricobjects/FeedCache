@@ -25,10 +25,11 @@ class TableViewController: UITableViewController, FeedKitDelegate {
         refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         //self.tableView.addSubview(refreshControl)
 
-        feedController = FeedController(feedType: FeedTypes.PeopleFeed, cacheOn: true, section: 0)
+        feedController = FeedController(cachePreferences: ExampleCachePreferences.CacheOn, section: 0)
         feedController.delegate = self
         feedController?.loadCacheSynchronously()
-        feedController?.fetchItems(isFirstPage: true, minId: 0, itemsPerPage: itemsPerPage)
+        let request = PeopleFeedRequest(isFirstPage: true, count: itemsPerPage, minId: 0)
+        feedController?.fetchItems(request)
     }
 
 
@@ -51,7 +52,8 @@ class TableViewController: UITableViewController, FeedKitDelegate {
             
             if indexPath.row == itemsPerPage * currentPage - 1 {
                 if let lastItem = feedController.items.last as? PeopleFeedItem{
-                    feedController?.fetchItems(isFirstPage: false, minId: 0, maxId: lastItem.id, itemsPerPage: itemsPerPage)
+                    let request = PeopleFeedRequest(isFirstPage: false, count: itemsPerPage, minId: 0, maxId: lastItem.id)
+                    feedController?.fetchItems(request)
                 }
                 currentPage++
             }
@@ -61,8 +63,8 @@ class TableViewController: UITableViewController, FeedKitDelegate {
     
     func refresh(sender: AnyObject){
         currentPage = 1
-        feedController.fetchItems(isFirstPage: true, minId: 0, itemsPerPage: itemsPerPage)
-        refreshControl?.endRefreshing()
+        let request = PeopleFeedRequest(isFirstPage: true, count: itemsPerPage, minId: 0)
+        feedController?.fetchItems(request)
     }
 
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
@@ -70,6 +72,9 @@ class TableViewController: UITableViewController, FeedKitDelegate {
         tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
         tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
         tableView.endUpdates()
+        if let refreshing = refreshControl?.refreshing where refreshing{
+            refreshControl?.endRefreshing()
+        }
     }
 
 
