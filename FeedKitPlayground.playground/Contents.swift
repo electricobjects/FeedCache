@@ -42,18 +42,15 @@ class TestItem: FeedItem, NSCoding {
         aCoder.encodeObject(name, forKey: "name")
     }
     
-    var sortableReference: SortableReference {
-        return SortableReference(reference: self, hashValue: self.hashValue)
-    }
     
-    /*var hashValue : Int {
+    var hashValue : Int {
     if let name = name {
     return name.hashValue
     }
     else {
     return 0
     }
-    }*/
+    }
 }
 
 let testCache = Cache(name: "Foo")

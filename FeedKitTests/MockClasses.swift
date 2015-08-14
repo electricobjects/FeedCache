@@ -9,28 +9,37 @@
 import UIKit
 import FeedKit
 
-enum TestFeedKitType: FeedKitType {
-    case TestFeedType
+struct TestFeedKitRequest: FeedKitFetchRequest {
+    var isFirstPage: Bool
+    var pageNumber: Int
+    var itemsPerPage: Int
     
-    var cacheName : String {
-        return "test"
+    init(isFirstPage: Bool, pageNumber: Int, itemsPerPage: Int){
+        self.isFirstPage = isFirstPage
+        self.pageNumber = pageNumber
+        self.itemsPerPage = itemsPerPage
     }
     
-    func fetchItems(
-        firstPage: Bool,
-        pageNumber: Int?,
-        itemsPerPage: Int?,
-        minId: Int?,
-        maxId: Int?,
-        maxTimeStamp: Int?,
-        minTimeStamp: Int?,
-        success:(newItems:[FeedItem])->(),
-        failure:(error: NSError)->()
-        ) {
+    func fetchItems(success success: ([FeedItem]) -> (), failure: (NSError) -> ()) {
+        MockService.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: success, failure: failure)
+    }
+}
 
-        if let pageNumber = pageNumber, itemsPerPage = itemsPerPage {
-            MockService.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: success, failure: failure)
+enum TestFeedKitCachePreferences : CachePreferences{
+    case CacheOn
+    case CacheOff
+    
+    var cacheOn: Bool {
+        switch self {
+        case .CacheOn :
+            return true
+        default:
+            return false
         }
+    }
+    
+    var cacheName: String {
+        return "test"
     }
 }
 

@@ -8,34 +8,38 @@
 
 import Foundation
 
+public protocol FeedKitFetchRequest {
+    var isFirstPage: Bool { get }
+    
+    func fetchItems(success success: ([FeedItem])->(), failure:(NSError)->())
+}
 
 public protocol FeedKitDelegate {
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
 }
 
+public protocol CachePreferences {
+    var cacheName: String { get }
+    var cacheOn: Bool { get }
+}
+
 public class FeedController {
     private(set) public var items: [FeedItem]! = []
     public var delegate: FeedKitDelegate?
-    private(set) var  feedType: FeedKitType!
+    //private(set) var  feedType: FeedKitType!
+    private(set) var cachePreferences: CachePreferences
     public var cache: Cache?
     var redundantItemsAllowed : Bool = false //TODO implement this
     let section: Int!
     
-    var cacheOn: Bool {
-        get {
-            return cache == nil ? false : true
-        }
-        set (on) {
-            cache = on ? Cache(name: feedType.cacheName) : nil
-        }
-    }
 
     
-    
-    public init(feedType: FeedKitType, cacheOn: Bool, section: Int){
+    public init(cachePreferences: CachePreferences, section: Int){
         self.section = section
-        self.feedType = feedType
-        self.cacheOn = cacheOn
+        self.cachePreferences = cachePreferences
+        if self.cachePreferences.cacheOn {
+            self.cache = Cache(name: cachePreferences.cacheName)
+        }
     }
     
     public func loadCacheSynchronously(){
@@ -48,27 +52,13 @@ public class FeedController {
         self.items = self.items + items
     }
     
-    public func fetchItems(
-        isFirstPage isFirstPage: Bool,
-        pageNumber: Int? = nil,
-        itemsPerPage: Int? = nil,
-        minId: Int? = nil,
-        maxId: Int? = nil,
-        maxTimeStamp: Int? = nil,
-        minTimeStamp: Int? = nil)
+    public func fetchItems(request: FeedKitFetchRequest)
     {
-        feedType.fetchItems(
-            isFirstPage,
-            pageNumber: pageNumber,
-            itemsPerPage: itemsPerPage,
-            minId: minId,
-            maxId: maxId,
-            maxTimeStamp: maxTimeStamp,
-            minTimeStamp: minTimeStamp,
+        request.fetchItems(
             success: {
                 [weak self](newItems) -> () in
                 if let strongSelf = self {
-                    if isFirstPage {
+                    if request.isFirstPage {
                         strongSelf._processNewItemsForPageOne(newItems)
                     }
                     else {
@@ -145,19 +135,6 @@ public class FeedItem: NSObject {
 public protocol FeedKitType{
     var cacheName: String {get}
     
-    func fetchItems(
-        firstPage: Bool,
-        pageNumber: Int?,
-        itemsPerPage: Int?,
-        minId: Int?,
-        maxId: Int?,
-        maxTimeStamp: Int?,
-        minTimeStamp: Int?,
-        success:(newItems:[FeedItem])->(),
-        failure:(error: NSError)->()
-    )
-    
-    
-    
+    func fetchItems(success success:(newItems:[FeedItem])->(), failure:(error: NSError)->())
 }
 
