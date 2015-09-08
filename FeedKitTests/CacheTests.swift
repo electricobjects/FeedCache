@@ -10,8 +10,8 @@ import XCTest
 import FeedKit
 
 class CacheTests: XCTestCase {
-    let testItems : [FeedItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
-    let cache = Cache(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+    let testItems : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
+    let cache = Cache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
     
     override func setUp() {
         cache.addItems(testItems)
@@ -42,7 +42,7 @@ class CacheTests: XCTestCase {
         
         //Test success is dependent on there already being items in the cache
         
-        let cache = Cache(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        let cache = Cache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
         let expectation = self.expectationWithDescription("Load cache expectation")
         var testSuccess = false
         cache.loadCache { (success) -> () in
@@ -60,7 +60,7 @@ class CacheTests: XCTestCase {
         //If the cache were already empty before this test was run it would
         //succeed even if it were not operating correctly
         
-        let cache = Cache(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        let cache = Cache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
         cache.loadCache { (success) -> () in
             print(success)
         }
@@ -72,10 +72,10 @@ class CacheTests: XCTestCase {
     }
     
     func test_015_addMoreItems() {
-        let cache = Cache(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        let cache = Cache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
         cache.clearCache()
-        let items1 : [FeedItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
-        let items2 : [FeedItem] = [TestItem(name: "test2"), TestItem(name: "test3"), TestItem(name: "test4")]
+        let items1 : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
+        let items2 : [TestItem] = [TestItem(name: "test2"), TestItem(name: "test3"), TestItem(name: "test4")]
         
         cache.addItems(items1)
         cache.loadCache()

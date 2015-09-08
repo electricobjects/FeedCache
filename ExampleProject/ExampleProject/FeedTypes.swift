@@ -23,7 +23,6 @@ struct PeopleFeedRequest: FeedKitFetchRequest {
     }
     
     func fetchItems(success success: ([FeedItem])->(), failure:(NSError)->()){
-
         MockAPIService.sharedService.fetchFeed(minId, maxId: maxId, count: count) { (items) -> () in
             success(items)
         }

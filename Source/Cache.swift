@@ -8,14 +8,14 @@
 
 import Foundation
 
-public class Cache{
+public class Cache<T:FeedItem>{
     
     let name: String!
     let saveOperationQueue = NSOperationQueue()
     let apiCacheFolderName = "FeedKitCache"
     let archiveName = "feed_kit_cache.archive"
     var semaphore: dispatch_semaphore_t?
-    public var items : [FeedItem] = []
+    public var items : [T] = []
     public var saved = false
     
     public init(name: String) {
@@ -25,7 +25,7 @@ public class Cache{
     
     //public var cachedItems: [FeedItems] = []
     
-    public func addItems(items: [FeedItem]){
+    public func addItems(items: [T]){
         self.saved = false
         self.items = self.items + items
         let data = NSKeyedArchiver.archivedDataWithRootObject(self.items)
@@ -47,7 +47,7 @@ public class Cache{
         _getCachedData { (data) -> () in
             if let data = data {
                 let unarchivedItems = NSKeyedUnarchiver.unarchiveObjectWithData(data)
-                if let unarchivedItems = unarchivedItems as? [FeedItem] {
+                if let unarchivedItems = unarchivedItems as? [T] {
                     objc_sync_enter(self.items)
                     self.items = unarchivedItems
                     objc_sync_exit(self.items)
