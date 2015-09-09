@@ -13,15 +13,19 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
     var isFirstPage: Bool
     var pageNumber: Int
     var itemsPerPage: Int
-    
+        
     init(isFirstPage: Bool, pageNumber: Int, itemsPerPage: Int){
         self.isFirstPage = isFirstPage
         self.pageNumber = pageNumber
         self.itemsPerPage = itemsPerPage
     }
     
-    func fetchItems(success success: ([FeedItem]) -> (), failure: (NSError) -> ()) {
-        MockService.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: success, failure: failure)
+    func fetchItems(success success: (newItems: [TestItem]) -> (), failure: (NSError) -> ()) {
+        MockService.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: { (newItems) -> () in
+            success(newItems: newItems)
+        }) { (error) -> () in
+
+        }
     }
 }
 
@@ -43,20 +47,19 @@ enum TestFeedKitCachePreferences : CachePreferences{
     }
 }
 
-@objc
-class TestItem: FeedItem, NSCoding {
-    var name: String?
+class TestItem: NSObject, FeedItem{
+    var name: String? = nil
     
     init(name: String){
-        super.init()
+        
         self.name = name
     }
     
-    @objc required init(coder aDecoder: NSCoder){
+    @objc required  init(coder aDecoder: NSCoder){
         name = aDecoder.decodeObjectForKey("name") as? String
     }
     
-    @objc func encodeWithCoder(aCoder: NSCoder){
+    @objc  func encodeWithCoder(aCoder: NSCoder){
         aCoder.encodeObject(name, forKey: "name")
     }
     
@@ -68,19 +71,19 @@ class TestItem: FeedItem, NSCoding {
         return false
     }
     
-    override var hashValue : Int{
+     override var hashValue : Int{
         var h: Int = 0
         if let name = name { h ^= name.hash }
         return h
     }
     
-    override var description: String { return name! }
+     override var description: String { return name! }
 }
 
 class MockService {
     static var mockResponseItems: [TestItem]?
     
-    class func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject]?, success:(newItems:[FeedItem])->(), failure:(error: NSError)->()){
+    class func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject]?, success:(newItems:[TestItem])->(), failure:(error: NSError)->()){
         success(newItems: MockService.mockResponseItems!)
     }
 }

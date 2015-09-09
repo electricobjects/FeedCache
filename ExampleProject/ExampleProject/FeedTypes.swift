@@ -22,10 +22,10 @@ struct PeopleFeedRequest: FeedKitFetchRequest {
         self.maxId = maxId
     }
     
-    func fetchItems(success success: ([FeedItem])->(), failure:(NSError)->()){
-
+    
+    func fetchItems(success success: (newItems: [PeopleFeedItem]) -> (), failure: (NSError) -> ()) {
         MockAPIService.sharedService.fetchFeed(minId, maxId: maxId, count: count) { (items) -> () in
-            success(items)
+            success(newItems: items)
         }
     }
 }

@@ -9,9 +9,10 @@
 import Foundation
 
 public protocol FeedKitFetchRequest {
+    typealias H: FeedItem
     var isFirstPage: Bool { get }
     
-    func fetchItems(success success: ([FeedItem])->(), failure:(NSError)->())
+    func fetchItems(success success: (newItems: [H])->(), failure:(NSError)->())
 }
 
 public protocol FeedKitDelegate {
@@ -23,16 +24,14 @@ public protocol CachePreferences {
     var cacheOn: Bool { get }
 }
 
-public class FeedController {
-    private(set) public var items: [FeedItem]! = []
+public class FeedController <T:FeedItem>{
+    private(set) public var items: [T]! = []
     public var delegate: FeedKitDelegate?
     //private(set) var  feedType: FeedKitType!
     private(set) var cachePreferences: CachePreferences
-    public var cache: Cache?
+    public var cache: Cache<T>?
     var redundantItemsAllowed : Bool = false //TODO implement this
     let section: Int!
-    
-
     
     public init(cachePreferences: CachePreferences, section: Int){
         self.section = section
@@ -48,28 +47,26 @@ public class FeedController {
         _processCacheLoad()
     }
     
-    private func _addItems(items: [FeedItem]){
+    private func _addItems(items: [T]){
         self.items = self.items + items
     }
     
-    public func fetchItems(request: FeedKitFetchRequest)
+    public func fetchItems<G:FeedKitFetchRequest>(request: G)
     {
-        request.fetchItems(
-            success: {
-                [weak self](newItems) -> () in
-                if let strongSelf = self {
+        request.fetchItems(success: { [weak self](newItems) -> () in
+            if let strongSelf = self {
+                if let items =  newItems as Any as? [T]{
                     if request.isFirstPage {
-                        strongSelf._processNewItemsForPageOne(newItems)
+                        strongSelf._processNewItemsForPageOne(items)
                     }
                     else {
-                        strongSelf._addNewItems(newItems)
+                        strongSelf._addNewItems(items)
                     }
                 }
-            },
-            failure: {
-                (error) -> () in
+            }
+        }) { (error) -> () in
                 
-        })
+        }
     }
     
     private func _processCacheLoad(){
@@ -78,7 +75,7 @@ public class FeedController {
         }
     }
     
-    private func _processNewItemsForPageOne(newItems: [FeedItem]){
+    private func _processNewItemsForPageOne(newItems: [T]){
         if newItems == items {
             return
         }
@@ -99,14 +96,14 @@ public class FeedController {
         delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
     }
     
-    private func _addNewItems(newItems: [FeedItem]) {
+    private func _addNewItems(newItems: [T]) {
         items = items + newItems
         cache?.addItems(newItems)
         let itemsAdded = _indexesForItems(Set(newItems), inArray: items)
         delegate?.itemsUpdated(itemsAdded, itemsDeleted: [])
     }
     
-    private func _indexesForItems(itemsToFind: Set<FeedItem>, inArray array: [FeedItem]) -> [NSIndexPath]{
+    private func _indexesForItems(itemsToFind: Set<T>, inArray array: [T]) -> [NSIndexPath]{
         var returnPaths: [NSIndexPath] = []
         
         for item in itemsToFind {
@@ -119,22 +116,13 @@ public class FeedController {
     }
 }
 
-public class FeedItem: NSObject {
-        
-    public override func isEqual(object: AnyObject?) -> Bool {
-        assert(false, "This must be overridden")
-        return false
-    }
-    
-    public override var hashValue : Int{
-        assert(false, "This must be overridden")
-        return 0
-    }
+public protocol FeedItem : Hashable, NSCoding {
+
 }
 
 public protocol FeedKitType{
     var cacheName: String {get}
     
-    func fetchItems(success success:(newItems:[FeedItem])->(), failure:(error: NSError)->())
+    func fetchItems<T>(success success:(newItems:[T])->(), failure:(error: NSError)->())
 }
 

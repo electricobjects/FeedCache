@@ -15,16 +15,16 @@ import XCTest
 
 class FeedControllerTests: XCTestCase, FeedKitDelegate {
     
-    let testItems : [FeedItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
+    let testItems : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
     var delegateResponseExpectation: XCTestExpectation?
-    var feedController: FeedController!
+    var feedController: FeedController<TestItem>!
     
     var itemsAdded: [NSIndexPath]?
     var itemsDeleted: [NSIndexPath]?
     
     override func setUp() {
         super.setUp()
-        feedController = FeedController(cachePreferences: TestFeedKitCachePreferences.CacheOn, section: 0)
+        feedController = FeedController<TestItem>(cachePreferences: TestFeedKitCachePreferences.CacheOn, section: 0)
         feedController.delegate = self
         feedController.cache?.addItems(self.testItems)
         feedController.cache?.waitUntilSynchronized()
@@ -102,7 +102,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         MockService.mockResponseItems = [testItem]
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
         
-        let cachelessFc = FeedController(cachePreferences: TestFeedKitCachePreferences.CacheOff, section: 0)
+        let cachelessFc = FeedController<TestItem>(cachePreferences: TestFeedKitCachePreferences.CacheOff, section: 0)
         cachelessFc.delegate = self
         
         let request = TestFeedKitRequest(isFirstPage: true, pageNumber: 1, itemsPerPage: 10)
