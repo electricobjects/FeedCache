@@ -27,7 +27,6 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
 
         }
     }
-    
 }
 
 enum TestFeedKitCachePreferences : CachePreferences{
