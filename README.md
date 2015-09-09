@@ -11,6 +11,8 @@ FeedKit handles:
 * Deletions
 * Caching
 
+![pull to refresh](https://github.com/electricobjects/FeedKit/raw/master/ReadMe_Images/pull_to_refresh.gif)
+
 ## How it works ##
 
 When you first load your table view or collection view, FeedKit loads the first page of your feed. If the first page has changed from the last time it was loaded, the cache is cleared and replaced with the new items. This handles deletions and keeps the data on your phone from getting stale.
