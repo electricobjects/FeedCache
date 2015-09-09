@@ -12,7 +12,7 @@ import FeedKit
 class TableViewController: UITableViewController, FeedKitDelegate {
 
     //var refreshControl: UIRefreshControl!
-    var feedController: FeedKit.FeedController!
+    var feedController: FeedController<PeopleFeedItem>!
     let itemsPerPage = 25
     var currentPage = 1
     
@@ -25,7 +25,7 @@ class TableViewController: UITableViewController, FeedKitDelegate {
         refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         //self.tableView.addSubview(refreshControl)
 
-        feedController = FeedController(cachePreferences: ExampleCachePreferences.CacheOn, section: 0)
+        feedController = FeedController<PeopleFeedItem>(cachePreferences: ExampleCachePreferences.CacheOn, section: 0)
         feedController.delegate = self
         feedController?.loadCacheSynchronously()
         let request = PeopleFeedRequest(isFirstPage: true, count: itemsPerPage, minId: 0)
@@ -47,17 +47,18 @@ class TableViewController: UITableViewController, FeedKitDelegate {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
 
-        if let item = feedController.items[indexPath.row] as? PeopleFeedItem{
-            cell.textLabel?.text = item.name
-            
-            if indexPath.row == itemsPerPage * currentPage - 1 {
-                if let lastItem = feedController.items.last as? PeopleFeedItem{
-                    let request = PeopleFeedRequest(isFirstPage: false, count: itemsPerPage, minId: 0, maxId: lastItem.id)
-                    feedController?.fetchItems(request)
-                }
+        let item = feedController.items[indexPath.row]
+        cell.textLabel?.text = item.name
+        
+        if indexPath.row == itemsPerPage * currentPage - 1 {
+            if let lastItem = feedController.items.last{
+                let request = PeopleFeedRequest(isFirstPage: false, count: itemsPerPage, minId: 0, maxId: lastItem.id)
+                feedController?.fetchItems(request)
+                
                 currentPage++
             }
         }
+        
         return cell
     }
     
@@ -76,6 +77,4 @@ class TableViewController: UITableViewController, FeedKitDelegate {
             refreshControl?.endRefreshing()
         }
     }
-
-
 }

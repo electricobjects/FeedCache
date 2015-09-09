@@ -9,7 +9,7 @@
 import UIKit
 import FeedKit
 
-class PeopleFeedItem : FeedKit.FeedItem, NSCoding {
+class PeopleFeedItem : NSObject, FeedKit.FeedItem,  NSCoding {
     var name: String!
     var id: Int!
     
@@ -18,12 +18,12 @@ class PeopleFeedItem : FeedKit.FeedItem, NSCoding {
         self.id = id
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    @objc required init?(coder aDecoder: NSCoder) {
         name = aDecoder.decodeObjectForKey("name") as? String
         id = aDecoder.decodeObjectForKey("id") as? Int
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
+    @objc func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(name, forKey: "name")
         aCoder.encodeObject(id, forKey: "id")
     }
@@ -43,4 +43,7 @@ class PeopleFeedItem : FeedKit.FeedItem, NSCoding {
     override var description : String {
         return "\(id), \(name)"
     }
+}
+func ==(lhs: PeopleFeedItem, rhs: PeopleFeedItem) -> Bool{
+    return true
 }
