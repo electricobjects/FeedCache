@@ -1,15 +1,21 @@
 # FeedKit
-A Swift framework for consuming and displaying feeds in your iOS app
+A Swift framework for consuming and displaying feeds in iOS
 
-FeedKit is an alternative to using CoreData to manage feed data. Architecturally, it replaces an NSFetchedResultsController, while caching data with NSCoding so the feed can load quickly from a cold start.
+FeedKit is an alternative to using CoreData to manage paginated feed data. Architecturally, it replaces an NSFetchedResultsController, while caching data with NSCoding so the feed can load quickly from a cold start.
 
-####Featuress####
+####Features####
 
 FeedKit handles:
 
 * Insertions
 * Deletions
 * Caching
+
+## How it works ##
+
+When you first load your table view or collection view, FeedKit loads the first page of your feed. If the first page has changed from the last time it was loaded, the cache is cleared and replaced with the new items. This handles deletions and keeps the data on your phone from getting stale.
+
+
 
 ## To Use
 
@@ -80,4 +86,24 @@ Now create a `FeedKitController` in your UITableViewController or UICollectionVi
 
 ```swift
 self.feedController = FeedController<PeopleFeedItem>(cachePreferences: ExampleCachePreferences.CacheOn, section: 0)
+self.feedController.delegate = self
 ```
+
+Implement the FeedKitControllerDelegate methods
+
+```swift
+func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
+    tableView.beginUpdates()
+    tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
+    tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
+    tableView.endUpdates()
+}
+```
+
+##Installation##
+
+TODO: Cocoapods/carthage stuff goes here
+
+##Example App##
+
+TODO: Link to release download here.
