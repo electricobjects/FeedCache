@@ -24,43 +24,6 @@ public protocol CachePreferences {
     var cacheOn: Bool { get }
 }
 
-public class TestItem: FeedItem{
-    var name: String? = nil
-    public init() {}
-    
-    convenience public init(name: String){
-        self.init()
-        self.name = name
-    }
-    
-    @objc required public init(coder aDecoder: NSCoder){
-        name = aDecoder.decodeObjectForKey("name") as? String
-    }
-    
-    @objc public func encodeWithCoder(aCoder: NSCoder){
-        aCoder.encodeObject(name, forKey: "name")
-    }
-    
-    
-    func isEqual(object: AnyObject?) -> Bool {
-        if let object = object as? TestItem {
-            return hashValue == object.hashValue
-        }
-        return false
-    }
-    
-    public var hashValue : Int{
-        var h: Int = 0
-        if let name = name { h ^= name.hash }
-        return h
-    }
-    
-    var description: String { return name! }
-}
-public func ==(lhs: TestItem, rhs:TestItem) -> Bool {
-    return lhs.hashValue == rhs.hashValue
-}
-
 public class FeedController <T:FeedItem>{
     private(set) public var items: [T]! = []
     public var delegate: FeedKitDelegate?
@@ -69,8 +32,6 @@ public class FeedController <T:FeedItem>{
     public var cache: Cache<T>?
     var redundantItemsAllowed : Bool = false //TODO implement this
     let section: Int!
-    
-
     
     public init(cachePreferences: CachePreferences, section: Int){
         self.section = section
@@ -92,17 +53,11 @@ public class FeedController <T:FeedItem>{
     
     public func fetchItems<G:FeedKitFetchRequest>(request: G)
     {
-//        request.fetchItems(success: { (newItems) -> () in
-//            
-//        }) { (error) -> () in
-//                
-//        }
         request.fetchItems(success: { [weak self](newItems) -> () in
             if let strongSelf = self {
                 if let items =  newItems as Any as? [T]{
                     if request.isFirstPage {
                         strongSelf._processNewItemsForPageOne(items)
-                        //strongSelf._processNewItemsForPageOne(newItems)
                     }
                     else {
                         strongSelf._addNewItems(items)
@@ -161,21 +116,9 @@ public class FeedController <T:FeedItem>{
     }
 }
 
-public protocol FeedItem : Equatable, Hashable, NSCoding {
-    
+public protocol FeedItem : Hashable, NSCoding {
+
 }
-//public class FeedItem: NSObject {
-//        
-//    public override func isEqual(object: AnyObject?) -> Bool {
-//        assert(false, "This must be overridden")
-//        return false
-//    }
-//    
-//    public override var hashValue : Int{
-//        assert(false, "This must be overridden")
-//        return 0
-//    }
-//}
 
 public protocol FeedKitType{
     var cacheName: String {get}

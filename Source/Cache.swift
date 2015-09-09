@@ -22,9 +22,7 @@ public class Cache<T:FeedItem>{
         saveOperationQueue.maxConcurrentOperationCount = 1
         self.name = name
     }
-    
-    //public var cachedItems: [FeedItems] = []
-    
+        
     public func addItems(items: [T]){
         self.saved = false
         self.items = self.items + items

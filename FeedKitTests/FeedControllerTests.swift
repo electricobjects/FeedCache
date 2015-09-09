@@ -24,7 +24,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
     
     override func setUp() {
         super.setUp()
-        feedController = FeedController(cachePreferences: TestFeedKitCachePreferences.CacheOn, section: 0)
+        feedController = FeedController<TestItem>(cachePreferences: TestFeedKitCachePreferences.CacheOn, section: 0)
         feedController.delegate = self
         feedController.cache?.addItems(self.testItems)
         feedController.cache?.waitUntilSynchronized()

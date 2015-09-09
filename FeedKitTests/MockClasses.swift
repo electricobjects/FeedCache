@@ -13,9 +13,7 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
     var isFirstPage: Bool
     var pageNumber: Int
     var itemsPerPage: Int
-    
-    //typealias H = TestItem
-    
+        
     init(isFirstPage: Bool, pageNumber: Int, itemsPerPage: Int){
         self.isFirstPage = isFirstPage
         self.pageNumber = pageNumber
@@ -82,11 +80,6 @@ class TestItem: NSObject, FeedItem{
     
      override var description: String { return name! }
 }
-func ==(lhs: TestItem, rhs:TestItem) -> Bool {
-    return lhs.hashValue == rhs.hashValue
-}
-
-
 
 class MockService {
     static var mockResponseItems: [TestItem]?
