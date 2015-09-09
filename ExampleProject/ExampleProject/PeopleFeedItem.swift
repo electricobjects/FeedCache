@@ -44,6 +44,3 @@ class PeopleFeedItem : NSObject, FeedKit.FeedItem,  NSCoding {
         return "\(id), \(name)"
     }
 }
-func ==(lhs: PeopleFeedItem, rhs: PeopleFeedItem) -> Bool{
-    return true
-}
