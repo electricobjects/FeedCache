@@ -10,7 +10,7 @@ import Foundation
 
 public protocol FeedKitFetchRequest {
     typealias H: FeedItem
-    var clearCacheOnCompletion: Bool { get }
+    var clearStaleDataOnCompletion: Bool { get }
     
     func fetchItems(success success: (newItems: [H])->(), failure:(NSError)->())
 }
@@ -56,7 +56,7 @@ public class FeedController <T:FeedItem>{
         request.fetchItems(success: { [weak self](newItems) -> () in
             if let strongSelf = self {
                 if let items =  newItems as Any as? [T]{
-                    if request.clearCacheOnCompletion {
+                    if request.clearStaleDataOnCompletion {
                         strongSelf._processNewItemsAndClearCache(items)
                     }
                     else {

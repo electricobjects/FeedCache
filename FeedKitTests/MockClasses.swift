@@ -10,12 +10,12 @@ import UIKit
 import FeedKit
 
 struct TestFeedKitRequest: FeedKitFetchRequest {
-    var clearCacheOnCompletion: Bool
+    var clearStaleDataOnCompletion: Bool
     var pageNumber: Int
     var itemsPerPage: Int
         
-    init(clearCacheOnCompletion: Bool, pageNumber: Int, itemsPerPage: Int){
-        self.clearCacheOnCompletion = clearCacheOnCompletion
+    init(clearStaleDataOnCompletion: Bool, pageNumber: Int, itemsPerPage: Int){
+        self.clearStaleDataOnCompletion = clearStaleDataOnCompletion
         self.pageNumber = pageNumber
         self.itemsPerPage = itemsPerPage
     }

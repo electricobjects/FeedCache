@@ -62,12 +62,12 @@ The FeedKitFetchRequest protocol requires you to implement the `fetchItems` meth
 
 ```swift
 struct TestFeedKitRequest: FeedKitFetchRequest {
-    var isFirstPage: Bool
+    var clearStaleDataOnCompletion: Bool
     var pageNumber: Int
     var itemsPerPage: Int
 
-    init(isFirstPage: Bool, pageNumber: Int, itemsPerPage: Int){
-        self.isFirstPage = isFirstPage
+    init(clearStaleDataOnCompletion: Bool, pageNumber: Int, itemsPerPage: Int){
+        self.clearStaleDataOnCompletion = clearStaleDataOnCompletion
         self.pageNumber = pageNumber
         self.itemsPerPage = itemsPerPage
     }
