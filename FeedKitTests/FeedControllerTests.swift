@@ -47,7 +47,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
         
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        let request = TestFeedKitRequest(isFirstPage: true, pageNumber: 1, itemsPerPage: 10)
+        let request = TestFeedKitRequest(clearCacheOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         feedController.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -65,7 +65,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         MockService.mockResponseItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "baz")]
         
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        let request = TestFeedKitRequest(isFirstPage: true, pageNumber: 1, itemsPerPage: 10)
+        let request = TestFeedKitRequest(clearCacheOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         feedController.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -82,7 +82,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
     func test_addPages(){
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        let request = TestFeedKitRequest(isFirstPage: false, pageNumber: 2, itemsPerPage: 10)
+        let request = TestFeedKitRequest(clearCacheOnCompletion: false, pageNumber: 2, itemsPerPage: 10)
         feedController.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -105,7 +105,7 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         let cachelessFc = FeedController<TestItem>(cachePreferences: TestFeedKitCachePreferences.CacheOff, section: 0)
         cachelessFc.delegate = self
         
-        let request = TestFeedKitRequest(isFirstPage: true, pageNumber: 1, itemsPerPage: 10)
+        let request = TestFeedKitRequest(clearCacheOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         cachelessFc.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in

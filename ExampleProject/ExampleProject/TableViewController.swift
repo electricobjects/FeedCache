@@ -28,7 +28,7 @@ class TableViewController: UITableViewController, FeedKitDelegate {
         feedController = FeedController<PeopleFeedItem>(cachePreferences: ExampleCachePreferences.CacheOn, section: 0)
         feedController.delegate = self
         feedController?.loadCacheSynchronously()
-        let request = PeopleFeedRequest(isFirstPage: true, count: itemsPerPage, minId: 0)
+        let request = PeopleFeedRequest(clearCacheOnCompletion: true, count: itemsPerPage, minId: 0)
         feedController?.fetchItems(request)
     }
 
@@ -52,7 +52,7 @@ class TableViewController: UITableViewController, FeedKitDelegate {
         
         if indexPath.row == itemsPerPage * currentPage - 1 {
             if let lastItem = feedController.items.last{
-                let request = PeopleFeedRequest(isFirstPage: false, count: itemsPerPage, minId: 0, maxId: lastItem.id)
+                let request = PeopleFeedRequest(clearCacheOnCompletion: false, count: itemsPerPage, minId: 0, maxId: lastItem.id)
                 feedController?.fetchItems(request)
                 
                 currentPage++
@@ -64,7 +64,7 @@ class TableViewController: UITableViewController, FeedKitDelegate {
     
     func refresh(sender: AnyObject){
         currentPage = 1
-        let request = PeopleFeedRequest(isFirstPage: true, count: itemsPerPage, minId: 0)
+        let request = PeopleFeedRequest(clearCacheOnCompletion: true, count: itemsPerPage, minId: 0)
         feedController?.fetchItems(request)
     }
 

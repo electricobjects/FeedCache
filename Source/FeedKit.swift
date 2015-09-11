@@ -10,7 +10,7 @@ import Foundation
 
 public protocol FeedKitFetchRequest {
     typealias H: FeedItem
-    var isFirstPage: Bool { get }
+    var clearCacheOnCompletion: Bool { get }
     
     func fetchItems(success success: (newItems: [H])->(), failure:(NSError)->())
 }
@@ -56,8 +56,8 @@ public class FeedController <T:FeedItem>{
         request.fetchItems(success: { [weak self](newItems) -> () in
             if let strongSelf = self {
                 if let items =  newItems as Any as? [T]{
-                    if request.isFirstPage {
-                        strongSelf._processNewItemsForPageOne(items)
+                    if request.clearCacheOnCompletion {
+                        strongSelf._processNewItemsAndClearCache(items)
                     }
                     else {
                         strongSelf._addNewItems(items)
@@ -75,7 +75,7 @@ public class FeedController <T:FeedItem>{
         }
     }
     
-    private func _processNewItemsForPageOne(newItems: [T]){
+    private func _processNewItemsAndClearCache(newItems: [T]){
         if newItems == items {
             return
         }

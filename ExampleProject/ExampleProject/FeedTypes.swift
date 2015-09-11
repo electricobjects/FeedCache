@@ -10,13 +10,13 @@ import Foundation
 import FeedKit
 
 struct PeopleFeedRequest: FeedKitFetchRequest {
-    var isFirstPage: Bool
+    var clearCacheOnCompletion: Bool
     var maxId: Int?
     var minId: Int!
     var count: Int!
     
-    init(isFirstPage: Bool, count: Int, minId: Int, maxId: Int? = nil){
-        self.isFirstPage = isFirstPage
+    init(clearCacheOnCompletion: Bool, count: Int, minId: Int, maxId: Int? = nil){
+        self.clearCacheOnCompletion = clearCacheOnCompletion
         self.count = count
         self.minId = minId
         self.maxId = maxId
