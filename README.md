@@ -13,7 +13,7 @@ FeedKit handles:
 
 ![pull to refresh](https://github.com/electricobjects/FeedKit/raw/master/ReadMe_Images/pull_to_refresh.gif)
 
-## How it works ##
+## First-page cache deletion ##
 
 When you first load your table view or collection view, FeedKit loads the first page of your feed. If the first page has changed from the last time it was loaded, the cache is cleared and replaced with the new items. This handles deletions and keeps the data on your phone from getting stale.
 
@@ -84,14 +84,14 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
 
 **Create a FeedKitController**
 
-Now create a `FeedKitController` in your UITableViewController or UICollectionViewController, specifying the type of feedItem it will handle.
+Now create a `FeedKitController` in your UITableViewController or UICollectionViewController, specifying the type of FeedItem it will handle.
 
 ```swift
-self.feedController = FeedController<PeopleFeedItem>(cachePreferences: ExampleCachePreferences.CacheOn, section: 0)
+self.feedController = FeedController<PeopleFeedItem>(cachePreferences: MyCachePreferences.Photos, section: 0)
 self.feedController.delegate = self
 ```
 
-Implement the FeedKitControllerDelegate methods
+Implement the `FeedKitControllerDelegate` methods
 
 ```swift
 func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
@@ -99,6 +99,39 @@ func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
     tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
     tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
     tableView.endUpdates()
+}
+```
+** CachePreferences ##
+
+Create your own cache preferences as an enum.
+
+```swift
+enum MyCachePreferences : CachePreferences{
+    case Friends
+    case Photos
+    case PhotosNoCache
+
+    var cacheOn: Bool {
+        switch self {
+        case .Friends:
+            return true
+        case Photos:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var cacheName: String {
+        switch self {
+        case .Friends:
+            return "friends"
+        case .Photos:
+            return "photos"
+        default:
+          return ""
+        }
+    }
 }
 ```
 
