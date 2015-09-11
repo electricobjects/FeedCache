@@ -101,7 +101,7 @@ func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
     tableView.endUpdates()
 }
 ```
-** CachePreferences ##
+** CachePreferences **
 
 Create your own cache preferences as an enum.
 
