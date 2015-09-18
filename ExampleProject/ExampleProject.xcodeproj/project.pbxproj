@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D427AE4D1BAC6396007213D2 /* FeedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D47B38AE1B7BFABE0052A299 /* FeedKit.framework */; };
 		D427AE4E1BAC6396007213D2 /* FeedKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D47B38AE1B7BFABE0052A299 /* FeedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D47B38A71B7BEB320052A299 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38A61B7BEB320052A299 /* TableViewController.swift */; };
 		D47B38A91B7BEBEB0052A299 /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38A81B7BEBEB0052A299 /* MockAPIService.swift */; };
@@ -81,7 +80,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D47B38AF1B7BFABE0052A299 /* FeedKit.framework in Frameworks */,
-				D427AE4D1BAC6396007213D2 /* FeedKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
