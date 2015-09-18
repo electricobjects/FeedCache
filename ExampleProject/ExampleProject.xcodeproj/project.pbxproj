@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D427AE4D1BAC6396007213D2 /* FeedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D47B38AE1B7BFABE0052A299 /* FeedKit.framework */; };
+		D427AE4E1BAC6396007213D2 /* FeedKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D47B38AE1B7BFABE0052A299 /* FeedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D47B38A71B7BEB320052A299 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38A61B7BEB320052A299 /* TableViewController.swift */; };
 		D47B38A91B7BEBEB0052A299 /* MockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38A81B7BEBEB0052A299 /* MockAPIService.swift */; };
 		D47B38AB1B7BED000052A299 /* PeopleFeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47B38AA1B7BED000052A299 /* PeopleFeedItem.swift */; };
@@ -38,6 +40,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D427AE4F1BAC6396007213D2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D427AE4E1BAC6396007213D2 /* FeedKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D47B38A61B7BEB320052A299 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		D47B38A81B7BEBEB0052A299 /* MockAPIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockAPIService.swift; sourceTree = "<group>"; };
@@ -65,6 +81,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D47B38AF1B7BFABE0052A299 /* FeedKit.framework in Frameworks */,
+				D427AE4D1BAC6396007213D2 /* FeedKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +168,7 @@
 				D4F3A6611B5FE31A009D38C5 /* Sources */,
 				D4F3A6621B5FE31A009D38C5 /* Frameworks */,
 				D4F3A6631B5FE31A009D38C5 /* Resources */,
+				D427AE4F1BAC6396007213D2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
