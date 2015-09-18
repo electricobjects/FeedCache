@@ -29,7 +29,7 @@ public class FeedController <T:FeedItem>{
     public var delegate: FeedKitDelegate?
     //private(set) var  feedType: FeedKitType!
     private(set) var cachePreferences: CachePreferences
-    public var cache: Cache<T>?
+    public var cache: FeedCache<T>?
     var redundantItemsAllowed : Bool = false //TODO implement this
     let section: Int!
     
@@ -37,7 +37,7 @@ public class FeedController <T:FeedItem>{
         self.section = section
         self.cachePreferences = cachePreferences
         if self.cachePreferences.cacheOn {
-            self.cache = Cache(name: cachePreferences.cacheName)
+            self.cache = FeedCache(name: cachePreferences.cacheName)
         }
     }
     

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Cache<T:FeedItem>{
+public class FeedCache<T:FeedItem>{
     
     let name: String!
     let saveOperationQueue = NSOperationQueue()
