@@ -76,7 +76,7 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
         MockService.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: { (newItems) -> () in
             success(newItems: newItems)
         }) { (error) -> () in
-
+            failure(error)
         }
     }
 }
