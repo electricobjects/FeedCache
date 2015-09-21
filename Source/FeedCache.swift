@@ -11,7 +11,7 @@ import Foundation
 public class FeedCache<T:FeedItem>{
     
     let name: String!
-    let saveOperationQueue = NSOperationQueue()
+    let diskOperationQueue = NSOperationQueue()
     let apiCacheFolderName = "FeedKitCache"
     let archiveName = "feed_kit_cache.archive"
     var semaphore: dispatch_semaphore_t?
@@ -19,7 +19,7 @@ public class FeedCache<T:FeedItem>{
     public var saved = false
     
     public init(name: String) {
-        saveOperationQueue.maxConcurrentOperationCount = 1
+        diskOperationQueue.maxConcurrentOperationCount = 1
         self.name = name
     }
         
@@ -42,7 +42,7 @@ public class FeedCache<T:FeedItem>{
             })
         }
         
-        _getCachedData { (data) -> () in
+        _getCachedData (completion: {(data) -> () in
             if let data = data {
                 let unarchivedItems = NSKeyedUnarchiver.unarchiveObjectWithData(data)
                 if let unarchivedItems = unarchivedItems as? [T] {
@@ -54,7 +54,7 @@ public class FeedCache<T:FeedItem>{
                 }
             }
             mainQueueCompletion(success: false)
-        }
+        })
     }
     
     public func clearCache() {
@@ -66,9 +66,9 @@ public class FeedCache<T:FeedItem>{
     
     // Wait until operation queue is empty
     public func waitUntilSynchronized(){
-        print(saveOperationQueue.operationCount)
-        saveOperationQueue.waitUntilAllOperationsAreFinished()
-        print(saveOperationQueue.operationCount)
+        print(diskOperationQueue.operationCount)
+        diskOperationQueue.waitUntilAllOperationsAreFinished()
+        print(diskOperationQueue.operationCount)
     }
     
     private func _deleteCache() {
@@ -84,7 +84,7 @@ public class FeedCache<T:FeedItem>{
     }
     
     private func _saveData(data : NSData){
-        saveOperationQueue.addOperationWithBlock {
+        diskOperationQueue.addOperationWithBlock {
             [weak self]() -> Void in
             
             if let
@@ -98,15 +98,15 @@ public class FeedCache<T:FeedItem>{
                 let filePath = (folderPath as NSString).stringByAppendingPathComponent(strongSelf.archiveName)
                 
                 data.writeToFile(filePath, atomically: true)
-                if strongSelf.saveOperationQueue.operationCount == 1 {
+                if strongSelf.diskOperationQueue.operationCount == 1 {
                     strongSelf.saved = true
                 }
             }
         }
     }
     
-    private func _getCachedData(completion: (NSData?)->()){
-        saveOperationQueue.addOperationWithBlock {
+    private func _getCachedData(completion completion: (NSData?)->()){
+        diskOperationQueue.addOperationWithBlock {
             [weak self]() -> Void in
 
             if let
@@ -123,7 +123,7 @@ public class FeedCache<T:FeedItem>{
                 completion(nil)
             }
         }
-        print(saveOperationQueue.operationCount)
+        print(diskOperationQueue.operationCount)
     }
     
     

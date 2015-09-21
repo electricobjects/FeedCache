@@ -51,7 +51,6 @@ class TestItem: NSObject, FeedItem{
     var name: String? = nil
     
     init(name: String){
-        
         self.name = name
     }
     
