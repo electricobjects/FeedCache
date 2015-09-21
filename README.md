@@ -8,7 +8,7 @@ FeedKit is an alternative to using CoreData to manage paginated feed data. Archi
 FeedKit handles:
 
 * Insertions
-* Deletions
+* Deletions (through first-page cache deletion)
 * Caching
 
 ![pull to refresh](https://github.com/electricobjects/FeedKit/raw/master/ReadMe_Images/pull_to_refresh.gif)
@@ -76,7 +76,7 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
         MockService.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: { (newItems) -> () in
             success(newItems: newItems)
         }) { (error) -> () in
-
+            failure(error)
         }
     }
 }
