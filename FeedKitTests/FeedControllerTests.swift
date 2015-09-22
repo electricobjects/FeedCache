@@ -79,6 +79,24 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
         }
     }
     
+    func test_redundantRequest(){
+        MockService.mockResponseItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
+        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        let request = TestFeedKitRequest(clearStaleDataOnCompletion: false, pageNumber: 1, itemsPerPage: 10)
+        feedController.fetchItems(request)
+        
+        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
+            if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
+                XCTAssert(itemsAdded.count == 0)
+                XCTAssert(itemsDeleted.count == 0)
+            }
+            else {
+                XCTAssert(false)
+            }
+            XCTAssert(self.feedController.items.count == 3)
+        }
+    }
+    
     func test_addPages(){
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
@@ -96,6 +114,8 @@ class FeedControllerTests: XCTestCase, FeedKitDelegate {
             XCTAssert(self.feedController.items.count == 6)
         }
     }
+    
+
     
     func test_noCache(){
         let testItem = TestItem(name: "No Cache")

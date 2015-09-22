@@ -57,10 +57,10 @@ public class FeedController <T:FeedItem>{
             if let strongSelf = self {
                 if let items =  newItems as Any as? [T]{
                     if request.clearStaleDataOnCompletion {
-                        strongSelf._processNewItemsAndClearCache(items)
+                        strongSelf._processNewItems(items, clearCacheIfNewItems: true)
                     }
                     else {
-                        strongSelf._addNewItems(items)
+                        strongSelf._processNewItems(items, clearCacheIfNewItems: false)
                     }
                 }
             }
@@ -75,24 +75,32 @@ public class FeedController <T:FeedItem>{
         }
     }
     
-    private func _processNewItemsAndClearCache(newItems: [T]){
+    private func _processNewItems(newItems: [T], clearCacheIfNewItems: Bool) {
         if newItems == items {
+            delegate?.itemsUpdated([], itemsDeleted: [])
             return
         }
         let newSet = Set(newItems)
         let oldSet = Set(items)
         
         let insertSet = newSet.subtract(oldSet)
-        let deleteSet = oldSet.subtract(newSet)
         
         let indexPathsForInsertion = _indexesForItems(insertSet, inArray: newItems)
-        let indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
         
-        items = newItems
-        
-        cache?.clearCache()
-        cache?.addItems(items)
-        
+        var indexPathsForDeletion: [NSIndexPath] = []
+        if clearCacheIfNewItems {
+            let deleteSet = oldSet.subtract(newSet)
+            indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
+            items = newItems
+            cache?.clearCache()
+            cache?.addItems(items)
+        }
+        else {
+            let itemsToAdd = _orderSetWithArray(insertSet, array: newItems)
+            _addItems(itemsToAdd)
+            //TODO: Remove items with the same Identity as new ones
+        }
+
         delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
     }
     
@@ -113,6 +121,16 @@ public class FeedController <T:FeedItem>{
         }
         
         return returnPaths
+    }
+    
+    private func _orderSetWithArray(set : Set<T>, array: [T]) -> [T] {
+        let forDeletion = Set(array).subtract(set)
+        var returnArray = [T](array)
+        for item in forDeletion {
+            let removeIndex = returnArray.indexOf(item)!
+            returnArray.removeAtIndex(removeIndex)
+        }
+        return returnArray
     }
 }
 

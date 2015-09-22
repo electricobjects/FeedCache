@@ -14,7 +14,6 @@ public class FeedCache<T:FeedItem>{
     let diskOperationQueue = NSOperationQueue()
     let apiCacheFolderName = "FeedKitCache"
     let archiveName = "feed_kit_cache.archive"
-    var semaphore: dispatch_semaphore_t?
     public var items : [T] = []
     public var saved = false
     
