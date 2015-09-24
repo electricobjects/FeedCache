@@ -56,12 +56,7 @@ public class FeedController <T:FeedItem>{
         request.fetchItems(success: { [weak self](newItems) -> () in
             if let strongSelf = self {
                 if let items =  newItems as Any as? [T]{
-                    if request.clearStaleDataOnCompletion {
-                        strongSelf._processNewItems(items, clearCacheIfNewItems: true)
-                    }
-                    else {
-                        strongSelf._processNewItems(items, clearCacheIfNewItems: false)
-                    }
+                    strongSelf._processNewItems(items, clearCacheIfNewItems: request.clearStaleDataOnCompletion)
                 }
             }
         }) { (error) -> () in
@@ -85,10 +80,11 @@ public class FeedController <T:FeedItem>{
         
         let insertSet = newSet.subtract(oldSet)
         
-        let indexPathsForInsertion = _indexesForItems(insertSet, inArray: newItems)
-        
+        var indexPathsForInsertion: [NSIndexPath] = []
         var indexPathsForDeletion: [NSIndexPath] = []
+        
         if clearCacheIfNewItems {
+            indexPathsForInsertion = _indexesForItems(insertSet, inArray: newItems)
             let deleteSet = oldSet.subtract(newSet)
             indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
             items = newItems
@@ -96,8 +92,11 @@ public class FeedController <T:FeedItem>{
             cache?.addItems(items)
         }
         else {
+            
             let itemsToAdd = _orderSetWithArray(insertSet, array: newItems)
             _addItems(itemsToAdd)
+            indexPathsForInsertion = _indexesForItems(insertSet, inArray: items)
+            
             //TODO: Remove items with the same Identity as new ones
         }
 
