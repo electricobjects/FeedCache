@@ -15,7 +15,7 @@ public protocol FeedKitFetchRequest {
     func fetchItems(success success: (newItems: [H])->(), failure:(NSError)->())
 }
 
-public protocol FeedKitDelegate {
+public protocol FeedKitControllerDelegate: class {
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
 }
 
@@ -26,7 +26,7 @@ public protocol CachePreferences {
 
 public class FeedController <T:FeedItem>{
     private(set) public var items: [T]! = []
-    public var delegate: FeedKitDelegate?
+    public weak var delegate: FeedKitControllerDelegate?
     //private(set) var  feedType: FeedKitType!
     private(set) var cachePreferences: CachePreferences
     public var cache: FeedCache<T>?

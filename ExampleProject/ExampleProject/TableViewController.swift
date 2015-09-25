@@ -9,7 +9,7 @@
 import UIKit
 import FeedKit
 
-class TableViewController: UITableViewController, FeedKitDelegate {
+class TableViewController: UITableViewController, FeedKitControllerDelegate {
 
     //var refreshControl: UIRefreshControl!
     var feedController: FeedController<PeopleFeedItem>!

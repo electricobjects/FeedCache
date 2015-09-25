@@ -13,7 +13,7 @@ import XCTest
 
 
 
-class FeedControllerTests: XCTestCase, FeedKitDelegate {
+class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     
     let testItems : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
     var delegateResponseExpectation: XCTestExpectation?
