@@ -56,11 +56,11 @@ public class FeedController <T:FeedItem>{
         request.fetchItems(success: { [weak self](newItems) -> () in
             if let strongSelf = self {
                 if let items =  newItems as Any as? [T]{
-                    strongSelf._processNewItems(items, clearCacheIfNewItems: request.clearStaleDataOnCompletion)
+                    strongSelf._processNewItems(items, clearCacheIfNewItemsAreDifferent: request.clearStaleDataOnCompletion)
                 }
             }
         }) { (error) -> () in
-                
+            //TODO: call error callback
         }
     }
     
@@ -70,10 +70,17 @@ public class FeedController <T:FeedItem>{
         }
     }
     
-    private func _processNewItems(newItems: [T], clearCacheIfNewItems: Bool) {
+    private func _processNewItems(newItems: [T], clearCacheIfNewItemsAreDifferent: Bool) {
         if newItems == items {
             delegate?.itemsUpdated([], itemsDeleted: [])
             return
+        }
+        else if clearCacheIfNewItemsAreDifferent && items.count >= newItems.count {
+            let oldSlice = items[0..<newItems.count]
+            if newItems[0..<newItems.count] == oldSlice {
+                delegate?.itemsUpdated([], itemsDeleted: [])
+                return
+            }
         }
         let newSet = Set(newItems)
         let oldSet = Set(items)
@@ -83,11 +90,12 @@ public class FeedController <T:FeedItem>{
         var indexPathsForInsertion: [NSIndexPath] = []
         var indexPathsForDeletion: [NSIndexPath] = []
         
-        if clearCacheIfNewItems {
+        if clearCacheIfNewItemsAreDifferent {
             indexPathsForInsertion = _indexesForItems(insertSet, inArray: newItems)
             let deleteSet = oldSet.subtract(newSet)
             indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
             items = newItems
+
             cache?.clearCache()
             cache?.addItems(items)
         }
