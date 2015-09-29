@@ -77,4 +77,9 @@ class TableViewController: UITableViewController, FeedKitControllerDelegate {
             refreshControl?.endRefreshing()
         }
     }
+    
+    func fetchRequestFailed(error: NSError){
+        print(error)
+    }
+
 }

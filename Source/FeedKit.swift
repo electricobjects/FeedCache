@@ -17,6 +17,7 @@ public protocol FeedKitFetchRequest {
 
 public protocol FeedKitControllerDelegate: class {
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
+    func fetchRequestFailed(error: NSError)
 }
 
 public protocol CachePreferences {
@@ -59,8 +60,10 @@ public class FeedController <T:FeedItem>{
                     strongSelf._processNewItems(items, clearCacheIfNewItemsAreDifferent: request.clearStaleDataOnCompletion)
                 }
             }
-        }) { (error) -> () in
-            //TODO: call error callback
+        }) { [weak self](error) -> () in
+            if let delegate = self?.delegate {
+                delegate.fetchRequestFailed(error)
+            }
         }
     }
     
