@@ -60,6 +60,8 @@ class CacheTests: XCTestCase {
         //If the cache were already empty before this test was run it would
         //succeed even if it were not operating correctly
         
+        //TODO: Refactor this so it is not dependant on previous tests
+        
         let cache = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
         cache.loadCache { (success) -> () in
             print(success)
@@ -86,5 +88,23 @@ class CacheTests: XCTestCase {
         cache.loadCache()
         cache.waitUntilSynchronized()
         XCTAssert(cache.items.count == 6, "add more items")
+    }
+    
+    func test_020_clearAllCaches() {
+        let items1 : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
+        var testCache: FeedCache<TestItem>? = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        testCache!.addItems(items1)
+        testCache = nil
+        do {
+           try FeedCache<TestItem>.deleteAllCaches()
+        } catch let error {
+            print (error)
+            XCTAssert(false)
+        }
+        testCache = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        testCache!.loadCache()
+        testCache!.waitUntilSynchronized()
+        XCTAssert(testCache!.items.count == 0, "clear all caches")
+        
     }
 }
