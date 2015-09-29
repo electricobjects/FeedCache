@@ -96,7 +96,7 @@ class CacheTests: XCTestCase {
         testCache!.addItems(items1)
         testCache = nil
         do {
-           try FeedCache<TestItem>.deleteAllCaches()
+           try deleteAllFeedKitCaches()
         } catch let error {
             print (error)
             XCTAssert(false)
@@ -105,6 +105,5 @@ class CacheTests: XCTestCase {
         testCache!.loadCache()
         testCache!.waitUntilSynchronized()
         XCTAssert(testCache!.items.count == 0, "clear all caches")
-        
     }
 }

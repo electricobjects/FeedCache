@@ -13,19 +13,19 @@ struct FeedKitFileNames {
     static let genericArchiveName = "feed_kit_cache.archive"
 }
 
+public func deleteAllFeedKitCaches() throws {
+    let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+    let documentsDirectory: AnyObject = paths[0]
+    let cacheDirectory = documentsDirectory.stringByAppendingPathComponent(FeedKitFileNames.apiCacheFolderName)
+    try NSFileManager.defaultManager().removeItemAtPath(cacheDirectory)
+}
+
 public class FeedCache<T:FeedItem>{
     
     let name: String!
     let diskOperationQueue = NSOperationQueue()
     public var items : [T] = []
     public var saved = false
-    
-    public class func deleteAllCaches() throws {
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        let documentsDirectory: AnyObject = paths[0]
-        let cacheDirectory = documentsDirectory.stringByAppendingPathComponent(FeedKitFileNames.apiCacheFolderName)
-        try NSFileManager.defaultManager().removeItemAtPath(cacheDirectory)
-    }
     
     public init(name: String) {
         diskOperationQueue.maxConcurrentOperationCount = 1
