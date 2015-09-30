@@ -15,6 +15,10 @@ public protocol FeedKitFetchRequest {
     func fetchItems(success success: (newItems: [H])->(), failure:(NSError)->())
 }
 
+public protocol FeedItem : Hashable, NSCoding {
+    
+}
+
 public protocol FeedKitControllerDelegate: class {
     func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
     func fetchRequestFailed(error: NSError)
@@ -144,13 +148,5 @@ public class FeedController <T:FeedItem>{
     }
 }
 
-public protocol FeedItem : Hashable, NSCoding {
 
-}
-
-public protocol FeedKitType{
-    var cacheName: String {get}
-    
-    func fetchItems<T>(success success:(newItems:[T])->(), failure:(error: NSError)->())
-}
 
