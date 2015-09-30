@@ -142,4 +142,8 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
         self.itemsDeleted = itemsDeleted
         self.delegateResponseExpectation?.fulfill()
     }
+    
+    func fetchRequestFailed(error: NSError){
+        
+    }
 }

@@ -60,9 +60,11 @@ public class FeedController <T:FeedItem>{
     {
         request.fetchItems(success: { [weak self](newItems) -> () in
             if let strongSelf = self {
-                if let items =  newItems as Any as? [T]{
-                    strongSelf._processNewItems(items, clearCacheIfNewItemsAreDifferent: request.clearStaleDataOnCompletion)
-                }
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+                    if let items =  newItems as Any as? [T]{
+                        strongSelf._processNewItems(items, clearCacheIfNewItemsAreDifferent: request.clearStaleDataOnCompletion)
+                    }
+                })
             }
         }) { [weak self](error) -> () in
             if let delegate = self?.delegate {
@@ -115,7 +117,9 @@ public class FeedController <T:FeedItem>{
             //TODO: Remove items with the same Identity as new ones
         }
 
-        delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
+        }
     }
     
     private func _addNewItems(newItems: [T]) {
