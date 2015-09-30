@@ -23,7 +23,7 @@ When you first load your table view or collection view, FeedKit loads the first 
 
 **Define your model**
 
-First, you must make whatever items you want to view conform to the FeedItem protocol, which ensures it conforms to NSCoding and is Hashable:
+First, you must make whatever items you want to view conform to the FeedItem protocol, which ensures it conforms to NSCoding and is Hashable. It is important to override `isEqual()`, as this is what FeedKit uses to determine which items should be inserted or deleted. By default `isEqual()` returns the object's memory address, but we want it to return a value that is computed from its properties:
 
 ```swift
 class TestItem: NSObject, FeedItem{
@@ -41,6 +41,7 @@ class TestItem: NSObject, FeedItem{
         aCoder.encodeObject(name, forKey: "name")
     }
 
+    // It's important to override isEqual so it compares properties
     override func isEqual(object: AnyObject?) -> Bool {
         if let object = object as? TestItem {
             return hashValue == object.hashValue
@@ -48,7 +49,8 @@ class TestItem: NSObject, FeedItem{
         return false
     }
 
-     override var hashValue : Int{
+    // Override hashValue to compute a value from the object's properties
+    override var hashValue : Int{
         var h: Int = 0
         if let name = name { h ^= name.hash }
         return h
