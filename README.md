@@ -81,26 +81,6 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
     }
 }
 ```
-
-**Create a FeedKitController**
-
-Now create a `FeedKitController` in your UITableViewController or UICollectionViewController, specifying the type of FeedItem it will handle.
-
-```swift
-self.feedController = FeedController<PeopleFeedItem>(cachePreferences: MyCachePreferences.Photos, section: 0)
-self.feedController.delegate = self
-```
-
-Implement the `FeedKitControllerDelegate` methods
-
-```swift
-func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
-    tableView.beginUpdates()
-    tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
-    tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
-    tableView.endUpdates()
-}
-```
 **CachePreferences**
 
 Create your own cache preferences as an enum.
@@ -134,6 +114,49 @@ enum MyCachePreferences : CachePreferences{
     }
 }
 ```
+
+**Create a FeedKitController**
+
+Now create a `FeedKitController` in your UITableViewController or UICollectionViewController, specifying the type of FeedItem it will handle.
+
+```swift
+override func viewDidLoad() {
+  self.feedController = FeedController<PeopleFeedItem>(cachePreferences: MyCachePreferences.Photos, section: 0)
+  self.feedController.delegate = self
+  feedController.loadCacheSynchronously()
+  self.currentPage = 1
+  let request = PeopleFeedRequest(currentPage, clearStaleDataOnCompletion: true, count: itemsPerPage)
+  feedController?.fetchItems(request)
+}
+
+override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return feedController.items.count
+}
+
+override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+
+    let item = feedController.items[indexPath.row]
+    cell.textLabel?.text = item.name
+
+    if indexPath.row == (itemsPerPage * currentPage) - 1 {
+        currentPage++
+        let request = PeopleFeedRequest(currentPage, clearStaleDataOnCompletion: false, count: itemsPerPage)
+        feedController?.fetchItems(request)
+    }
+    return cell
+}
+
+//MARK: ***** FeedKitControllerDelegate Methods *****
+
+func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
+    tableView.beginUpdates()
+    tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
+    tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
+    tableView.endUpdates()
+}
+```
+
 
 ##Installation##
 
