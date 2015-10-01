@@ -81,13 +81,17 @@ public class FeedController <T:FeedItem>{
     
     private func _processNewItems(newItems: [T], clearCacheIfNewItemsAreDifferent: Bool) {
         if newItems == items {
-            delegate?.itemsUpdated([], itemsDeleted: [])
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                delegate?.itemsUpdated([], itemsDeleted: [])
+            }
             return
         }
         else if clearCacheIfNewItemsAreDifferent && items.count >= newItems.count {
             let oldSlice = items[0..<newItems.count]
             if newItems[0..<newItems.count] == oldSlice {
-                delegate?.itemsUpdated([], itemsDeleted: [])
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    delegate?.itemsUpdated([], itemsDeleted: [])
+                }
                 return
             }
         }
@@ -106,7 +110,9 @@ public class FeedController <T:FeedItem>{
             items = newItems
 
             cache?.clearCache()
-            cache?.addItems(items)
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                cache?.addItems(items)
+            }
         }
         else {
             
@@ -126,7 +132,9 @@ public class FeedController <T:FeedItem>{
         items = items + newItems
         cache?.addItems(newItems)
         let itemsAdded = _indexesForItems(Set(newItems), inArray: items)
-        delegate?.itemsUpdated(itemsAdded, itemsDeleted: [])
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            delegate?.itemsUpdated(itemsAdded, itemsDeleted: [])
+        }
     }
     
     private func _indexesForItems(itemsToFind: Set<T>, inArray array: [T]) -> [NSIndexPath]{
