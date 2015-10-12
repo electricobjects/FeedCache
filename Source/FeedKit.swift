@@ -149,7 +149,7 @@ public class FeedController <T:FeedItem>{
         return returnPaths
     }
     
-    private func _indexesOf(item: T, inArray array: [T]) -> [Int]?{
+    internal func _indexesOf(item: T, inArray array: [T]) -> [Int]?{
         var indexes = [Int]()
         for i in 0..<array.count {
             if array[i] == item {
