@@ -149,6 +149,16 @@ public class FeedController <T:FeedItem>{
         return returnPaths
     }
     
+    private func _indexesOf(item: T, inArray array: [T]) -> [Int]?{
+        var indexes = [Int]()
+        for i in 0..<array.count {
+            if array[i] == item {
+                indexes.append(i)
+            }
+        }
+        return indexes.count > 0 ? indexes : nil
+    }
+    
     private func _orderSetWithArray(set : Set<T>, array: [T]) -> [T] {
         let forDeletion = Set(array).subtract(set)
         var returnArray = [T](array)
