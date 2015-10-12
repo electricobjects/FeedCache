@@ -131,7 +131,33 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
             XCTAssert(cachelessFc.items == [testItem])
         }
+    }
+    
+    
+    func test_indexesOf(){
+        var testItems : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3"), TestItem(name: "test1")]
+        var indexes : [Int]? = feedController._indexesOf(TestItem(name: "test1"), inArray: testItems)
+        XCTAssert(indexes! == [0, 3], "indexes Of test")
 
+        testItems = [TestItem(name: "test0"), TestItem(name: "test2"), TestItem(name: "test3"), TestItem(name: "test1")]
+        indexes = feedController._indexesOf(TestItem(name: "test1"), inArray: testItems)
+        XCTAssert(indexes! == [3], "indexes Of test")
+        
+        testItems = [TestItem(name: "test0"), TestItem(name: "test2"), TestItem(name: "test3"), TestItem(name: "test4")]
+        indexes = feedController._indexesOf(TestItem(name: "test1"), inArray: testItems)
+        XCTAssert(indexes == nil, "indexes Of test")
+        
+        testItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3"), TestItem(name: "test0")]
+        indexes = feedController._indexesOf(TestItem(name: "test1"), inArray: testItems)
+        XCTAssert(indexes! == [0], "indexes Of test")
+        
+        testItems = [TestItem(name: "test0"), TestItem(name: "test1"), TestItem(name: "test1"), TestItem(name: "test0")]
+        indexes = feedController._indexesOf(TestItem(name: "test1"), inArray: testItems)
+        XCTAssert(indexes! == [1,2], "indexes Of test")
+        
+        testItems = [TestItem(name: "test0"), TestItem(name: "test1"), TestItem(name: "test1"), TestItem(name: "test0")]
+        indexes = feedController._indexesOf(TestItem(name: "test1"), inArray: testItems)
+        XCTAssert(indexes! == [1,2], "indexes Of test")
     }
     
     
