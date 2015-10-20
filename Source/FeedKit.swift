@@ -86,15 +86,6 @@ public class FeedController <T:FeedItem>{
             }
             return
         }
-        else if clearCacheIfNewItemsAreDifferent && items.count >= newItems.count {
-            let oldSlice = items[0..<newItems.count]
-            if newItems[0..<newItems.count] == oldSlice {
-                dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    delegate?.itemsUpdated([], itemsDeleted: [])
-                }
-                return
-            }
-        }
         let newSet = Set(newItems)
         let oldSet = Set(items)
         
