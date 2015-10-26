@@ -82,7 +82,7 @@ public class FeedController <T:FeedItem>{
     private func _processNewItems(newItems: [T], clearCacheIfNewItemsAreDifferent: Bool) {
         if newItems == items {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                delegate?.itemsUpdated([], itemsDeleted: [])
+                self.delegate?.itemsUpdated([], itemsDeleted: [])
             }
             return
         }
@@ -102,7 +102,7 @@ public class FeedController <T:FeedItem>{
 
             cache?.clearCache()
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                cache?.addItems(items)
+                self.cache?.addItems(self.items)
             }
         }
         else {
@@ -115,7 +115,7 @@ public class FeedController <T:FeedItem>{
         }
 
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
+            self.delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
         }
     }
     
@@ -124,7 +124,7 @@ public class FeedController <T:FeedItem>{
         cache?.addItems(newItems)
         let itemsAdded = _indexesForItems(Set(newItems), inArray: items)
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            delegate?.itemsUpdated(itemsAdded, itemsDeleted: [])
+            self.delegate?.itemsUpdated(itemsAdded, itemsDeleted: [])
         }
     }
     
