@@ -20,8 +20,9 @@ public protocol FeedItem : Hashable, NSCoding {
 }
 
 public protocol FeedKitControllerDelegate: class {
-    func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
-    func fetchRequestFailed(error: NSError)
+    //typealias T
+    func feedController(feedController: FeedControllerGeneric, itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError)
 }
 
 public protocol CachePreferences {
@@ -29,7 +30,11 @@ public protocol CachePreferences {
     var cacheOn: Bool { get }
 }
 
-public class FeedController <T:FeedItem>{
+public class FeedControllerGeneric {
+    
+}
+
+public class FeedController <T:FeedItem> : FeedControllerGeneric{
     private(set) public var items: [T]! = []
     public weak var delegate: FeedKitControllerDelegate?
     //private(set) var  feedType: FeedKitType!
@@ -67,8 +72,8 @@ public class FeedController <T:FeedItem>{
                 })
             }
         }) { [weak self](error) -> () in
-            if let delegate = self?.delegate {
-                delegate.fetchRequestFailed(error)
+            if let delegate = self?.delegate, strongSelf = self {
+                delegate.feedController(strongSelf, requestFailed: error)
             }
         }
     }
@@ -82,7 +87,7 @@ public class FeedController <T:FeedItem>{
     private func _processNewItems(newItems: [T], clearCacheIfNewItemsAreDifferent: Bool) {
         if newItems == items {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                self.delegate?.itemsUpdated([], itemsDeleted: [])
+                self.delegate?.feedController(self, itemsAdded: [], itemsDeleted: [])
             }
             return
         }
@@ -115,7 +120,7 @@ public class FeedController <T:FeedItem>{
         }
 
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            self.delegate?.itemsUpdated(indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
+            self.delegate?.feedController(self, itemsAdded: indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
         }
     }
     
@@ -124,7 +129,7 @@ public class FeedController <T:FeedItem>{
         cache?.addItems(newItems)
         let itemsAdded = _indexesForItems(Set(newItems), inArray: items)
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            self.delegate?.itemsUpdated(itemsAdded, itemsDeleted: [])
+            self.delegate?.feedController(self, itemsAdded: itemsAdded, itemsDeleted: [])
         }
     }
     

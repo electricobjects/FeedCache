@@ -137,13 +137,13 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     
     //MARK: FeedKit Delegate methods
     
-    func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
+    func feedController(feedController: FeedControllerGeneric, itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
         self.itemsAdded = itemsAdded
         self.itemsDeleted = itemsDeleted
         self.delegateResponseExpectation?.fulfill()
     }
     
-    func fetchRequestFailed(error: NSError){
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError) {
         
     }
 }
