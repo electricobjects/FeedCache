@@ -34,6 +34,10 @@ public class FeedControllerGeneric {
     
 }
 
+func == (lhs: FeedControllerGeneric, rhs: FeedControllerGeneric) -> Bool{
+    return unsafeAddressOf(lhs) == unsafeAddressOf(rhs)
+}
+
 public class FeedController <T:FeedItem> : FeedControllerGeneric{
     private(set) public var items: [T]! = []
     public weak var delegate: FeedKitControllerDelegate?
