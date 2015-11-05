@@ -89,6 +89,13 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     }
     
     private func _processNewItems(newItems: [T], clearCacheIfNewItemsAreDifferent: Bool) {
+        
+        //prevent calls of this method on other threads from mutating items array while we are working with it
+        objc_sync_enter(self)
+        defer {
+            objc_sync_exit(self)
+        }
+        
         if newItems == items {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 self.delegate?.feedController(self, itemsAdded: [], itemsDeleted: [])
