@@ -21,7 +21,7 @@ public protocol FeedItem : Hashable, NSCoding {
 
 public protocol FeedKitControllerDelegate: class {
     //typealias T
-    func feedController(feedController: FeedControllerGeneric, items: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
+    func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
     func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError)
 }
 
@@ -98,8 +98,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         
         if newItems == items {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                let items = self.items //defensive copy
-                self.delegate?.feedController(self, items: items, itemsAdded: [], itemsDeleted: [])
+                self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: [], itemsDeleted: [])
             }
             return
         }
@@ -132,8 +131,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         }
 
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            let items = self.items //defensive copy
-            self.delegate?.feedController(self, items: items, itemsAdded: indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
+            self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
         }
     }
     
