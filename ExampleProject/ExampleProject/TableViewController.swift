@@ -43,7 +43,6 @@ class TableViewController: UITableViewController, FeedKitControllerDelegate {
         return feedController.items.count
     }
 
-  
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
 
@@ -68,7 +67,9 @@ class TableViewController: UITableViewController, FeedKitControllerDelegate {
         feedController?.fetchItems(request)
     }
 
-    func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
+    //MARK: ====  FeedKitController delegate methods  ====
+    
+    func feedController(feedController: FeedControllerGeneric, items: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
         tableView.beginUpdates()
         tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
         tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
@@ -78,8 +79,7 @@ class TableViewController: UITableViewController, FeedKitControllerDelegate {
         }
     }
     
-    func fetchRequestFailed(error: NSError){
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError) {
         print(error)
     }
-
 }
