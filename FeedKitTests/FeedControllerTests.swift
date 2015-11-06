@@ -137,7 +137,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     
     //MARK: FeedKit Delegate methods
     
-    func feedController(feedController: FeedControllerGeneric, itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
+    func feedController(feedController: FeedControllerGeneric, items: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
         self.itemsAdded = itemsAdded
         self.itemsDeleted = itemsDeleted
         self.delegateResponseExpectation?.fulfill()
