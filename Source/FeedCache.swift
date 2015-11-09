@@ -75,9 +75,7 @@ public class FeedCache<T:FeedItem>{
     
     // Wait until operation queue is empty
     public func waitUntilSynchronized(){
-        print(diskOperationQueue.operationCount)
         diskOperationQueue.waitUntilAllOperationsAreFinished()
-        print(diskOperationQueue.operationCount)
     }
     
     private func _deleteCache() {
@@ -101,7 +99,6 @@ public class FeedCache<T:FeedItem>{
                 folderName = strongSelf.name
             {
                 let folderPath = strongSelf._folderPathFromFolderName(folderName, insideCacheFolder: true)
-                print(folderPath)
                 strongSelf._createFolderIfNeeded(folderPath)
                 
                 let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedKitFileNames.genericArchiveName)
@@ -132,7 +129,6 @@ public class FeedCache<T:FeedItem>{
                 completion(nil)
             }
         }
-        print(diskOperationQueue.operationCount)
     }
     
     
