@@ -55,9 +55,7 @@ public class FeedCache<T:FeedItem>{
             if let data = data {
                 let unarchivedItems = NSKeyedUnarchiver.unarchiveObjectWithData(data)
                 if let unarchivedItems = unarchivedItems as? [T] {
-                    objc_sync_enter(self.items)
                     self.items = unarchivedItems
-                    objc_sync_exit(self.items)
                     mainQueueCompletion(success: true)
                     return
                 }
