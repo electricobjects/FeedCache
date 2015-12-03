@@ -129,7 +129,9 @@ Now create a `FeedKitController` in your UITableViewController or UICollectionVi
 ```swift
 
 class MyTableViewController: UITableViewController, FeedKitControllerDelegate {
+
     var items = [TestItem]()
+
     override func viewDidLoad() {
       self.feedController = FeedController<PeopleFeedItem>(cachePreferences: MyCachePreferences.TestItems, section: 0)
       self.feedController.delegate = self
