@@ -129,23 +129,27 @@ Now create a `FeedKitController` in your UITableViewController or UICollectionVi
 ```swift
 
 class MyTableViewController: UITableViewController, FeedKitControllerDelegate {
+    var items = [TestItem]()
     override func viewDidLoad() {
       self.feedController = FeedController<PeopleFeedItem>(cachePreferences: MyCachePreferences.TestItems, section: 0)
       self.feedController.delegate = self
       feedController.loadCacheSynchronously()
+      //Defensively copy items to prevent race conditions
+      items = feedController.items
+
       self.currentPage = 1
       let request = PeopleFeedRequest(currentPage, clearStaleDataOnCompletion: true, count: itemsPerPage)
       feedController?.fetchItems(request)
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return feedController.items.count
+        return items.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
 
-        let item = feedController.items[indexPath.row]
+        let item = items[indexPath.row]
         cell.textLabel?.text = item.name
 
         if indexPath.row == (itemsPerPage * currentPage) - 1 {
@@ -162,7 +166,10 @@ class MyTableViewController: UITableViewController, FeedKitControllerDelegate {
 
     //MARK: ***** FeedKitControllerDelegate Methods *****
 
-    func itemsUpdated(itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]){
+    func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
+        //Defensively copy items to prevent race conditions
+        items = itemsCopy  
+
         tableView.beginUpdates()
         tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
         tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
