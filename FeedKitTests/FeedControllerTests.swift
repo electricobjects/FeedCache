@@ -164,6 +164,19 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
         XCTAssert(feedController.items.count == 3)
     }
     
+    func test_cacheLoadingPerformance(){
+        var numberStrings = [String]()
+        for i in 0...10000 {
+            numberStrings.append(String(i))
+        }
+        let cacheItems =  numberStrings.map({TestItem(name: $0)})
+        feedController.cache?.clearCache()
+        feedController.cache?.addItems(cacheItems)
+        measureBlock { () -> Void in
+            self.feedController.loadCacheSynchronously()
+        }
+    }
+    
     
     //MARK: FeedKit Delegate methods
     
