@@ -154,7 +154,14 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
             
             XCTAssert(beforeCount + itemsAdded.count - itemsDeleted.count == afterCount)
         }
-
+    }
+    
+    func test_uniqueCacheLoading(){
+        let cacheItems =  [TestItem(name: "2"), TestItem(name: "2"), TestItem(name: "3"), TestItem(name: "4")]
+        feedController.cache?.clearCache()
+        feedController.cache?.addItems(cacheItems)
+        feedController.loadCacheSynchronously()
+        XCTAssert(feedController.items.count == 3)
     }
     
     

@@ -84,7 +84,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     
     private func _processCacheLoad(){
         if let cache = cache {
-            items = cache.items
+            items = unique(cache.items)
         }
     }
     
