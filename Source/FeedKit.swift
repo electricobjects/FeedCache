@@ -96,13 +96,15 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
             objc_sync_exit(self)
         }
         
-        if newItems == items {
+        let uniqueNewItems = unique(newItems)
+        
+        if uniqueNewItems == items {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: [], itemsDeleted: [])
             }
             return
         }
-        let newSet = Set(newItems)
+        let newSet = Set(uniqueNewItems)
         let oldSet = Set(items)
         
         let insertSet = newSet.subtract(oldSet)
@@ -111,10 +113,10 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         var indexPathsForDeletion: [NSIndexPath] = []
         
         if clearCacheIfNewItemsAreDifferent {
-            indexPathsForInsertion = _indexesForItems(insertSet, inArray: newItems)
+            indexPathsForInsertion = _indexesForItems(insertSet, inArray: uniqueNewItems)
             let deleteSet = oldSet.subtract(newSet)
             indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
-            items = newItems
+            items = uniqueNewItems
 
             cache?.clearCache()
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
@@ -123,7 +125,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         }
         else {
             
-            let itemsToAdd = _orderSetWithArray(insertSet, array: newItems)
+            let itemsToAdd = _orderSetWithArray(insertSet, array: uniqueNewItems)
             _addItems(itemsToAdd)
             indexPathsForInsertion = _indexesForItems(insertSet, inArray: items)
             
@@ -155,6 +157,11 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
             returnArray.removeAtIndex(removeIndex)
         }
         return returnArray
+    }
+    
+    func unique<S: SequenceType, E: Hashable where E == S.Generator.Element>(source: S) -> [E] {
+        var seen = [E: Bool]()
+        return source.filter { seen.updateValue(true, forKey: $0) == nil }
     }
 }
 

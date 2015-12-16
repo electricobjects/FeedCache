@@ -134,6 +134,29 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
 
     }
     
+    func test_nonUniqueItems(){
+        MockService.mockResponseItems = [TestItem(name: "1"), TestItem(name: "1"), TestItem(name: "2"), TestItem(name: "3")]
+        let cacheItems =  [TestItem(name: "2"), TestItem(name: "3"), TestItem(name: "4")]
+        
+        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        
+        feedController.cache?.clearCache()
+        feedController.cache?.addItems(cacheItems)
+        feedController.loadCacheSynchronously()
+        let itemsCount = feedController.items.count
+        let request = TestFeedKitRequest(clearStaleDataOnCompletion: false, pageNumber: 2, itemsPerPage: 10)
+        feedController.fetchItems(request)
+        
+        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
+            guard let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted else { XCTAssert(false); return}
+            let beforeCount = itemsCount
+            let afterCount = self.feedController.items.count
+            
+            XCTAssert(beforeCount + itemsAdded.count - itemsDeleted.count == afterCount)
+        }
+
+    }
+    
     
     //MARK: FeedKit Delegate methods
     
