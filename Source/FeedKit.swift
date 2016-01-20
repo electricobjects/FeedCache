@@ -82,6 +82,22 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         }
     }
     
+    public func removeItemAtIndex(index: Int) {
+        items.removeAtIndex(index)
+        if let cache = cache {
+            cache.clearCache()
+            cache.addItems(items)
+        }
+    }
+    
+    public func insertItem(item: T, atIndex index : Int) {
+        items.insert(item, atIndex: index)
+        if let cache = cache {
+            cache.clearCache()
+            cache.addItems(items)
+        }
+    }
+    
     private func _processCacheLoad(){
         if let cache = cache {
             items = unique(cache.items)

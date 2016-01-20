@@ -115,7 +115,21 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
         }
     }
     
+    func test_insertItem(){
+        let insertItem = TestItem(name: "InsertTest")
+        feedController.insertItem(insertItem, atIndex: 0)
+        XCTAssert(feedController.items[0] == insertItem)
+        
+        feedController.loadCacheSynchronously()
+        XCTAssert(feedController.items[0] == insertItem)
+    }
 
+    func test_deleteItem(){
+        feedController.removeItemAtIndex(0)
+        XCTAssert(feedController.items[0] == testItems[1])
+        feedController.loadCacheSynchronously()
+        XCTAssert(feedController.items[0] == testItems[1])
+    }
     
     func test_noCache(){
         let testItem = TestItem(name: "No Cache")
