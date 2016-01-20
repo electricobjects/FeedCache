@@ -128,8 +128,6 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
             let itemsToAdd = _orderSetWithArray(insertSet, array: uniqueNewItems)
             _addItems(itemsToAdd)
             indexPathsForInsertion = _indexesForItems(insertSet, inArray: items)
-            
-            //TODO: Remove items with the same Identity as new ones
         }
 
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
