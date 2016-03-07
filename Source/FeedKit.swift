@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol FeedKitFetchRequest {
-    typealias H: FeedItem
+    associatedtype H: FeedItem
     var clearStaleDataOnCompletion: Bool { get }
     
     func fetchItems(success success: (newItems: [H])->(), failure:(NSError)->())
