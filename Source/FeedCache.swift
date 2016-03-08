@@ -14,9 +14,9 @@ struct FeedKitFileNames {
 }
 
 public func deleteAllFeedKitCaches() throws {
-    let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-    let documentsDirectory: AnyObject = paths[0]
-    let cacheDirectory = documentsDirectory.stringByAppendingPathComponent(FeedKitFileNames.apiCacheFolderName)
+    let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+    let libraryCachesDirectory: AnyObject = paths[0]
+    let cacheDirectory = libraryCachesDirectory.stringByAppendingPathComponent(FeedKitFileNames.apiCacheFolderName)
     try NSFileManager.defaultManager().removeItemAtPath(cacheDirectory)
 }
 
@@ -131,14 +131,14 @@ public class FeedCache<T:FeedItem>{
     
     
     private func _folderPathFromFolderName(folderName : String, insideCacheFolder: Bool) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        var documentsDirectory: AnyObject = paths[0]
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+        var libraryCachesDirectory: AnyObject = paths[0]
         
         if insideCacheFolder {
-            documentsDirectory = documentsDirectory.stringByAppendingPathComponent(FeedKitFileNames.apiCacheFolderName)
+            libraryCachesDirectory = libraryCachesDirectory.stringByAppendingPathComponent(FeedKitFileNames.apiCacheFolderName)
         }
         
-        let folderPath = documentsDirectory.stringByAppendingPathComponent(folderName)
+        let folderPath = libraryCachesDirectory.stringByAppendingPathComponent(folderName)
         return folderPath
     }
     
