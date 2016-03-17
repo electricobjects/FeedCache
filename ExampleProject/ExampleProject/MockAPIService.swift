@@ -31,7 +31,7 @@ class MockAPIService {
                 for name in list {
                     let item = PeopleFeedItem(name: name, id: count)
                     feedItems.append(item)
-                    count++
+                    count += 1
                 }
                 feedItems = feedItems.reverse()
                 

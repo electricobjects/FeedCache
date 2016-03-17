@@ -22,7 +22,7 @@ class TableViewController: UITableViewController, FeedKitControllerDelegate {
         MockAPIService.sharedService.startFeedUdpateSimulation()
         
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl?.addTarget(self, action: #selector(TableViewController.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         //self.tableView.addSubview(refreshControl)
 
         feedController = FeedController<PeopleFeedItem>(cachePreferences: ExampleCachePreferences.CacheOn, section: 0)
@@ -54,7 +54,7 @@ class TableViewController: UITableViewController, FeedKitControllerDelegate {
                 let request = PeopleFeedRequest(clearStaleDataOnCompletion: false, count: itemsPerPage, minId: 0, maxId: lastItem.id)
                 feedController?.fetchItems(request)
                 
-                currentPage++
+                currentPage += 1
             }
         }
         
