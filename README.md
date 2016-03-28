@@ -130,11 +130,12 @@ Now create a `FeedKitController` in your UITableViewController or UICollectionVi
 
 class MyTableViewController: UITableViewController, FeedKitControllerDelegate {
 
+    var feedController: FeedController<PeopleFeedItem>!
     var items = [TestItem]()
 
     override func viewDidLoad() {
-      self.feedController = FeedController<PeopleFeedItem>(cachePreferences: MyCachePreferences.TestItems, section: 0)
-      self.feedController.delegate = self
+      feedController = FeedController<PeopleFeedItem>(cachePreferences: MyCachePreferences.TestItems, section: 0)
+      feedController.delegate = self
       feedController.loadCacheSynchronously()
       //Defensively copy items to prevent race conditions
       items = feedController.items
