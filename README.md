@@ -23,7 +23,7 @@ When you first load your table view or collection view, FeedKit loads the first 
 
 **Define your model**
 
-First, you must make whatever items you want to view conform to the FeedItem protocol, which ensures it conforms to NSCoding and is Hashable. It is important to override `isEqual()`, as this is what FeedKit uses to determine which items should be inserted or deleted. By default `isEqual()` returns the object's memory address, but we want it to return a value that is computed from its properties:
+First, you must make whatever items you want to view conform to the FeedItem protocol, which ensures it conforms to NSCoding and is Hashable. It is important to override `isEqual()`, as this is what FeedKit uses to determine which items should be inserted or deleted. By default `isEqual()` compares objects' memory addresses, but we want it to compare hash values that are computed from properties:
 
 ```swift
 class TestItem: NSObject, FeedItem{
@@ -60,7 +60,7 @@ class TestItem: NSObject, FeedItem{
 
 **Define your fetch request**
 
-The FeedKitFetchRequest protocol requires you to implement the `fetchItems` method.
+The FeedKitFetchRequest protocol requires you to implement the `fetchItems` method. This is called by FeedKit.
 
 ```swift
 struct TestFeedKitRequest: FeedKitFetchRequest {
@@ -85,7 +85,7 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
 ```
 **CachePreferences**
 
-Create your own cache preferences as an enum.
+Create your own cache preferences as an enum. This example is for many feeds.
 
 ```swift
 enum MyCachePreferences : CachePreferences{
