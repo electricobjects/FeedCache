@@ -142,7 +142,7 @@ class MyTableViewController: UITableViewController, FeedKitControllerDelegate {
 
       self.currentPage = 1
       let request = PeopleFeedRequest(currentPage, clearStaleDataOnCompletion: true, count: itemsPerPage)
-      feedController?.fetchItems(request)
+      feedController.fetchItems(request)
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
