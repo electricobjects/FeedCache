@@ -122,9 +122,9 @@ enum MyCachePreferences : CachePreferences{
 }
 ```
 
-**Create a FeedKitController**
+**Create a FeedController**
 
-Now create a `FeedKitController` in your UITableViewController or UICollectionViewController, specifying the type of FeedItem it will handle.
+Now create a `FeedController` in your UITableViewController or UICollectionViewController, specifying the type of FeedItem it will handle.
 
 ```swift
 
