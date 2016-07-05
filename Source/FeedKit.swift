@@ -23,18 +23,18 @@ public protocol FeedKitControllerDelegate: class {
     /**
      The delegate method called when changes are made to the controller's items via a FeedKitFetchRequest
      
-     - Parameter feedController:    The feed controller
-     - Parameter itemsCopy:         A copy of the feed controller's updated items array
-     - Parameter itemsAdded:        The index paths of items that were added to the items array
-     - Parameter itemsDeleted:      The index paths of items that were deleted from the items array
+     - Parameter feedController:    The feed controller.
+     - Parameter itemsCopy:         A copy of the feed controller's updated items array.
+     - Parameter itemsAdded:        The index paths of items that were added to the items array.
+     - Parameter itemsDeleted:      The index paths of items that were deleted from the items array.
      */
     func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
     
     /**
      The delegate method called if there is an error making a FeedKitFetchRequest
      
-     - parameter feedController:    The feed controller
-     - parameter feedController:    The error that occured in the FeedKitFetchRequest
+     - parameter feedController:    The feed controller.
+     - parameter feedController:    The error that occured in the FeedKitFetchRequest.
      */
     func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError)
 }
@@ -44,6 +44,10 @@ public protocol CachePreferences {
     var cacheOn: Bool { get }
 }
 
+/**
+ Since Feed Controllers use generics to ensure type saftey, they inherit from this common class so we can compare different
+ Feed Controllers with the '==' operator
+ */
 public class FeedControllerGeneric {
     
 }
@@ -53,13 +57,23 @@ func == (lhs: FeedControllerGeneric, rhs: FeedControllerGeneric) -> Bool{
 }
 
 public class FeedController <T:FeedItem> : FeedControllerGeneric{
+    
+    ///The items in the feed.
     private(set) public var items: [T]! = []
     public weak var delegate: FeedKitControllerDelegate?
-    //private(set) var  feedType: FeedKitType!
     private(set) var cachePreferences: CachePreferences
     public var cache: FeedCache<T>?
-    let section: Int!
     
+    ///The section in a UITableView or UICollectionView that the Feed Controller corresponds to.
+    let section: Int!
+
+    
+    /**
+     Initialize the Feed Controller
+     
+     parameter cachePreferences: The cache preferences.
+     parameter section: The section of the tableview or collection view that the controller corresponds to.
+     */
     public init(cachePreferences: CachePreferences, section: Int){
         self.section = section
         self.cachePreferences = cachePreferences
@@ -68,6 +82,9 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         }
     }
     
+    /**
+     Load the Feed Controller's cache and block until it finishes.
+     */
     public func loadCacheSynchronously(){
         cache?.loadCache()
         cache?.waitUntilSynchronized()
@@ -98,9 +115,9 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     
     /**
      Remove an item. This can be useful when rearranging items, e.g. if the user is manually arranging items in a tableview, we can use these to keep
-     the FeedKit items in the correct position
+     the FeedKit items in the correct position.
      
-     - parameter index: the index of the item to be removed
+     - parameter index: the index of the item to be removed.
     */
     public func removeItemAtIndex(index: Int) {
         items.removeAtIndex(index)
@@ -112,10 +129,10 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     
     /**
      Insert an item. This can be useful when rearranging items, e.g. if the user is manually arranging items in a tableview, we can use these to keep
-     the FeedKit items in the correct position
+     the FeedKit items in the correct position.
      
-     - parameter item: The item to be inserted
-     - parameter atIndex: The index at which to insert the item
+     - parameter item: The item to be inserted.
+     - parameter atIndex: The index at which to insert the item.
     */
     public func insertItem(item: T, atIndex index : Int) {
         items.insert(item, atIndex: index)
@@ -133,7 +150,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     
     private func _processNewItems(newItems: [T], clearCacheIfNewItemsAreDifferent: Bool) {
         
-        //prevent calls of this method on other threads from mutating items array while we are working with it
+        //prevent calls of this method on other threads from mutating items array while we are working with it.
         objc_sync_enter(self)
         defer {
             objc_sync_exit(self)
@@ -203,7 +220,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     /**
      Remove duplicates
      
-     - parameter source: The original sequence
+     - parameter source: The original sequence.
      - returns: A sequence of unique items.
     */
     private func _unique<S: SequenceType, E: Hashable where E == S.Generator.Element>(source: S) -> [E] {
