@@ -58,7 +58,6 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     //private(set) var  feedType: FeedKitType!
     private(set) var cachePreferences: CachePreferences
     public var cache: FeedCache<T>?
-    var redundantItemsAllowed : Bool = false //TODO implement this
     let section: Int!
     
     public init(cachePreferences: CachePreferences, section: Int){
