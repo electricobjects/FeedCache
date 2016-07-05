@@ -128,7 +128,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     
     private func _processCacheLoad(){
         if let cache = cache {
-            items = unique(cache.items)
+            items = _unique(cache.items)
         }
     }
     
@@ -140,7 +140,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
             objc_sync_exit(self)
         }
         
-        let uniqueNewItems = unique(newItems)
+        let uniqueNewItems = _unique(newItems)
         
         if uniqueNewItems == items {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
@@ -201,7 +201,13 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         return returnArray
     }
     
-    func unique<S: SequenceType, E: Hashable where E == S.Generator.Element>(source: S) -> [E] {
+    /**
+     Remove duplicates
+     
+     - parameter source: The original sequence
+     - returns: A sequence of unique items.
+    */
+    private func _unique<S: SequenceType, E: Hashable where E == S.Generator.Element>(source: S) -> [E] {
         var seen = [E: Bool]()
         return source.filter { seen.updateValue(true, forKey: $0) == nil }
     }

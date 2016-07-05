@@ -11,8 +11,6 @@ import XCTest
 @testable import FeedKit
 
 
-
-
 class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     
     let testItems : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
