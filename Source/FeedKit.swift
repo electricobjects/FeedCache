@@ -20,8 +20,22 @@ public protocol FeedItem : Hashable, NSCoding {
 }
 
 public protocol FeedKitControllerDelegate: class {
-    //typealias T
+    /**
+     The delegate method called when changes are made to the controller's items via a FeedKitFetchRequest
+     
+     - Parameter feedController:    The feed controller
+     - Parameter itemsCopy:         A copy of the feed controller's updated items array
+     - Parameter itemsAdded:        The index paths of items that were added to the items array
+     - Parameter itemsDeleted:      The index paths of items that were deleted from the items array
+     */
     func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
+    
+    /**
+     The delegate method called if there is an error making a FeedKitFetchRequest
+     
+     - parameter feedController:    The feed controller
+     - parameter feedController:    The error that occured in the FeedKitFetchRequest
+     */
     func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError)
 }
 
@@ -65,6 +79,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         self.items = self.items + items
     }
     
+    /// Fetch items with a FeedKitFetchRequest
     public func fetchItems<G:FeedKitFetchRequest>(request: G)
     {
         request.fetchItems(success: { [weak self](newItems) -> () in
@@ -82,6 +97,12 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         }
     }
     
+    /**
+     Remove an item. This can be useful when rearranging items, e.g. if the user is manually arranging items in a tableview, we can use these to keep
+     the FeedKit items in the correct position
+     
+     - parameter index: the index of the item to be removed
+    */
     public func removeItemAtIndex(index: Int) {
         items.removeAtIndex(index)
         if let cache = cache {
@@ -90,6 +111,13 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         }
     }
     
+    /**
+     Insert an item. This can be useful when rearranging items, e.g. if the user is manually arranging items in a tableview, we can use these to keep
+     the FeedKit items in the correct position
+     
+     - parameter item: The item to be inserted
+     - parameter atIndex: The index at which to insert the item
+    */
     public func insertItem(item: T, atIndex index : Int) {
         items.insert(item, atIndex: index)
         if let cache = cache {
