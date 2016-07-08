@@ -100,7 +100,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
     {
         request.fetchItems(success: { [weak self](newItems) -> () in
             if let strongSelf = self {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+                fk_dispatch_on_queue(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), block: { () -> Void in
                     if let items =  newItems as Any as? [T]{
                         strongSelf._processNewItems(items, clearCacheIfNewItemsAreDifferent: request.clearStaleDataOnCompletion)
                     }
@@ -159,7 +159,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
         let uniqueNewItems = _unique(newItems)
         
         if uniqueNewItems == items {
-            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            fk_dispatch_on_queue(dispatch_get_main_queue()) { () -> Void in
                 self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: [], itemsDeleted: [])
             }
             return
@@ -179,7 +179,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
             items = uniqueNewItems
 
             cache?.clearCache()
-            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            fk_dispatch_on_queue(dispatch_get_main_queue()) { () -> Void in
                 self.cache?.addItems(self.items)
             }
         }
@@ -190,7 +190,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric{
             indexPathsForInsertion = _indexesForItems(insertSet, inArray: items)
         }
 
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+        fk_dispatch_on_queue(dispatch_get_main_queue()) { () -> Void in
             self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
         }
     }
