@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D46685D51B58567A0036C479"
-               BuildableName = "FeedKit.framework"
-               BlueprintName = "FeedKit"
-               ReferencedContainer = "container:FeedKit.xcodeproj">
+               BuildableName = "FeedCache.framework"
+               BlueprintName = "FeedCache"
+               ReferencedContainer = "container:FeedCache.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D46685E01B58567A0036C479"
-               BuildableName = "FeedKitTests.xctest"
-               BlueprintName = "FeedKitTests"
-               ReferencedContainer = "container:FeedKit.xcodeproj">
+               BuildableName = "FeedCache.xctest"
+               BlueprintName = "FeedCacheTests"
+               ReferencedContainer = "container:FeedCache.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -48,9 +48,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D46685E01B58567A0036C479"
-               BuildableName = "FeedKitTests.xctest"
-               BlueprintName = "FeedKitTests"
-               ReferencedContainer = "container:FeedKit.xcodeproj">
+               BuildableName = "FeedCache.xctest"
+               BlueprintName = "FeedCacheTests"
+               ReferencedContainer = "container:FeedCache.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -58,9 +58,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D46685D51B58567A0036C479"
-            BuildableName = "FeedKit.framework"
-            BlueprintName = "FeedKit"
-            ReferencedContainer = "container:FeedKit.xcodeproj">
+            BuildableName = "FeedCache.framework"
+            BlueprintName = "FeedCache"
+            ReferencedContainer = "container:FeedCache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D46685D51B58567A0036C479"
-            BuildableName = "FeedKit.framework"
-            BlueprintName = "FeedKit"
-            ReferencedContainer = "container:FeedKit.xcodeproj">
+            BuildableName = "FeedCache.framework"
+            BlueprintName = "FeedCache"
+            ReferencedContainer = "container:FeedCache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -98,9 +98,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D46685D51B58567A0036C479"
-            BuildableName = "FeedKit.framework"
-            BlueprintName = "FeedKit"
-            ReferencedContainer = "container:FeedKit.xcodeproj">
+            BuildableName = "FeedCache.framework"
+            BlueprintName = "FeedCache"
+            ReferencedContainer = "container:FeedCache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D46685DC1B58567A0036C479 /* FeedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = D46685DB1B58567A0036C479 /* FeedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D46685E21B58567A0036C479 /* FeedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D46685D61B58567A0036C479 /* FeedKit.framework */; };
+		D46685E21B58567A0036C479 /* FeedCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D46685D61B58567A0036C479 /* FeedCache.framework */; };
 		D46685E91B58567A0036C479 /* FeedControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46685E81B58567A0036C479 /* FeedControllerTests.swift */; };
 		D46685F31B5856D60036C479 /* FeedKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46685F21B5856D60036C479 /* FeedKit.swift */; };
 		D4A1FBE81B596A0F006B4C6B /* FeedCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A1FBE71B596A0F006B4C6B /* FeedCache.swift */; };
@@ -28,10 +28,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D46685D61B58567A0036C479 /* FeedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FeedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D46685D61B58567A0036C479 /* FeedCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FeedCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D46685DA1B58567A0036C479 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D46685DB1B58567A0036C479 /* FeedKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedKit.h; sourceTree = "<group>"; };
-		D46685E11B58567A0036C479 /* FeedKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D46685E11B58567A0036C479 /* FeedCache.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedCache.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D46685E71B58567A0036C479 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D46685E81B58567A0036C479 /* FeedControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedControllerTests.swift; sourceTree = "<group>"; };
 		D46685F21B5856D60036C479 /* FeedKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedKit.swift; sourceTree = "<group>"; };
@@ -53,7 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D46685E21B58567A0036C479 /* FeedKit.framework in Frameworks */,
+				D46685E21B58567A0036C479 /* FeedCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,8 +72,8 @@
 		D46685D71B58567A0036C479 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D46685D61B58567A0036C479 /* FeedKit.framework */,
-				D46685E11B58567A0036C479 /* FeedKitTests.xctest */,
+				D46685D61B58567A0036C479 /* FeedCache.framework */,
+				D46685E11B58567A0036C479 /* FeedCache.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -131,9 +131,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		D46685D51B58567A0036C479 /* FeedKit */ = {
+		D46685D51B58567A0036C479 /* FeedCache */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D46685EC1B58567A0036C479 /* Build configuration list for PBXNativeTarget "FeedKit" */;
+			buildConfigurationList = D46685EC1B58567A0036C479 /* Build configuration list for PBXNativeTarget "FeedCache" */;
 			buildPhases = (
 				D46685D11B58567A0036C479 /* Sources */,
 				D46685D21B58567A0036C479 /* Frameworks */,
@@ -144,14 +144,14 @@
 			);
 			dependencies = (
 			);
-			name = FeedKit;
+			name = FeedCache;
 			productName = FeedKit;
-			productReference = D46685D61B58567A0036C479 /* FeedKit.framework */;
+			productReference = D46685D61B58567A0036C479 /* FeedCache.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D46685E01B58567A0036C479 /* FeedKitTests */ = {
+		D46685E01B58567A0036C479 /* FeedCacheTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D46685EF1B58567A0036C479 /* Build configuration list for PBXNativeTarget "FeedKitTests" */;
+			buildConfigurationList = D46685EF1B58567A0036C479 /* Build configuration list for PBXNativeTarget "FeedCacheTests" */;
 			buildPhases = (
 				D46685DD1B58567A0036C479 /* Sources */,
 				D46685DE1B58567A0036C479 /* Frameworks */,
@@ -162,9 +162,9 @@
 			dependencies = (
 				D46685E41B58567A0036C479 /* PBXTargetDependency */,
 			);
-			name = FeedKitTests;
+			name = FeedCacheTests;
 			productName = FeedKitTests;
-			productReference = D46685E11B58567A0036C479 /* FeedKitTests.xctest */;
+			productReference = D46685E11B58567A0036C479 /* FeedCache.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -185,7 +185,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D46685D01B58567A0036C479 /* Build configuration list for PBXProject "FeedKit" */;
+			buildConfigurationList = D46685D01B58567A0036C479 /* Build configuration list for PBXProject "FeedCache" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -197,8 +197,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D46685D51B58567A0036C479 /* FeedKit */,
-				D46685E01B58567A0036C479 /* FeedKitTests */,
+				D46685D51B58567A0036C479 /* FeedCache */,
+				D46685E01B58567A0036C479 /* FeedCacheTests */,
 			);
 		};
 /* End PBXProject section */
@@ -246,7 +246,7 @@
 /* Begin PBXTargetDependency section */
 		D46685E41B58567A0036C479 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D46685D51B58567A0036C479 /* FeedKit */;
+			target = D46685D51B58567A0036C479 /* FeedCache */;
 			targetProxy = D46685E31B58567A0036C479 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -355,7 +355,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.electricobjects.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FeedCache;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -374,7 +374,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.electricobjects.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FeedCache;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -391,7 +391,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.electricobjects.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FeedCache;
 			};
 			name = Debug;
 		};
@@ -403,14 +403,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.electricobjects.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FeedCache;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D46685D01B58567A0036C479 /* Build configuration list for PBXProject "FeedKit" */ = {
+		D46685D01B58567A0036C479 /* Build configuration list for PBXProject "FeedCache" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D46685EA1B58567A0036C479 /* Debug */,
@@ -419,7 +419,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D46685EC1B58567A0036C479 /* Build configuration list for PBXNativeTarget "FeedKit" */ = {
+		D46685EC1B58567A0036C479 /* Build configuration list for PBXNativeTarget "FeedCache" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D46685ED1B58567A0036C479 /* Debug */,
@@ -428,7 +428,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D46685EF1B58567A0036C479 /* Build configuration list for PBXNativeTarget "FeedKitTests" */ = {
+		D46685EF1B58567A0036C479 /* Build configuration list for PBXNativeTarget "FeedCacheTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D46685F01B58567A0036C479 /* Debug */,
