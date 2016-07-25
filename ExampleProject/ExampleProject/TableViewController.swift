@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import FeedKit
+import FeedCache
 
-class TableViewController: UITableViewController, FeedKitControllerDelegate {
+class TableViewController: UITableViewController, FeedControllerDelegate {
 
     //var refreshControl: UIRefreshControl!
     var feedController: FeedController<PeopleFeedItem>!

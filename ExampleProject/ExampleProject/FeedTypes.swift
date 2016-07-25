@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import FeedKit
+import FeedCache
 
-struct PeopleFeedRequest: FeedKitFetchRequest {
+struct PeopleFeedRequest: FeedFetchRequest {
     var clearStaleDataOnCompletion: Bool
     var maxId: Int?
     var minId: Int!

@@ -1,15 +1,15 @@
 //
 //  MockClasses.swift
-//  FeedKit
+//  FeedCache
 //
 //  Created by Rob Seward on 7/21/15.
 //  Copyright © 2015 Rob Seward. All rights reserved.
 //
 
 import UIKit
-import FeedKit
+import FeedCache
 
-struct TestFeedKitRequest: FeedKitFetchRequest {
+struct TestFeedRequest: FeedFetchRequest {
     var clearStaleDataOnCompletion: Bool
     var pageNumber: Int
     var itemsPerPage: Int
@@ -29,7 +29,7 @@ struct TestFeedKitRequest: FeedKitFetchRequest {
     }
 }
 
-enum TestFeedKitCachePreferences : CachePreferences{
+enum TestFeedCachePreferences : CachePreferences{
     case CacheOn
     case CacheOff
     

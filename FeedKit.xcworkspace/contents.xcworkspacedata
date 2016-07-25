@@ -8,6 +8,6 @@
       location = "group:FeedKitPlayground.playground">
    </FileRef>
    <FileRef
-      location = "group:FeedKit.xcodeproj">
+      location = "group:FeedCache.xcodeproj">
    </FileRef>
 </Workspace>

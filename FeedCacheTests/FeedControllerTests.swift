@@ -1,6 +1,6 @@
 //
-//  FeedKitTests.swift
-//  FeedKitTests
+//  FeedCacheTests.swift
+//  FeedCacheTests
 //
 //  Created by Rob Seward on 7/16/15.
 //  Copyright (c) 2015 Rob Seward. All rights reserved.
@@ -8,10 +8,10 @@
 
 import UIKit
 import XCTest
-@testable import FeedKit
+@testable import FeedCache
 
 
-class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
+class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     
     let testItems : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
     var delegateResponseExpectation: XCTestExpectation?
@@ -22,7 +22,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     
     override func setUp() {
         super.setUp()
-        feedController = FeedController<TestItem>(cachePreferences: TestFeedKitCachePreferences.CacheOn, section: 0)
+        feedController = FeedController<TestItem>(cachePreferences: TestFeedCachePreferences.CacheOn, section: 0)
         feedController.delegate = self
         feedController.cache?.addItems(self.testItems)
         feedController.cache?.waitUntilSynchronized()
@@ -36,7 +36,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     }
 
     
-    func test_feedKitCacheLoad() {
+    func test_feedCacheLoad() {
         feedController.loadCacheSynchronously()
         XCTAssert(feedController.items.count > 0)
     }
@@ -45,7 +45,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
         
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        let request = TestFeedKitRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
+        let request = TestFeedRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         feedController.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -63,7 +63,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
         MockService.mockResponseItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "baz")]
         
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        let request = TestFeedKitRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
+        let request = TestFeedRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         feedController.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -80,7 +80,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     func test_redundantRequest(){
         MockService.mockResponseItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        let request = TestFeedKitRequest(clearStaleDataOnCompletion: false, pageNumber: 1, itemsPerPage: 10)
+        let request = TestFeedRequest(clearStaleDataOnCompletion: false, pageNumber: 1, itemsPerPage: 10)
         feedController.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -98,7 +98,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     func test_addPages(){
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
-        let request = TestFeedKitRequest(clearStaleDataOnCompletion: false, pageNumber: 2, itemsPerPage: 10)
+        let request = TestFeedRequest(clearStaleDataOnCompletion: false, pageNumber: 2, itemsPerPage: 10)
         feedController.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -134,10 +134,10 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
         MockService.mockResponseItems = [testItem]
         self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
         
-        let cachelessFc = FeedController<TestItem>(cachePreferences: TestFeedKitCachePreferences.CacheOff, section: 0)
+        let cachelessFc = FeedController<TestItem>(cachePreferences: TestFeedCachePreferences.CacheOff, section: 0)
         cachelessFc.delegate = self
         
-        let request = TestFeedKitRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
+        let request = TestFeedRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         cachelessFc.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -156,7 +156,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
         feedController.cache?.addItems(cacheItems)
         feedController.loadCacheSynchronously()
         let itemsCount = feedController.items.count
-        let request = TestFeedKitRequest(clearStaleDataOnCompletion: false, pageNumber: 2, itemsPerPage: 10)
+        let request = TestFeedRequest(clearStaleDataOnCompletion: false, pageNumber: 2, itemsPerPage: 10)
         feedController.fetchItems(request)
         
         self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
@@ -190,7 +190,7 @@ class FeedControllerTests: XCTestCase, FeedKitControllerDelegate {
     }
     
     
-    //MARK: FeedKit Delegate methods
+    //MARK: FeedCache Delegate methods
     
     func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
         self.itemsAdded = itemsAdded
