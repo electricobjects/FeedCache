@@ -5,9 +5,6 @@
       location = "group:ExampleProject/ExampleProject.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:FeedKitPlayground.playground">
-   </FileRef>
-   <FileRef
       location = "group:FeedCache.xcodeproj">
    </FileRef>
 </Workspace>
