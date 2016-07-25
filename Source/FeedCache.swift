@@ -1,6 +1,6 @@
 //
 //  Cache.swift
-//  FeedKit
+//  FeedCache
 //
 //  Created by Rob Seward on 7/17/15.
 //  Copyright © 2015 Rob Seward. All rights reserved.
@@ -8,15 +8,15 @@
 
 import Foundation
 
-struct FeedKitFileNames {
-    static let apiCacheFolderName = "FeedKitCache"
-    static let genericArchiveName = "feed_kit_cache.archive"
+struct FeedCacheFileNames {
+    static let apiCacheFolderName = "FeedCache"
+    static let genericArchiveName = "feed_cache.archive"
 }
 
-public func deleteAllFeedKitCaches() throws {
+public func deleteAllFeedCaches() throws {
     let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
     let libraryCachesDirectory: AnyObject = paths[0]
-    let cacheDirectory = libraryCachesDirectory.stringByAppendingPathComponent(FeedKitFileNames.apiCacheFolderName)
+    let cacheDirectory = libraryCachesDirectory.stringByAppendingPathComponent(FeedCacheFileNames.apiCacheFolderName)
     try NSFileManager.defaultManager().removeItemAtPath(cacheDirectory)
 }
 
@@ -28,7 +28,7 @@ public class FeedCache<T:FeedItem>{
     public var saved = false
     
     public init(name: String) {
-        if FeedKitPerformWorkSynchronously {
+        if FeedCachePerformWorkSynchronously {
             diskOperationQueue = NSOperationQueue.mainQueue()
         }
         diskOperationQueue.maxConcurrentOperationCount = 1
@@ -89,7 +89,7 @@ public class FeedCache<T:FeedItem>{
     private func _deleteCache() {
         let folderName = name
         let folderPath = _folderPathFromFolderName(folderName, insideCacheFolder: true)
-        let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedKitFileNames.genericArchiveName)
+        let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedCacheFileNames.genericArchiveName)
         do {
             try NSFileManager.defaultManager().removeItemAtPath(filePath)
         }
@@ -109,7 +109,7 @@ public class FeedCache<T:FeedItem>{
                 let folderPath = strongSelf._folderPathFromFolderName(folderName, insideCacheFolder: true)
                 strongSelf._createFolderIfNeeded(folderPath)
                 
-                let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedKitFileNames.genericArchiveName)
+                let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedCacheFileNames.genericArchiveName)
                 
                 data.writeToFile(filePath, atomically: true)
                 if strongSelf.diskOperationQueue.operationCount == 1 {
@@ -129,7 +129,7 @@ public class FeedCache<T:FeedItem>{
             {
                 let folderPath = strongSelf._folderPathFromFolderName(folderName, insideCacheFolder: true)
 
-                let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedKitFileNames.genericArchiveName)
+                let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedCacheFileNames.genericArchiveName)
                 let data = NSData(contentsOfFile: filePath)
                 completion(data)
             }
@@ -145,7 +145,7 @@ public class FeedCache<T:FeedItem>{
         var libraryCachesDirectory: AnyObject = paths[0]
         
         if insideCacheFolder {
-            libraryCachesDirectory = libraryCachesDirectory.stringByAppendingPathComponent(FeedKitFileNames.apiCacheFolderName)
+            libraryCachesDirectory = libraryCachesDirectory.stringByAppendingPathComponent(FeedCacheFileNames.apiCacheFolderName)
         }
         
         let folderPath = libraryCachesDirectory.stringByAppendingPathComponent(folderName)

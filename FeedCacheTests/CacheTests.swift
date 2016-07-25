@@ -1,17 +1,17 @@
 //
 //  CacheTests.swift
-//  FeedKit
+//  FeedCache
 //
 //  Created by Rob Seward on 7/21/15.
 //  Copyright © 2015 Rob Seward. All rights reserved.
 //
 
 import XCTest
-import FeedKit
+import FeedCache
 
 class CacheTests: XCTestCase {
     let testItems : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
-    let cache = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+    let cache = FeedCache<TestItem>(name: TestFeedCachePreferences.CacheOn.cacheName)
     
     override func setUp() {
         cache.addItems(testItems)
@@ -42,7 +42,7 @@ class CacheTests: XCTestCase {
         
         //Test success is dependent on there already being items in the cache
         
-        let cache = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        let cache = FeedCache<TestItem>(name: TestFeedCachePreferences.CacheOn.cacheName)
         let expectation = self.expectationWithDescription("Load cache expectation")
         var testSuccess = false
         cache.loadCache { (success) -> () in
@@ -62,7 +62,7 @@ class CacheTests: XCTestCase {
         
         //TODO: Refactor this so it is not dependant on previous tests
         
-        let cache = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        let cache = FeedCache<TestItem>(name: TestFeedCachePreferences.CacheOn.cacheName)
         cache.loadCache { (success) -> () in
             print(success)
         }
@@ -74,7 +74,7 @@ class CacheTests: XCTestCase {
     }
     
     func test_015_addMoreItems() {
-        let cache = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        let cache = FeedCache<TestItem>(name: TestFeedCachePreferences.CacheOn.cacheName)
         cache.clearCache()
         let items1 : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
         let items2 : [TestItem] = [TestItem(name: "test2"), TestItem(name: "test3"), TestItem(name: "test4")]
@@ -92,16 +92,16 @@ class CacheTests: XCTestCase {
     
     func test_020_clearAllCaches() {
         let items1 : [TestItem] = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
-        var testCache: FeedCache<TestItem>? = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        var testCache: FeedCache<TestItem>? = FeedCache<TestItem>(name: TestFeedCachePreferences.CacheOn.cacheName)
         testCache!.addItems(items1)
         testCache = nil
         do {
-           try deleteAllFeedKitCaches()
+           try deleteAllFeedCaches()
         } catch let error {
             print (error)
             XCTAssert(false)
         }
-        testCache = FeedCache<TestItem>(name: TestFeedKitCachePreferences.CacheOn.cacheName)
+        testCache = FeedCache<TestItem>(name: TestFeedCachePreferences.CacheOn.cacheName)
         testCache!.loadCache()
         testCache!.waitUntilSynchronized()
         XCTAssert(testCache!.items.count == 0, "clear all caches")
