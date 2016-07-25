@@ -184,8 +184,11 @@ class MyTableViewController: UITableViewController, FeedControllerDelegate {
 
 ##Installation##
 
-TODO: Cocoapods/carthage stuff goes here
+'''
+platform :ios, '8.0'
+use_frameworks!
 
-##Example App##
-
-TODO: Link to release download here.
+target 'MyApp' do
+    pod 'FeedCache'
+end
+'''
