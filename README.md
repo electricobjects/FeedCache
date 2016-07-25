@@ -1,11 +1,11 @@
-# FeedKit
+# FeedCache
 A Swift framework for consuming and displaying feeds in iOS
 
-FeedKit is an alternative to using CoreData to manage paginated feed data. Architecturally, it replaces an NSFetchedResultsController, while caching data with NSCoding so the feed can load quickly from a cold start.
+FeedCache is an alternative to using CoreData to manage paginated feed data. Architecturally, it replaces an NSFetchedResultsController, while caching data with NSCoding so the feed can load quickly from a cold start.
 
 ####Features####
 
-FeedKit handles:
+FeedCache handles:
 
 * Insertions
 * Deletions (through first-page cache deletion)
@@ -15,7 +15,7 @@ FeedKit handles:
 
 ## First-page cache deletion ##
 
-When you first load your table view or collection view, FeedKit loads the first page of your feed. If the first page has changed from the last time it was loaded, the cache is cleared and replaced with the new items. This handles deletions and keeps the data on your phone from getting stale.
+When you first load your table view or collection view, FeedCache loads the first page of your feed. If the first page has changed from the last time it was loaded, the cache is cleared and replaced with the new items. This handles deletions and keeps the data on your phone from getting stale.
 
 
 
@@ -23,7 +23,7 @@ When you first load your table view or collection view, FeedKit loads the first 
 
 **Define your model**
 
-First, you must make whatever items you want to view conform to the FeedItem protocol, which ensures it conforms to NSCoding and is Hashable. It is important to override `isEqual()`, as this is what FeedKit uses to determine which items should be inserted or deleted. By default `isEqual()` compares objects' memory addresses, but we want it to compare hash values that are computed from properties:
+First, you must make whatever items you want to view conform to the FeedItem protocol, which ensures it conforms to NSCoding and is Hashable. It is important to override `isEqual()`, as this is what FeedCache uses to determine which items should be inserted or deleted. By default `isEqual()` compares objects' memory addresses, but we want it to compare hash values that are computed from properties:
 
 ```swift
 class TestItem: NSObject, FeedItem{
@@ -60,10 +60,10 @@ class TestItem: NSObject, FeedItem{
 
 **Define your fetch request**
 
-The FeedKitFetchRequest protocol requires you to implement the `fetchItems` method. This is called by FeedKit.
+The FeedFetchRequest protocol requires you to implement the `fetchItems` method. This is called by FeedCache.
 
 ```swift
-struct TestFeedKitRequest: FeedKitFetchRequest {
+struct TestFeedRequest: FeedFetchRequest {
     var clearStaleDataOnCompletion: Bool
     var pageNumber: Int
     var itemsPerPage: Int
@@ -128,7 +128,7 @@ Now create a `FeedController` in your UITableViewController or UICollectionViewC
 
 ```swift
 
-class MyTableViewController: UITableViewController, FeedKitControllerDelegate {
+class MyTableViewController: UITableViewController, FeedControllerDelegate {
 
     var feedController: FeedController<PeopleFeedItem>!
     var items = [TestItem]()
@@ -167,7 +167,7 @@ class MyTableViewController: UITableViewController, FeedKitControllerDelegate {
         feedController?.fetchItems(request)
     }
 
-    //MARK: ***** FeedKitControllerDelegate Methods *****
+    //MARK: ***** FeedControllerDelegate Methods *****
 
     func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
         //Defensively copy items to prevent race conditions
