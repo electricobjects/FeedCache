@@ -23,11 +23,14 @@ public func deleteAllFeedKitCaches() throws {
 public class FeedCache<T:FeedItem>{
     
     let name: String!
-    let diskOperationQueue = NSOperationQueue()
+    var diskOperationQueue = NSOperationQueue()
     public var items : [T] = []
     public var saved = false
     
     public init(name: String) {
+        if FeedKitPerformWorkSynchronously {
+            diskOperationQueue = NSOperationQueue.mainQueue()
+        }
         diskOperationQueue.maxConcurrentOperationCount = 1
         self.name = name
     }
@@ -46,9 +49,14 @@ public class FeedCache<T:FeedItem>{
         // thus completion will fire **after** synchronize unblocks
         let mainQueueCompletion : (success: Bool) -> () = {
             (success: Bool) -> () in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            if NSThread.isMainThread() == false {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    completion?(success: success)
+                })
+            }
+            else {
                 completion?(success: success)
-            })
+            }
         }
         
         _getCachedData (completion: {(data) -> () in
@@ -73,7 +81,9 @@ public class FeedCache<T:FeedItem>{
     
     // Wait until operation queue is empty
     public func waitUntilSynchronized(){
-        diskOperationQueue.waitUntilAllOperationsAreFinished()
+        if diskOperationQueue != NSOperationQueue.mainQueue() {
+            diskOperationQueue.waitUntilAllOperationsAreFinished()
+        }
     }
     
     private func _deleteCache() {
