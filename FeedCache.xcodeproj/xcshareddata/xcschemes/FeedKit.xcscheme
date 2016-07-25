@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D46685E01B58567A0036C479"
-               BuildableName = "FeedCache.xctest"
+               BuildableName = "FeedCacheTests.xctest"
                BlueprintName = "FeedCacheTests"
                ReferencedContainer = "container:FeedCache.xcodeproj">
             </BuildableReference>
@@ -48,7 +48,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D46685E01B58567A0036C479"
-               BuildableName = "FeedCache.xctest"
+               BuildableName = "FeedCacheTests.xctest"
                BlueprintName = "FeedCacheTests"
                ReferencedContainer = "container:FeedCache.xcodeproj">
             </BuildableReference>

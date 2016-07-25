@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import FeedKit
+import FeedCache
 
-class PeopleFeedItem : NSObject, FeedKit.FeedItem,  NSCoding {
+class PeopleFeedItem : NSObject, FeedItem,  NSCoding {
     var name: String!
     var id: Int!
     
