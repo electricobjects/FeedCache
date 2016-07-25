@@ -184,6 +184,8 @@ class MyTableViewController: UITableViewController, FeedControllerDelegate {
 
 ##Installation##
 
+You can use [Cocoapods](http://cocoapods.org/) to install `FeedCache`by adding it to your `Podfile`:
+
 ```ruby
 platform :ios, '8.0'
 use_frameworks!
