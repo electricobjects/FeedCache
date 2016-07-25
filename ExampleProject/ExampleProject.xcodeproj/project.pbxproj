@@ -19,7 +19,6 @@
 		D4F3A67E1B5FE31A009D38C5 /* ExampleProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F3A67D1B5FE31A009D38C5 /* ExampleProjectTests.swift */; };
 		D4F3A6891B5FE31A009D38C5 /* ExampleProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F3A6881B5FE31A009D38C5 /* ExampleProjectUITests.swift */; };
 		D4F6A7C11D469BC0008BA7CD /* FeedCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4F6A7C01D469BC0008BA7CD /* FeedCache.framework */; };
-		D4F6A7C41D469C86008BA7CD /* FeedCache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D4F6A7C21D469C86008BA7CD /* FeedCache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +45,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D4F6A7C41D469C86008BA7CD /* FeedCache.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,7 +70,6 @@
 		D4F3A6881B5FE31A009D38C5 /* ExampleProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleProjectUITests.swift; sourceTree = "<group>"; };
 		D4F3A68A1B5FE31A009D38C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4F6A7C01D469BC0008BA7CD /* FeedCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedCache.framework; path = "../../../../Library/Developer/Xcode/DerivedData/FeedKit-farobqtflxnvyrgiywygnedxqmdi/Build/Products/Debug-iphonesimulator/FeedCache.framework"; sourceTree = "<group>"; };
-		D4F6A7C21D469C86008BA7CD /* FeedCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = FeedCache.framework; path = "/Users/rob/Library/Developer/Xcode/DerivedData/FeedKit-farobqtflxnvyrgiywygnedxqmdi/Build/Products/Debug-iphoneos/FeedCache.framework"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +101,6 @@
 		D4F3A65C1B5FE31A009D38C5 = {
 			isa = PBXGroup;
 			children = (
-				D4F6A7C21D469C86008BA7CD /* FeedCache.framework */,
 				D4F6A7C01D469BC0008BA7CD /* FeedCache.framework */,
 				D4F3A6671B5FE31A009D38C5 /* ExampleProject */,
 				D4F3A67C1B5FE31A009D38C5 /* ExampleProjectTests */,
