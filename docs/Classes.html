@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Classes  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="Classes  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">FeedCache Docs</a> (93% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">FeedCache Reference</a>
+        <img id="carat" src="img/carat.png" />
+        Classes  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/FeedCache.html">FeedCache</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/FeedController.html">FeedController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Global Variables.html#/s:v9FeedCache33FeedCachePerformWorkSynchronouslySb">FeedCachePerformWorkSynchronously</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:F9FeedCache19deleteAllFeedCachesFzT_T_">deleteAllFeedCaches()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/CachePreferences.html">CachePreferences</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/FeedControllerDelegate.html">FeedControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/FeedFetchRequest.html">FeedFetchRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols.html#/s:P9FeedCache8FeedItem">FeedItem</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Classes</h1>
+            <p>The following classes are available globally.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C9FeedCache9FeedCache"></a>
+                    <a name="//apple_ref/swift/Class/FeedCache" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C9FeedCache9FeedCache">FeedCache</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>FeedCache is responsible for saving and retreiving feed items from disk. It should be operated by the FeedController.</p>
+
+                        <a href="Classes/FeedCache.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">FeedCache</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span><span class="kt"><a href="Protocols.html#/s:P9FeedCache8FeedItem">FeedItem</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C9FeedCache21FeedControllerGeneric"></a>
+                    <a name="//apple_ref/swift/Class/FeedControllerGeneric" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Since Feed Controllers use generics to ensure type saftey, they inherit from this common class so we can compare different
+Feed Controllers with the &rsquo;==&rsquo; operator</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">FeedControllerGeneric</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C9FeedCache14FeedController"></a>
+                    <a name="//apple_ref/swift/Class/FeedController" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C9FeedCache14FeedController">FeedController</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The FeedController keeps track of incoming feed items and caches them accordingly. It is designed to be controlled by a UITableViewController or
+<code>UICollectionViewController</code>, and is modeled after the <code>NSFetchedResultsController</code>.</p>
+
+                        <a href="Classes/FeedController.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">FeedController</span> <span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span><span class="kt"><a href="Protocols.html#/s:P9FeedCache8FeedItem">FeedItem</a></span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://github.com/ElectricObjects/FeedCache" target="_blank" rel="external">Rob Seward</a>. All rights reserved. (Last updated: 2016-08-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

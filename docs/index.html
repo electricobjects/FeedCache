@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FeedCache  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="FeedCache  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">FeedCache Docs</a> (93% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">FeedCache Reference</a>
+        <img id="carat" src="img/carat.png" />
+        FeedCache  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/FeedCache.html">FeedCache</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/FeedController.html">FeedController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Global Variables.html#/s:v9FeedCache33FeedCachePerformWorkSynchronouslySb">FeedCachePerformWorkSynchronously</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:F9FeedCache19deleteAllFeedCachesFzT_T_">deleteAllFeedCaches()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/CachePreferences.html">CachePreferences</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/FeedControllerDelegate.html">FeedControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/FeedFetchRequest.html">FeedFetchRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols.html#/s:P9FeedCache8FeedItem">FeedItem</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <a href='#feedcache' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='feedcache'>FeedCache</h1>
+
+<p>A Swift framework for consuming and displaying feeds in iOS</p>
+
+<p>FeedCache is an alternative to using CoreData to manage paginated feed data. Architecturally, it replaces an NSFetchedResultsController, while caching data with NSCoding so the feed can load quickly from a cold start.</p>
+<a href='#features' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='features'>Features</h4>
+
+<p>FeedCache handles:</p>
+
+<ul>
+<li>Insertions</li>
+<li>Deletions (through first-page cache deletion)</li>
+<li>Caching</li>
+</ul>
+
+<p><img src="https://github.com/electricobjects/FeedKit/raw/master/ReadMe_Images/pull_to_refresh.gif" alt="pull to refresh"></p>
+<a href='#first-page-cache-deletion' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='first-page-cache-deletion'>First-page cache deletion</h2>
+
+<p>When you first load your table view or collection view, FeedCache loads the first page of your feed. If the first page has changed from the last time it was loaded, the cache is cleared and replaced with the new items. This handles deletions and keeps the data on your phone from getting stale.</p>
+<a href='#to-use' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='to-use'>To Use</h2>
+
+<p><strong>Define your model</strong></p>
+
+<p>First, you must make whatever items you want to view conform to the FeedItem protocol, which ensures it conforms to NSCoding and is Hashable. It is important to override <code>isEqual()</code>, as this is what FeedCache uses to determine which items should be inserted or deleted. By default <code>isEqual()</code> compares objects&rsquo; memory addresses, but we want it to compare hash values that are computed from properties:</p>
+<pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">TestItem</span><span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">FeedItem</span><span class="p">{</span>
+    <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+
+    <span class="nf">init</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">){</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="p">}</span>
+
+    <span class="kd">@objc</span> <span class="kd">required</span>  <span class="nf">init</span><span class="p">(</span><span class="n">coder</span> <span class="nv">aDecoder</span><span class="p">:</span> <span class="kt">NSCoder</span><span class="p">){</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">aDecoder</span><span class="o">.</span><span class="nf">decodeObjectForKey</span><span class="p">(</span><span class="s">"name"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">String</span>
+    <span class="p">}</span>
+
+    <span class="kd">@objc</span>  <span class="kd">func</span> <span class="nf">encodeWithCoder</span><span class="p">(</span><span class="nv">aCoder</span><span class="p">:</span> <span class="kt">NSCoder</span><span class="p">){</span>
+        <span class="n">aCoder</span><span class="o">.</span><span class="nf">encodeObject</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="s">"name"</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">// It's important to override isEqual so it compares properties</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">isEqual</span><span class="p">(</span><span class="nv">object</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">object</span> <span class="o">=</span> <span class="n">object</span> <span class="k">as?</span> <span class="kt">TestItem</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">hashValue</span> <span class="o">==</span> <span class="n">object</span><span class="o">.</span><span class="n">hashValue</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">false</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Override hashValue to compute a value from the object's properties</span>
+    <span class="k">override</span> <span class="k">var</span> <span class="nv">hashValue</span> <span class="p">:</span> <span class="kt">Int</span><span class="p">{</span>
+        <span class="k">var</span> <span class="nv">h</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">name</span> <span class="p">{</span> <span class="n">h</span> <span class="o">^=</span> <span class="n">name</span><span class="o">.</span><span class="n">hash</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">h</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><strong>Define your fetch request</strong></p>
+
+<p>The FeedFetchRequest protocol requires you to implement the <code>fetchItems</code> method. This is called by FeedCache.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">TestFeedRequest</span><span class="p">:</span> <span class="kt">FeedFetchRequest</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">clearStaleDataOnCompletion</span><span class="p">:</span> <span class="kt">Bool</span>
+    <span class="k">var</span> <span class="nv">pageNumber</span><span class="p">:</span> <span class="kt">Int</span>
+    <span class="k">var</span> <span class="nv">itemsPerPage</span><span class="p">:</span> <span class="kt">Int</span>
+
+    <span class="nf">init</span><span class="p">(</span><span class="nv">clearStaleDataOnCompletion</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">pageNumber</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">itemsPerPage</span><span class="p">:</span> <span class="kt">Int</span><span class="p">){</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">clearStaleDataOnCompletion</span> <span class="o">=</span> <span class="n">clearStaleDataOnCompletion</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">pageNumber</span> <span class="o">=</span> <span class="n">pageNumber</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">itemsPerPage</span> <span class="o">=</span> <span class="n">itemsPerPage</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">fetchItems</span><span class="p">(</span><span class="n">success</span> <span class="nv">success</span><span class="p">:</span> <span class="p">(</span><span class="nv">newItems</span><span class="p">:</span> <span class="p">[</span><span class="kt">TestItem</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">(),</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">(</span><span class="kt">NSError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())</span> <span class="p">{</span>
+        <span class="kt">MockService</span><span class="o">.</span><span class="nf">fetchItems</span><span class="p">(</span><span class="n">pageNumber</span><span class="p">,</span> <span class="nv">itemsPerPage</span><span class="p">:</span> <span class="n">itemsPerPage</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">newItems</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="k">in</span>
+            <span class="nf">success</span><span class="p">(</span><span class="nv">newItems</span><span class="p">:</span> <span class="n">newItems</span><span class="p">)</span>
+        <span class="p">})</span> <span class="p">{</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="k">in</span>
+            <span class="nf">failure</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><strong>CachePreferences</strong></p>
+
+<p>Create your own cache preferences as an enum. This example is for many feeds.</p>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">MyCachePreferences</span> <span class="p">:</span> <span class="kt">CachePreferences</span><span class="p">{</span>
+    <span class="k">case</span> <span class="kt">TestItems</span>
+    <span class="k">case</span> <span class="kt">Friends</span>
+    <span class="k">case</span> <span class="kt">Photos</span>
+    <span class="k">case</span> <span class="kt">PhotosNoCache</span>
+
+    <span class="k">var</span> <span class="nv">cacheOn</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">TestItems</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Friends</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="k">case</span> <span class="kt">Photos</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">false</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="nv">cacheName</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">TestItem</span>
+            <span class="k">return</span> <span class="s">"TestItems"</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Friends</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">"Friends"</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Photos</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">"Photos"</span>
+        <span class="k">default</span><span class="p">:</span>
+          <span class="k">return</span> <span class="s">""</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><strong>Create a FeedController</strong></p>
+
+<p>Now create a <code>FeedController</code> in your UITableViewController or UICollectionViewController, specifying the type of FeedItem it will handle.</p>
+<pre class="highlight swift"><code>
+<span class="kd">class</span> <span class="kt">MyTableViewController</span><span class="p">:</span> <span class="kt">UITableViewController</span><span class="p">,</span> <span class="kt">FeedControllerDelegate</span> <span class="p">{</span>
+
+    <span class="k">var</span> <span class="nv">feedController</span><span class="p">:</span> <span class="kt">FeedController</span><span class="o">&lt;</span><span class="kt">PeopleFeedItem</span><span class="o">&gt;!</span>
+    <span class="k">var</span> <span class="nv">items</span> <span class="o">=</span> <span class="p">[</span><span class="kt">TestItem</span><span class="p">]()</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+      <span class="n">feedController</span> <span class="o">=</span> <span class="kt">FeedController</span><span class="o">&lt;</span><span class="kt">PeopleFeedItem</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">cachePreferences</span><span class="p">:</span> <span class="kt">MyCachePreferences</span><span class="o">.</span><span class="kt">TestItems</span><span class="p">,</span> <span class="nv">section</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">feedController</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
+      <span class="n">feedController</span><span class="o">.</span><span class="nf">loadCacheSynchronously</span><span class="p">()</span>
+      <span class="c1">//Defensively copy items to prevent race conditions</span>
+      <span class="n">items</span> <span class="o">=</span> <span class="n">feedController</span><span class="o">.</span><span class="n">items</span>
+
+      <span class="k">self</span><span class="o">.</span><span class="n">currentPage</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="k">let</span> <span class="nv">request</span> <span class="o">=</span> <span class="kt">PeopleFeedRequest</span><span class="p">(</span><span class="n">currentPage</span><span class="p">,</span> <span class="nv">clearStaleDataOnCompletion</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">count</span><span class="p">:</span> <span class="n">itemsPerPage</span><span class="p">)</span>
+      <span class="n">feedController</span><span class="o">.</span><span class="nf">fetchItems</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">numberOfRowsInSection</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">items</span><span class="o">.</span><span class="n">count</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAtIndexPath</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">NSIndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCellWithIdentifier</span><span class="p">(</span><span class="s">"cell"</span><span class="p">,</span> <span class="nv">forIndexPath</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span>
+
+        <span class="k">let</span> <span class="nv">item</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">]</span>
+        <span class="n">cell</span><span class="o">.</span><span class="n">textLabel</span><span class="p">?</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span> <span class="o">==</span> <span class="p">(</span><span class="n">itemsPerPage</span> <span class="o">*</span> <span class="n">currentPage</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">{</span>
+            <span class="nf">loadMoreItems</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">cell</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">loadMoreItems</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">currentPage</span><span class="o">++</span>
+        <span class="k">let</span> <span class="nv">request</span> <span class="o">=</span> <span class="kt">PeopleFeedRequest</span><span class="p">(</span><span class="n">currentPage</span><span class="p">,</span> <span class="nv">clearStaleDataOnCompletion</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">count</span><span class="p">:</span> <span class="n">itemsPerPage</span><span class="p">)</span>
+        <span class="n">feedController</span><span class="p">?</span><span class="o">.</span><span class="nf">fetchItems</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">//MARK: ***** FeedControllerDelegate Methods *****</span>
+
+    <span class="kd">func</span> <span class="nf">feedController</span><span class="p">(</span><span class="nv">feedController</span><span class="p">:</span> <span class="kt">FeedControllerGeneric</span><span class="p">,</span> <span class="nv">itemsCopy</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyObject</span><span class="p">],</span> <span class="nv">itemsAdded</span><span class="p">:</span> <span class="p">[</span><span class="kt">NSIndexPath</span><span class="p">],</span> <span class="nv">itemsDeleted</span><span class="p">:</span> <span class="p">[</span><span class="kt">NSIndexPath</span><span class="p">])</span> <span class="p">{</span>
+        <span class="c1">//Defensively copy items to prevent race conditions</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">itemsCopy</span>  
+
+        <span class="n">tableView</span><span class="o">.</span><span class="nf">beginUpdates</span><span class="p">()</span>
+        <span class="n">tableView</span><span class="o">.</span><span class="nf">insertRowsAtIndexPaths</span><span class="p">(</span><span class="n">itemsAdded</span><span class="p">,</span> <span class="nv">withRowAnimation</span><span class="p">:</span> <span class="kt">UITableViewRowAnimation</span><span class="o">.</span><span class="kt">Automatic</span><span class="p">)</span>
+        <span class="n">tableView</span><span class="o">.</span><span class="nf">deleteRowsAtIndexPaths</span><span class="p">(</span><span class="n">itemsDeleted</span><span class="p">,</span> <span class="nv">withRowAnimation</span><span class="p">:</span> <span class="kt">UITableViewRowAnimation</span><span class="o">.</span><span class="kt">Automatic</span><span class="p">)</span>
+        <span class="n">tableView</span><span class="o">.</span><span class="nf">endUpdates</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<a href='#installation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='installation'>Installation</h2>
+
+<p>You can use <a href="http://cocoapods.org/">Cocoapods</a> to install <code>FeedCache</code>by adding it to your <code>Podfile</code>:</p>
+<pre class="highlight ruby"><code><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'8.0'</span>
+<span class="n">use_frameworks!</span>
+
+<span class="n">target</span> <span class="s1">'MyApp'</span> <span class="k">do</span>
+    <span class="n">pod</span> <span class="s1">'FeedCache'</span>
+<span class="k">end</span>
+</code></pre>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://github.com/ElectricObjects/FeedCache" target="_blank" rel="external">Rob Seward</a>. All rights reserved. (Last updated: 2016-08-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

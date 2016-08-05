@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FeedFetchRequest Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/FeedFetchRequest" class="dashAnchor"></a>
+    <a title="FeedFetchRequest Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">FeedCache Docs</a> (93% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">FeedCache Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        FeedFetchRequest Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/FeedCache.html">FeedCache</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FeedController.html">FeedController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v9FeedCache33FeedCachePerformWorkSynchronouslySb">FeedCachePerformWorkSynchronously</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F9FeedCache19deleteAllFeedCachesFzT_T_">deleteAllFeedCaches()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/CachePreferences.html">CachePreferences</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeedControllerDelegate.html">FeedControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeedFetchRequest.html">FeedFetchRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P9FeedCache8FeedItem">FeedItem</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>FeedFetchRequest</h1>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vP9FeedCache16FeedFetchRequest26clearStaleDataOnCompletionSb"></a>
+                    <a name="//apple_ref/swift/Property/clearStaleDataOnCompletion" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP9FeedCache16FeedFetchRequest26clearStaleDataOnCompletionSb">clearStaleDataOnCompletion</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If set to true, cache data will be cleared when new data is loaded. This is usually set to true on the first page of a feed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">clearStaleDataOnCompletion</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP9FeedCache16FeedFetchRequest10fetchItemsFT7successFT8newItemsGSawx1H__T_7failureFCSo7NSErrorT__T_"></a>
+                    <a name="//apple_ref/swift/Method/fetchItems(success:failure:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP9FeedCache16FeedFetchRequest10fetchItemsFT7successFT8newItemsGSawx1H__T_7failureFCSo7NSErrorT__T_">fetchItems(success:failure:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Fetch items for the feed.</p>
+
+<p>This method is called by the FeedController. When overriding this function your should make your api calls inside this method.
+The success method will trigger the item processing and eventually the items added/deleted callback in FeedController delegate.
+Failure closure will trigger the <code>requestFailed</code> delegate method.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">fetchItems</span><span class="p">(</span><span class="n">success</span> <span class="nv">success</span><span class="p">:</span> <span class="p">(</span><span class="nv">newItems</span><span class="p">:</span> <span class="p">[</span><span class="kt">H</span><span class="p">])</span><span class="o">-&gt;</span><span class="p">(),</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">(</span><span class="kt">NSError</span><span class="p">)</span><span class="o">-&gt;</span><span class="p">())</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>&lt;#success description#&gt;</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>&lt;#failure description#&gt;</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://github.com/ElectricObjects/FeedCache" target="_blank" rel="external">Rob Seward</a>. All rights reserved. (Last updated: 2016-08-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

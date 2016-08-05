@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FeedControllerDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/FeedControllerDelegate" class="dashAnchor"></a>
+    <a title="FeedControllerDelegate Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">FeedCache Docs</a> (93% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">FeedCache Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        FeedControllerDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/FeedCache.html">FeedCache</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FeedController.html">FeedController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v9FeedCache33FeedCachePerformWorkSynchronouslySb">FeedCachePerformWorkSynchronously</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F9FeedCache19deleteAllFeedCachesFzT_T_">deleteAllFeedCaches()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/CachePreferences.html">CachePreferences</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeedControllerDelegate.html">FeedControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeedFetchRequest.html">FeedFetchRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P9FeedCache8FeedItem">FeedItem</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>FeedControllerDelegate</h1>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP9FeedCache22FeedControllerDelegate14feedControllerFTCS_21FeedControllerGeneric9itemsCopyGSaPs9AnyObject__10itemsAddedGSaCSo11NSIndexPath_12itemsDeletedGSaS3___T_"></a>
+                    <a name="//apple_ref/swift/Method/feedController(_:itemsCopy:itemsAdded:itemsDeleted:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP9FeedCache22FeedControllerDelegate14feedControllerFTCS_21FeedControllerGeneric9itemsCopyGSaPs9AnyObject__10itemsAddedGSaCSo11NSIndexPath_12itemsDeletedGSaS3___T_">feedController(_:itemsCopy:itemsAdded:itemsDeleted:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The delegate method called when changes are made to the controller&rsquo;s items via a FeedFetchRequest</p>
+
+<div class="aside aside-parameter">
+    <p class="aside-title">Parameter</p>
+    Parameter feedController:    The feed controller.
+
+</div>
+
+<div class="aside aside-parameter">
+    <p class="aside-title">Parameter</p>
+    Parameter itemsCopy:         A copy of the feed controller&rsquo;s updated items array.
+
+</div>
+
+<div class="aside aside-parameter">
+    <p class="aside-title">Parameter</p>
+    Parameter itemsAdded:        The index paths of items  that were added to the items array.
+
+</div>
+
+<div class="aside aside-parameter">
+    <p class="aside-title">Parameter</p>
+    Parameter itemsDeleted:      The index paths of items that were deleted from the items array.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">feedController</span><span class="p">(</span><span class="nv">feedController</span><span class="p">:</span> <span class="kt"><a href="../Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a></span><span class="p">,</span> <span class="nv">itemsCopy</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyObject</span><span class="p">],</span> <span class="nv">itemsAdded</span><span class="p">:</span> <span class="p">[</span><span class="kt">NSIndexPath</span><span class="p">],</span> <span class="nv">itemsDeleted</span><span class="p">:</span> <span class="p">[</span><span class="kt">NSIndexPath</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>feedController</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The feed controller.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>itemsCopy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A copy of the feed controller&rsquo;s updated items array.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>itemsAdded</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index paths of items  that were added to the items array.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>itemsDeleted</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index paths of items that were deleted from the items array.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP9FeedCache22FeedControllerDelegate14feedControllerFTCS_21FeedControllerGeneric13requestFailedCSo7NSError_T_"></a>
+                    <a name="//apple_ref/swift/Method/feedController(_:requestFailed:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP9FeedCache22FeedControllerDelegate14feedControllerFTCS_21FeedControllerGeneric13requestFailedCSo7NSError_T_">feedController(_:requestFailed:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The delegate method called if there is an error making a FeedFetchRequest</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">feedController</span><span class="p">(</span><span class="nv">feedController</span><span class="p">:</span> <span class="kt"><a href="../Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a></span><span class="p">,</span> <span class="n">requestFailed</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>feedController</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The feed controller.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>feedController</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The error that occured in the FeedFetchRequest.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://github.com/ElectricObjects/FeedCache" target="_blank" rel="external">Rob Seward</a>. All rights reserved. (Last updated: 2016-08-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

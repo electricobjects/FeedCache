@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FeedController Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/FeedController" class="dashAnchor"></a>
+    <a title="FeedController Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">FeedCache Docs</a> (93% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">FeedCache Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        FeedController Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/FeedCache.html">FeedCache</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FeedController.html">FeedController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v9FeedCache33FeedCachePerformWorkSynchronouslySb">FeedCachePerformWorkSynchronously</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F9FeedCache19deleteAllFeedCachesFzT_T_">deleteAllFeedCaches()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/CachePreferences.html">CachePreferences</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeedControllerDelegate.html">FeedControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeedFetchRequest.html">FeedFetchRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P9FeedCache8FeedItem">FeedItem</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>FeedController</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">FeedController</span> <span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span><span class="kt"><a href="../Protocols.html#/s:P9FeedCache8FeedItem">FeedItem</a></span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Classes.html#/s:C9FeedCache21FeedControllerGeneric">FeedControllerGeneric</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>The FeedController keeps track of incoming feed items and caches them accordingly. It is designed to be controlled by a UITableViewController or
+<code>UICollectionViewController</code>, and is modeled after the <code>NSFetchedResultsController</code>.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC9FeedCache14FeedController5itemsGSQGSax__"></a>
+                    <a name="//apple_ref/swift/Property/items" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC9FeedCache14FeedController5itemsGSQGSax__">items</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The items in the feed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">private(set)</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">T</span><span class="p">]</span><span class="o">!</span> <span class="o">=</span> <span class="p">[]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC9FeedCache14FeedController8delegateXwGSqPS_22FeedControllerDelegate__"></a>
+                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC9FeedCache14FeedController8delegateXwGSqPS_22FeedControllerDelegate__">delegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The FeedController delegate. Usually a <code>UITableViewController</code> or <code>UICollectionViewController</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/FeedControllerDelegate.html">FeedControllerDelegate</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC9FeedCache14FeedController5cacheGSqGCS_9FeedCachex__"></a>
+                    <a name="//apple_ref/swift/Property/cache" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC9FeedCache14FeedController5cacheGSqGCS_9FeedCachex__">cache</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The cache object is responsible for saving and retrieving the feed items.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">cache</span><span class="p">:</span> <span class="kt"><a href="../Classes/FeedCache.html">FeedCache</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC9FeedCache14FeedControllercFT16cachePreferencesPS_16CachePreferences_7sectionSi_GS0_x_"></a>
+                    <a name="//apple_ref/swift/Method/init(cachePreferences:section:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC9FeedCache14FeedControllercFT16cachePreferencesPS_16CachePreferences_7sectionSi_GS0_x_">init(cachePreferences:section:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize the Feed Controller</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cachePreferences</span><span class="p">:</span> <span class="kt"><a href="../Protocols/CachePreferences.html">CachePreferences</a></span><span class="p">,</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cachePreferences</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The cache preferences.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>section</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The section of the tableview or collection view that the controller corresponds to.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC9FeedCache14FeedController22loadCacheSynchronouslyFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/loadCacheSynchronously()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC9FeedCache14FeedController22loadCacheSynchronouslyFT_T_">loadCacheSynchronously()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Load the Feed Controller&rsquo;s cache and block until it finishes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">loadCacheSynchronously</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC9FeedCache14FeedController10fetchItemsuRd__S_16FeedFetchRequestrFqd__T_"></a>
+                    <a name="//apple_ref/swift/Method/fetchItems(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC9FeedCache14FeedController10fetchItemsuRd__S_16FeedFetchRequestrFqd__T_">fetchItems(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Fetch items with a FeedFetchRequest.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">fetchItems</span><span class="o">&lt;</span><span class="kt">G</span><span class="p">:</span> <span class="kt"><a href="../Protocols/FeedFetchRequest.html">FeedFetchRequest</a></span><span class="o">&gt;</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">G</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC9FeedCache14FeedController17removeItemAtIndexFSiT_"></a>
+                    <a name="//apple_ref/swift/Method/removeItemAtIndex(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC9FeedCache14FeedController17removeItemAtIndexFSiT_">removeItemAtIndex(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove an item. This can be useful when rearranging items, e.g. if the user is manually arranging items in a tableview, we can use these to keep
+the FeedCache items in the correct position.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">removeItemAtIndex</span><span class="p">(</span><span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the index of the item to be removed.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC9FeedCache14FeedController10insertItemFTx7atIndexSi_T_"></a>
+                    <a name="//apple_ref/swift/Method/insertItem(_:atIndex:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC9FeedCache14FeedController10insertItemFTx7atIndexSi_T_">insertItem(_:atIndex:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Insert an item. This can be useful when rearranging items, e.g. if the user is manually arranging items in a tableview, we can use these to keep
+the FeedCache items in the correct position.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">insertItem</span><span class="p">(</span><span class="nv">item</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span> <span class="n">atIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>item</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The item to be inserted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>atIndex</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index at which to insert the item.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://github.com/ElectricObjects/FeedCache" target="_blank" rel="external">Rob Seward</a>. All rights reserved. (Last updated: 2016-08-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
