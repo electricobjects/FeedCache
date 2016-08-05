@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Setting this to true will make item processing and cache writing/reading occur synchronously on the main thread. This can be useful for testing.
 public var FeedCachePerformWorkSynchronously = false
 
 func fk_dispatch_after(time: NSTimeInterval, block: dispatch_block_t ) {
