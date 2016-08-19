@@ -23,9 +23,9 @@ struct PeopleFeedRequest: FeedFetchRequest {
     }
     
     
-    func fetchItems(success success: (newItems: [PeopleFeedItem]) -> (), failure: (NSError) -> ()) {
+    func fetchItems(success: @escaping (_ newItems: [PeopleFeedItem]) -> (), failure: (NSError) -> ()) {
         MockAPIService.sharedService.fetchFeed(minId, maxId: maxId, count: count) { (items) -> () in
-            success(newItems: items)
+            success(items)
         }
     }
 }
@@ -33,7 +33,7 @@ struct PeopleFeedRequest: FeedFetchRequest {
 
 enum ExampleCachePreferences : CachePreferences{
     case CacheOn
-    case CacheOff
+    case cacheOff
     
     var cacheOn: Bool {
         switch self {

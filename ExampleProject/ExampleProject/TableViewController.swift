@@ -22,7 +22,7 @@ class TableViewController: UITableViewController, FeedControllerDelegate {
         MockAPIService.sharedService.startFeedUdpateSimulation()
         
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(TableViewController.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl?.addTarget(self, action: #selector(TableViewController.refresh(_:)), for: UIControlEvents.valueChanged)
         //self.tableView.addSubview(refreshControl)
 
         feedController = FeedController<PeopleFeedItem>(cachePreferences: ExampleCachePreferences.CacheOn, section: 0)
@@ -35,21 +35,21 @@ class TableViewController: UITableViewController, FeedControllerDelegate {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return feedController.items.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 
         let item = feedController.items[indexPath.row]
         cell.textLabel?.text = item.name
         
-        if indexPath.row == itemsPerPage * currentPage - 1 {
+        if (indexPath as NSIndexPath).row == itemsPerPage * currentPage - 1 {
             if let lastItem = feedController.items.last{
                 let request = PeopleFeedRequest(clearStaleDataOnCompletion: false, count: itemsPerPage, minId: 0, maxId: lastItem.id)
                 feedController?.fetchItems(request)
@@ -61,7 +61,7 @@ class TableViewController: UITableViewController, FeedControllerDelegate {
         return cell
     }
     
-    func refresh(sender: AnyObject){
+    func refresh(_ sender: AnyObject){
         currentPage = 1
         let request = PeopleFeedRequest(clearStaleDataOnCompletion: true, count: itemsPerPage, minId: 0)
         feedController?.fetchItems(request)
@@ -69,17 +69,17 @@ class TableViewController: UITableViewController, FeedControllerDelegate {
 
     //MARK: ====  FeedKitController delegate methods  ====
     
-    func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
+    func feedController(_ feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath]) {
         tableView.beginUpdates()
-        tableView.insertRowsAtIndexPaths(itemsAdded, withRowAnimation: UITableViewRowAnimation.Automatic)
-        tableView.deleteRowsAtIndexPaths(itemsDeleted, withRowAnimation: UITableViewRowAnimation.Automatic)
+        tableView.insertRows(at: itemsAdded, with: UITableViewRowAnimation.automatic)
+        tableView.deleteRows(at: itemsDeleted, with: UITableViewRowAnimation.automatic)
         tableView.endUpdates()
-        if let refreshing = refreshControl?.refreshing where refreshing{
+        if let refreshing = refreshControl?.isRefreshing , refreshing{
             refreshControl?.endRefreshing()
         }
     }
     
-    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError) {
+    func feedController(_ feedController: FeedControllerGeneric, requestFailed error: NSError) {
         print(error)
     }
 }
