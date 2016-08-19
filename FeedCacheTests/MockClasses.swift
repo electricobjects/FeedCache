@@ -10,19 +10,21 @@ import UIKit
 import FeedCache
 
 struct TestFeedRequest: FeedFetchRequest {
+    typealias H = TestItem
+
     var clearStaleDataOnCompletion: Bool
     var pageNumber: Int
     var itemsPerPage: Int
-        
+    
     init(clearStaleDataOnCompletion: Bool, pageNumber: Int, itemsPerPage: Int){
         self.clearStaleDataOnCompletion = clearStaleDataOnCompletion
         self.pageNumber = pageNumber
         self.itemsPerPage = itemsPerPage
     }
     
-    func fetchItems(success success: (newItems: [TestItem]) -> (), failure: (NSError) -> ()) {
-        MockService.fetchItems(pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: { (newItems) -> () in
-            success(newItems: newItems)
+    func fetchItems(success: @escaping (_ newItems: [TestItem]) -> (), failure: (NSError) -> ()) {
+        MockService.fetchItems(page: pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: { (newItems) -> () in
+            success(newItems)
         }) { (error) -> () in
 
         }
@@ -31,7 +33,7 @@ struct TestFeedRequest: FeedFetchRequest {
 
 enum TestFeedCachePreferences : CachePreferences{
     case CacheOn
-    case CacheOff
+    case cacheOff
     
     var cacheOn: Bool {
         switch self {
@@ -55,15 +57,15 @@ class TestItem: NSObject, FeedItem{
     }
     
     @objc required  init(coder aDecoder: NSCoder){
-        name = aDecoder.decodeObjectForKey("name") as? String
+        name = aDecoder.decodeObject(forKey: "name") as? String
     }
     
-    @objc  func encodeWithCoder(aCoder: NSCoder){
-        aCoder.encodeObject(name, forKey: "name")
+    @objc  func encode(with aCoder: NSCoder){
+        aCoder.encode(name, forKey: "name")
     }
     
     
-    override func isEqual(object: AnyObject?) -> Bool {
+    override func isEqual(_ object: Any?) -> Bool {
         if let object = object as? TestItem {
             return hashValue == object.hashValue
         }
@@ -82,8 +84,8 @@ class TestItem: NSObject, FeedItem{
 class MockService {
     static var mockResponseItems: [TestItem]?
     
-    class func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject]?, success:(newItems:[TestItem])->(), failure:(error: NSError)->()){
-        success(newItems: MockService.mockResponseItems!)
+    class func fetchItems(page: Int, itemsPerPage: Int, parameters: [String: AnyObject]?, success:([TestItem])->(), failure:(NSError)->()){
+        success(MockService.mockResponseItems!)
     }
 }
 

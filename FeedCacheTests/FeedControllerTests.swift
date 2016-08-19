@@ -17,8 +17,8 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     var delegateResponseExpectation: XCTestExpectation?
     var feedController: FeedController<TestItem>!
     
-    var itemsAdded: [NSIndexPath]?
-    var itemsDeleted: [NSIndexPath]?
+    var itemsAdded: [IndexPath]?
+    var itemsDeleted: [IndexPath]?
     
     override func setUp() {
         super.setUp()
@@ -44,12 +44,12 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     func test_allNewItems(){
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
         
-        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        self.delegateResponseExpectation = self.expectation(description: "delegate expectation")
         let request = TestFeedRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         feedController.fetchItems(request)
         
-        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
-            if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
+        self.waitForExpectations(timeout: 1.0) { (error) -> Void in
+            if let itemsAdded = self.itemsAdded, let itemsDeleted = self.itemsDeleted {
                 XCTAssert(itemsAdded.count == 3)
                 XCTAssert(itemsDeleted.count == 3)
             }
@@ -62,12 +62,12 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     func test_oneNewItem(){
         MockService.mockResponseItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "baz")]
         
-        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        self.delegateResponseExpectation = self.expectation(description: "delegate expectation")
         let request = TestFeedRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         feedController.fetchItems(request)
         
-        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
-            if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
+        self.waitForExpectations(timeout: 1.0) { (error) -> Void in
+            if let itemsAdded = self.itemsAdded, let itemsDeleted = self.itemsDeleted {
                 XCTAssert(itemsAdded.count == 1)
                 XCTAssert(itemsDeleted.count == 1)
             }
@@ -79,12 +79,12 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     
     func test_redundantRequest(){
         MockService.mockResponseItems = [TestItem(name: "test1"), TestItem(name: "test2"), TestItem(name: "test3")]
-        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        self.delegateResponseExpectation = self.expectation(description: "delegate expectation")
         let request = TestFeedRequest(clearStaleDataOnCompletion: false, pageNumber: 1, itemsPerPage: 10)
         feedController.fetchItems(request)
         
-        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
-            if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
+        self.waitForExpectations(timeout: 1.0) { (error) -> Void in
+            if let itemsAdded = self.itemsAdded, let itemsDeleted = self.itemsDeleted {
                 XCTAssert(itemsAdded.count == 0)
                 XCTAssert(itemsDeleted.count == 0)
             }
@@ -97,12 +97,12 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     
     func test_addPages(){
         MockService.mockResponseItems = [TestItem(name: "foo"), TestItem(name: "bar"), TestItem(name: "baz")]
-        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        self.delegateResponseExpectation = self.expectation(description: "delegate expectation")
         let request = TestFeedRequest(clearStaleDataOnCompletion: false, pageNumber: 2, itemsPerPage: 10)
         feedController.fetchItems(request)
         
-        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
-            if let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted {
+        self.waitForExpectations(timeout: 1.0) { (error) -> Void in
+            if let itemsAdded = self.itemsAdded, let itemsDeleted = self.itemsDeleted {
                 XCTAssert(itemsAdded.count == 3)
                 XCTAssert(itemsDeleted.count == 0)
             }
@@ -132,15 +132,15 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     func test_noCache(){
         let testItem = TestItem(name: "No Cache")
         MockService.mockResponseItems = [testItem]
-        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        self.delegateResponseExpectation = self.expectation(description: "delegate expectation")
         
-        let cachelessFc = FeedController<TestItem>(cachePreferences: TestFeedCachePreferences.CacheOff, section: 0)
+        let cachelessFc = FeedController<TestItem>(cachePreferences: TestFeedCachePreferences.cacheOff, section: 0)
         cachelessFc.delegate = self
         
         let request = TestFeedRequest(clearStaleDataOnCompletion: true, pageNumber: 1, itemsPerPage: 10)
         cachelessFc.fetchItems(request)
         
-        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
+        self.waitForExpectations(timeout: 1.0) { (error) -> Void in
             XCTAssert(cachelessFc.items == [testItem])
         }
 
@@ -150,7 +150,7 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
         MockService.mockResponseItems = [TestItem(name: "1"), TestItem(name: "1"), TestItem(name: "2"), TestItem(name: "3")]
         let cacheItems =  [TestItem(name: "2"), TestItem(name: "3"), TestItem(name: "4")]
         
-        self.delegateResponseExpectation = self.expectationWithDescription("delegate expectation")
+        self.delegateResponseExpectation = self.expectation(description: "delegate expectation")
         
         feedController.cache?.clearCache()
         feedController.cache?.addItems(cacheItems)
@@ -159,8 +159,8 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
         let request = TestFeedRequest(clearStaleDataOnCompletion: false, pageNumber: 2, itemsPerPage: 10)
         feedController.fetchItems(request)
         
-        self.waitForExpectationsWithTimeout(1.0) { (error) -> Void in
-            guard let itemsAdded = self.itemsAdded, itemsDeleted = self.itemsDeleted else { XCTAssert(false); return}
+        self.waitForExpectations(timeout: 1.0) { (error) -> Void in
+            guard let itemsAdded = self.itemsAdded, let itemsDeleted = self.itemsDeleted else { XCTAssert(false); return}
             let beforeCount = itemsCount
             let afterCount = self.feedController.items.count
             
@@ -184,7 +184,7 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
         let cacheItems =  numberStrings.map({TestItem(name: $0)})
         feedController.cache?.clearCache()
         feedController.cache?.addItems(cacheItems)
-        measureBlock { () -> Void in
+        measure { () -> Void in
             self.feedController.loadCacheSynchronously()
         }
     }
@@ -192,13 +192,13 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     
     //MARK: FeedCache Delegate methods
     
-    func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath]) {
+    func feedController(_ feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath]) {
         self.itemsAdded = itemsAdded
         self.itemsDeleted = itemsDeleted
         self.delegateResponseExpectation?.fulfill()
     }
     
-    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError) {
+    func feedController(_ feedController: FeedControllerGeneric, requestFailed error: NSError) {
         
     }
 }

@@ -25,7 +25,7 @@ public protocol FeedFetchRequest {
      - parameter success: <#success description#>
      - parameter failure: <#failure description#>
      */
-    func fetchItems(success success: (newItems: [H])->(), failure: (NSError)->())
+    func fetchItems(success: @escaping (_ newItems: [H])->(), failure: (NSError)->())
 }
 
 /**
@@ -46,7 +46,7 @@ public protocol FeedControllerDelegate: class {
      - Parameter itemsAdded:        The index paths of items  that were added to the items array.
      - Parameter itemsDeleted:      The index paths of items that were deleted from the items array.
      */
-    func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [NSIndexPath], itemsDeleted: [NSIndexPath])
+    func feedController(_ feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath])
 
     /**
      The delegate method called if there is an error making a FeedFetchRequest
@@ -54,7 +54,7 @@ public protocol FeedControllerDelegate: class {
      - parameter feedController:    The feed controller.
      - parameter feedController:    The error that occured in the FeedFetchRequest.
      */
-    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError)
+    func feedController(_ feedController: FeedControllerGeneric, requestFailed error: NSError)
 }
 
 /**
@@ -71,26 +71,26 @@ public protocol CachePreferences {
  Since Feed Controllers use generics to ensure type saftey, they inherit from this common class so we can compare different
  Feed Controllers with the '==' operator
  */
-public class FeedControllerGeneric {
+open class FeedControllerGeneric {
 
 }
 
 func == (lhs: FeedControllerGeneric, rhs: FeedControllerGeneric) -> Bool {
-    return unsafeAddressOf(lhs) == unsafeAddressOf(rhs)
+    return Unmanaged.passUnretained(lhs).toOpaque() == Unmanaged.passUnretained(rhs).toOpaque()
 }
 
 /// The FeedController keeps track of incoming feed items and caches them accordingly. It is designed to be controlled by a UITableViewController or
 /// `UICollectionViewController`, and is modeled after the `NSFetchedResultsController`.
-public class FeedController <T:FeedItem> : FeedControllerGeneric {
+open class FeedController <T:FeedItem> : FeedControllerGeneric {
 
     ///The items in the feed.
-    private(set) public var items: [T]! = []
+    fileprivate(set) open var items: [T]! = []
     /// The FeedController delegate. Usually a `UITableViewController` or `UICollectionViewController`.
-    public weak var delegate: FeedControllerDelegate?
+    open weak var delegate: FeedControllerDelegate?
     /// The `cachePreferences` tell the FeedController whether or not to cache the feed items, and if so, what the cache should be called.
-    private(set) var cachePreferences: CachePreferences
+    fileprivate(set) var cachePreferences: CachePreferences
     /// The cache object is responsible for saving and retrieving the feed items.
-    public var cache: FeedCache<T>?
+    open var cache: FeedCache<T>?
 
     ///The section in a UITableView or UICollectionView that the Feed Controller corresponds to.
     let section: Int!
@@ -113,28 +113,28 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric {
     /**
      Load the Feed Controller's cache and block until it finishes.
      */
-    public func loadCacheSynchronously() {
+    open func loadCacheSynchronously() {
         cache?.loadCache()
         cache?.waitUntilSynchronized()
         _processCacheLoad()
     }
 
-    private func _addItems(items: [T]) {
+    fileprivate func _addItems(_ items: [T]) {
         self.items = self.items + items
     }
 
     /// Fetch items with a FeedFetchRequest.
-    public func fetchItems<G: FeedFetchRequest>(request: G) {
+    open func fetchItems<G: FeedFetchRequest>(_ request: G) {
         request.fetchItems(success: { [weak self](newItems) -> () in
             if let strongSelf = self {
-                fk_dispatch_on_queue(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), block: { () -> Void in
+                fk_dispatch_on_queue(DispatchQueue.global(qos: DispatchQoS.QoSClass.default), block: { () -> Void in
                     if let items =  newItems as Any as? [T] {
                         strongSelf._processNewItems(items, clearCacheIfNewItemsAreDifferent: request.clearStaleDataOnCompletion)
                     }
                 })
             }
         }) { [weak self](error) -> () in
-            if let delegate = self?.delegate, strongSelf = self {
+            if let delegate = self?.delegate, let strongSelf = self {
                 delegate.feedController(strongSelf, requestFailed: error)
             }
         }
@@ -146,8 +146,8 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric {
 
      - parameter index: the index of the item to be removed.
     */
-    public func removeItemAtIndex(index: Int) {
-        items.removeAtIndex(index)
+    open func removeItemAtIndex(_ index: Int) {
+        items.remove(at: index)
         if let cache = cache {
             cache.clearCache()
             cache.addItems(items)
@@ -161,21 +161,21 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric {
      - parameter item: The item to be inserted.
      - parameter atIndex: The index at which to insert the item.
     */
-    public func insertItem(item: T, atIndex index: Int) {
-        items.insert(item, atIndex: index)
+    open func insertItem(_ item: T, atIndex index: Int) {
+        items.insert(item, at: index)
         if let cache = cache {
             cache.clearCache()
             cache.addItems(items)
         }
     }
 
-    private func _processCacheLoad() {
+    fileprivate func _processCacheLoad() {
         if let cache = cache {
             items = _unique(cache.items)
         }
     }
 
-    private func _processNewItems(newItems: [T], clearCacheIfNewItemsAreDifferent: Bool) {
+    fileprivate func _processNewItems(_ newItems: [T], clearCacheIfNewItemsAreDifferent: Bool) {
 
         //prevent calls of this method on other threads from mutating items array while we are working with it.
         objc_sync_enter(self)
@@ -186,7 +186,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric {
         let uniqueNewItems = _unique(newItems)
 
         if uniqueNewItems == items {
-            fk_dispatch_on_queue(dispatch_get_main_queue()) { () -> Void in
+            fk_dispatch_on_queue(DispatchQueue.main) { () -> Void in
                 self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: [], itemsDeleted: [])
             }
             return
@@ -194,19 +194,19 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric {
         let newSet = Set(uniqueNewItems)
         let oldSet = Set(items)
 
-        let insertSet = newSet.subtract(oldSet)
+        let insertSet = newSet.subtracting(oldSet)
 
-        var indexPathsForInsertion: [NSIndexPath] = []
-        var indexPathsForDeletion: [NSIndexPath] = []
+        var indexPathsForInsertion: [IndexPath] = []
+        var indexPathsForDeletion: [IndexPath] = []
 
         if clearCacheIfNewItemsAreDifferent {
             indexPathsForInsertion = _indexesForItems(insertSet, inArray: uniqueNewItems)
-            let deleteSet = oldSet.subtract(newSet)
+            let deleteSet = oldSet.subtracting(newSet)
             indexPathsForDeletion = _indexesForItems(deleteSet, inArray: items)
             items = uniqueNewItems
 
             cache?.clearCache()
-            fk_dispatch_on_queue(dispatch_get_main_queue()) { () -> Void in
+            fk_dispatch_on_queue(DispatchQueue.main) { () -> Void in
                 self.cache?.addItems(self.items)
             }
         } else {
@@ -216,29 +216,29 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric {
             indexPathsForInsertion = _indexesForItems(insertSet, inArray: items)
         }
 
-        fk_dispatch_on_queue(dispatch_get_main_queue()) { () -> Void in
+        fk_dispatch_on_queue(DispatchQueue.main) { () -> Void in
             self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
         }
     }
 
-    private func _indexesForItems(itemsToFind: Set<T>, inArray array: [T]) -> [NSIndexPath] {
-        var returnPaths: [NSIndexPath] = []
+    fileprivate func _indexesForItems(_ itemsToFind: Set<T>, inArray array: [T]) -> [IndexPath] {
+        var returnPaths: [IndexPath] = []
 
         for item in itemsToFind {
-            if let index = array.indexOf(item) {
-                returnPaths.append(NSIndexPath(forRow: index, inSection: section))
+            if let index = array.index(of: item) {
+                returnPaths.append(IndexPath(row: index, section: section))
             }
         }
 
         return returnPaths
     }
 
-    private func _orderSetWithArray(set: Set<T>, array: [T]) -> [T] {
-        let forDeletion = Set(array).subtract(set)
+    fileprivate func _orderSetWithArray(_ set: Set<T>, array: [T]) -> [T] {
+        let forDeletion = Set(array).subtracting(set)
         var returnArray = [T](array)
         for item in forDeletion {
-            let removeIndex = returnArray.indexOf(item)!
-            returnArray.removeAtIndex(removeIndex)
+            let removeIndex = returnArray.index(of: item)!
+            returnArray.remove(at: removeIndex)
         }
         return returnArray
     }
@@ -249,7 +249,7 @@ public class FeedController <T:FeedItem> : FeedControllerGeneric {
      - parameter source: The original sequence.
      - returns: A sequence of unique items.
     */
-    private func _unique<S: SequenceType, E: Hashable where E == S.Generator.Element>(source: S) -> [E] {
+    fileprivate func _unique<S: Sequence, E: Hashable>(_ source: S) -> [E] where E == S.Iterator.Element {
         var seen = [E: Bool]()
         return source.filter { seen.updateValue(true, forKey: $0) == nil }
     }
