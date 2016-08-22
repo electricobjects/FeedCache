@@ -192,13 +192,13 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
     
     //MARK: FeedCache Delegate methods
     
-    func feedController(_ feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath]) {
+    func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath]) {
         self.itemsAdded = itemsAdded
         self.itemsDeleted = itemsDeleted
         self.delegateResponseExpectation?.fulfill()
     }
     
-    func feedController(_ feedController: FeedControllerGeneric, requestFailed error: NSError) {
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError) {
         
     }
 }
