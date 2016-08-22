@@ -25,7 +25,7 @@ public protocol FeedFetchRequest {
      - parameter success: <#success description#>
      - parameter failure: <#failure description#>
      */
-    func fetchItems(success: @escaping (_ newItems: [H])->(), failure: (NSError)->())
+    func fetchItems(success: @escaping ([H])->(), failure: (NSError)->())
 }
 
 /**
@@ -46,7 +46,7 @@ public protocol FeedControllerDelegate: class {
      - Parameter itemsAdded:        The index paths of items  that were added to the items array.
      - Parameter itemsDeleted:      The index paths of items that were deleted from the items array.
      */
-    func feedController(_ feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath])
+    func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath])
 
     /**
      The delegate method called if there is an error making a FeedFetchRequest
@@ -54,7 +54,7 @@ public protocol FeedControllerDelegate: class {
      - parameter feedController:    The feed controller.
      - parameter feedController:    The error that occured in the FeedFetchRequest.
      */
-    func feedController(_ feedController: FeedControllerGeneric, requestFailed error: NSError)
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError)
 }
 
 /**
@@ -135,7 +135,7 @@ open class FeedController <T:FeedItem> : FeedControllerGeneric {
             }
         }) { [weak self](error) -> () in
             if let delegate = self?.delegate, let strongSelf = self {
-                delegate.feedController(strongSelf, requestFailed: error)
+                delegate.feedController(feedController: strongSelf, requestFailed: error)
             }
         }
     }
@@ -187,7 +187,7 @@ open class FeedController <T:FeedItem> : FeedControllerGeneric {
 
         if uniqueNewItems == items {
             fk_dispatch_on_queue(DispatchQueue.main) { () -> Void in
-                self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: [], itemsDeleted: [])
+                self.delegate?.feedController(feedController: self, itemsCopy: self.items, itemsAdded: [], itemsDeleted: [])
             }
             return
         }
@@ -217,7 +217,7 @@ open class FeedController <T:FeedItem> : FeedControllerGeneric {
         }
 
         fk_dispatch_on_queue(DispatchQueue.main) { () -> Void in
-            self.delegate?.feedController(self, itemsCopy: self.items, itemsAdded: indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
+            self.delegate?.feedController(feedController: self, itemsCopy: self.items, itemsAdded: indexPathsForInsertion, itemsDeleted: indexPathsForDeletion)
         }
     }
 
