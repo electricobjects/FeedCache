@@ -25,7 +25,7 @@ func fk_dispatch_after_on_queue(_ time: TimeInterval, queue: DispatchQueue, bloc
 }
 
 func fk_dispatch_async(_ block: @escaping ()->() ) {
-    fk_dispatch_on_queue(DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default), block: block)
+    fk_dispatch_on_queue(DispatchQueue.global(qos: DispatchQoS.QoSClass.default), block: block)
 }
 
 func fk_dispatch_main_queue(_ block: @escaping ()->()) {
