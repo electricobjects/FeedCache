@@ -69,7 +69,7 @@ class TableViewController: UITableViewController, FeedControllerDelegate {
 
     //MARK: ====  FeedKitController delegate methods  ====
     
-    func feedController(_ feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath]) {
+    func feedController(feedController: FeedControllerGeneric, itemsCopy: [AnyObject], itemsAdded: [IndexPath], itemsDeleted: [IndexPath]) {
         tableView.beginUpdates()
         tableView.insertRows(at: itemsAdded, with: UITableViewRowAnimation.automatic)
         tableView.deleteRows(at: itemsDeleted, with: UITableViewRowAnimation.automatic)
@@ -79,7 +79,7 @@ class TableViewController: UITableViewController, FeedControllerDelegate {
         }
     }
     
-    func feedController(_ feedController: FeedControllerGeneric, requestFailed error: NSError) {
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError) {
         print(error)
     }
 }
