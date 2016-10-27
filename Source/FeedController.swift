@@ -25,7 +25,7 @@ public protocol FeedFetchRequest {
      - parameter success: <#success description#>
      - parameter failure: <#failure description#>
      */
-    func fetchItems(success: @escaping ([H])->(), failure: (NSError)->())
+    func fetchItems(success: @escaping ([H])->(), failure: @escaping (NSError)->())
 }
 
 /**
