@@ -23,7 +23,7 @@ public func deleteAllFeedCaches() throws {
     let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
     let libraryCachesDirectory: URL = URL(fileURLWithPath: paths[0])
     let cacheDirectory = libraryCachesDirectory.appendingPathComponent(FeedCacheFileNames.apiCacheFolderName)
-    try FileManager.default.removeItem(atPath: cacheDirectory.absoluteString)
+    try FileManager.default.removeItem(atPath: cacheDirectory.relativePath)
 }
 
 /// FeedCache is responsible for saving and retreiving feed items from disk. It should be operated by the FeedController.
