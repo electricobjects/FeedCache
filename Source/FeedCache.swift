@@ -175,7 +175,7 @@ open class FeedCache<T:FeedItem> {
         }
 
         let folderPath = libraryCachesDirectory.appendingPathComponent(folderName)
-        return folderPath.absoluteString
+        return folderPath.relativePath
     }
 
     fileprivate func _createFolderIfNeeded(_ folderPath: String) {
