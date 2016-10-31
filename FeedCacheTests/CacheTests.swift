@@ -43,14 +43,14 @@ class CacheTests: XCTestCase {
         //Test success is dependent on there already being items in the cache
         
         let cache = FeedCache<TestItem>(name: TestFeedCachePreferences.CacheOn.cacheName)
-        let expectation = self.expectationWithDescription("Load cache expectation")
+        let expectation = self.expectation(description: "Load cache expectation")
         var testSuccess = false
         cache.loadCache { (success) -> () in
             testSuccess = success && cache.items.count > 0
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1) { (error) -> Void in
+        self.waitForExpectations(timeout: 1) { (error) -> Void in
             XCTAssert(testSuccess, "Load cache test")
         }
     }

@@ -10,6 +10,8 @@ import Foundation
 import FeedCache
 
 struct PeopleFeedRequest: FeedFetchRequest {
+    typealias H = PeopleFeedItem
+
     var clearStaleDataOnCompletion: Bool
     var maxId: Int?
     var minId: Int!
@@ -23,9 +25,9 @@ struct PeopleFeedRequest: FeedFetchRequest {
     }
     
     
-    func fetchItems(success success: (newItems: [PeopleFeedItem]) -> (), failure: (NSError) -> ()) {
+    func fetchItems(success: @escaping ([PeopleFeedItem]) -> (), failure: @escaping (NSError) -> ()) {
         MockAPIService.sharedService.fetchFeed(minId, maxId: maxId, count: count) { (items) -> () in
-            success(newItems: items)
+            success(items)
         }
     }
 }
@@ -33,7 +35,7 @@ struct PeopleFeedRequest: FeedFetchRequest {
 
 enum ExampleCachePreferences : CachePreferences{
     case CacheOn
-    case CacheOff
+    case cacheOff
     
     var cacheOn: Bool {
         switch self {

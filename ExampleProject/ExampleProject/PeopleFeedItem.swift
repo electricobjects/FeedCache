@@ -19,16 +19,16 @@ class PeopleFeedItem : NSObject, FeedItem,  NSCoding {
     }
     
     @objc required init?(coder aDecoder: NSCoder) {
-        name = aDecoder.decodeObjectForKey("name") as? String
-        id = aDecoder.decodeObjectForKey("id") as? Int
+        name = aDecoder.decodeObject(forKey: "name") as? String
+        id = aDecoder.decodeObject(forKey: "id") as? Int
     }
     
-    @objc func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(name, forKey: "name")
-        aCoder.encodeObject(id, forKey: "id")
+    @objc func encode(with aCoder: NSCoder) {
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(id, forKey: "id")
     }
     
-    override func isEqual(object: AnyObject?) -> Bool {
+    override func isEqual(_ object: Any?) -> Bool {
         if let object = object as? PeopleFeedItem {
             return object.name == self.name && object.id == self.id
         }

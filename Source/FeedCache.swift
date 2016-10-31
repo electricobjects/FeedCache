@@ -20,22 +20,22 @@ struct FeedCacheFileNames {
  - throws: `ErrorType` from NSFileManager
  */
 public func deleteAllFeedCaches() throws {
-    let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-    let libraryCachesDirectory: AnyObject = paths[0]
-    let cacheDirectory = libraryCachesDirectory.stringByAppendingPathComponent(FeedCacheFileNames.apiCacheFolderName)
-    try NSFileManager.defaultManager().removeItemAtPath(cacheDirectory)
+    let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+    let libraryCachesDirectory: URL = URL(fileURLWithPath: paths[0])
+    let cacheDirectory = libraryCachesDirectory.appendingPathComponent(FeedCacheFileNames.apiCacheFolderName)
+    try FileManager.default.removeItem(atPath: cacheDirectory.relativePath)
 }
 
 /// FeedCache is responsible for saving and retreiving feed items from disk. It should be operated by the FeedController.
-public class FeedCache<T:FeedItem> {
+open class FeedCache<T:FeedItem> {
 
     /// The name of the cache, used to create the filename for the on-disk archive.
     let name: String!
-    var diskOperationQueue = NSOperationQueue()
+    var diskOperationQueue = OperationQueue()
     /// Items that have been loaded from disk.
-    public var items: [T] = []
+    open var items: [T] = []
     /// Saved is set to false when a save operation is in progress.
-    public var saved = false
+    open var saved = false
 
     /**
      Initialize a FeedCache
@@ -46,7 +46,7 @@ public class FeedCache<T:FeedItem> {
      */
     public init(name: String) {
         if FeedCachePerformWorkSynchronously {
-            diskOperationQueue = NSOperationQueue.mainQueue()
+            diskOperationQueue = OperationQueue.main
         }
         diskOperationQueue.maxConcurrentOperationCount = 1
         self.name = name
@@ -57,10 +57,10 @@ public class FeedCache<T:FeedItem> {
 
      - parameter items: FeedItems to add to the cache.
      */
-    public func addItems(items: [T]) {
+    open func addItems(_ items: [T]) {
         self.saved = false
         self.items = self.items + items
-        let data = NSKeyedArchiver.archivedDataWithRootObject(self.items)
+        let data = NSKeyedArchiver.archivedData(withRootObject: self.items)
         _saveData(data)
     }
 
@@ -69,38 +69,38 @@ public class FeedCache<T:FeedItem> {
 
      - parameter completion: Success is true if the operation is a success.
      */
-    public func loadCache(completion: ( (success: Bool)->() )? = nil) {
+    open func loadCache(_ completion: ( (_ success: Bool)->() )? = nil) {
 
         // Once background queue is exited, synchronize will unblock
         // thus completion will fire **after** synchronize unblocks
-        let mainQueueCompletion : (success: Bool) -> () = {
+        let mainQueueCompletion : (_ success: Bool) -> () = {
             (success: Bool) -> () in
-            if NSThread.isMainThread() == false {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    completion?(success: success)
+            if Thread.isMainThread == false {
+                DispatchQueue.main.async(execute: { () -> Void in
+                    completion?(success)
                 })
             } else {
-                completion?(success: success)
+                completion?(success)
             }
         }
 
         _getCachedData (completion: {(data) -> () in
             if let data = data {
-                let unarchivedItems = NSKeyedUnarchiver.unarchiveObjectWithData(data)
+                let unarchivedItems = NSKeyedUnarchiver.unarchiveObject(with: data)
                 if let unarchivedItems = unarchivedItems as? [T] {
                     self.items = unarchivedItems
-                    mainQueueCompletion(success: true)
+                    mainQueueCompletion(true)
                     return
                 }
             }
-            mainQueueCompletion(success: false)
+            mainQueueCompletion(false)
         })
     }
 
     /**
      Clear cache from disk synchronously.
      */
-    public func clearCache() {
+    open func clearCache() {
         self.saved = false
         self.items = []
         _deleteCache()
@@ -110,37 +110,37 @@ public class FeedCache<T:FeedItem> {
     /**
      Cache operations are performed on an operation queue. Calling this method will block until the queue is empty.
      */
-    public func waitUntilSynchronized() {
-        if diskOperationQueue != NSOperationQueue.mainQueue() {
+    open func waitUntilSynchronized() {
+        if diskOperationQueue != OperationQueue.main {
             diskOperationQueue.waitUntilAllOperationsAreFinished()
         }
     }
 
-    private func _deleteCache() {
+    fileprivate func _deleteCache() {
         let folderName = name
-        let folderPath = _folderPathFromFolderName(folderName, insideCacheFolder: true)
-        let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedCacheFileNames.genericArchiveName)
+        let folderPath = _folderPathFromFolderName(folderName!, insideCacheFolder: true)
+        let filePath = (folderPath as NSString).appendingPathComponent(FeedCacheFileNames.genericArchiveName)
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(filePath)
+            try FileManager.default.removeItem(atPath: filePath)
         } catch let error as NSError {
             print(error)
         }
     }
 
-    private func _saveData(data: NSData) {
-        diskOperationQueue.addOperationWithBlock {
+    fileprivate func _saveData(_ data: Data) {
+        diskOperationQueue.addOperation {
             [weak self]() -> Void in
 
             if let
                 strongSelf = self,
-                folderName = strongSelf.name
+                let folderName = strongSelf.name
             {
                 let folderPath = strongSelf._folderPathFromFolderName(folderName, insideCacheFolder: true)
                 strongSelf._createFolderIfNeeded(folderPath)
 
-                let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedCacheFileNames.genericArchiveName)
+                let filePath = (folderPath as NSString).appendingPathComponent(FeedCacheFileNames.genericArchiveName)
 
-                data.writeToFile(filePath, atomically: true)
+                try? data.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
                 if strongSelf.diskOperationQueue.operationCount == 1 {
                     strongSelf.saved = true
                 }
@@ -148,17 +148,17 @@ public class FeedCache<T:FeedItem> {
         }
     }
 
-    private func _getCachedData(completion completion: (NSData?)->()) {
-        diskOperationQueue.addOperationWithBlock {
+    fileprivate func _getCachedData(completion: @escaping (Data?)->()) {
+        diskOperationQueue.addOperation {
             [weak self]() -> Void in
 
             if let
                 folderName = self?.name,
-                strongSelf = self {
+                let strongSelf = self {
                 let folderPath = strongSelf._folderPathFromFolderName(folderName, insideCacheFolder: true)
 
-                let filePath = (folderPath as NSString).stringByAppendingPathComponent(FeedCacheFileNames.genericArchiveName)
-                let data = NSData(contentsOfFile: filePath)
+                let filePath = (folderPath as NSString).appendingPathComponent(FeedCacheFileNames.genericArchiveName)
+                let data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
                 completion(data)
             } else {
                 completion(nil)
@@ -167,22 +167,21 @@ public class FeedCache<T:FeedItem> {
     }
 
 
-    private func _folderPathFromFolderName(folderName: String, insideCacheFolder: Bool) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        var libraryCachesDirectory: AnyObject = paths[0]
-
+    fileprivate func _folderPathFromFolderName(_ folderName: String, insideCacheFolder: Bool) -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        var libraryCachesDirectory: URL = URL(fileURLWithPath: paths[0])
         if insideCacheFolder {
-            libraryCachesDirectory = libraryCachesDirectory.stringByAppendingPathComponent(FeedCacheFileNames.apiCacheFolderName)
+            libraryCachesDirectory.appendPathComponent(FeedCacheFileNames.apiCacheFolderName)
         }
 
-        let folderPath = libraryCachesDirectory.stringByAppendingPathComponent(folderName)
-        return folderPath
+        let folderPath = libraryCachesDirectory.appendingPathComponent(folderName)
+        return folderPath.relativePath
     }
 
-    private func _createFolderIfNeeded(folderPath: String) {
-        if (!NSFileManager.defaultManager().fileExistsAtPath(folderPath)) {
+    fileprivate func _createFolderIfNeeded(_ folderPath: String) {
+        if (!FileManager.default.fileExists(atPath: folderPath)) {
             do {
-                try NSFileManager.defaultManager().createDirectoryAtPath(folderPath, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(atPath: folderPath, withIntermediateDirectories: true, attributes: nil)
             } catch let error as NSError {
                 print(error)
             }

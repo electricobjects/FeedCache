@@ -7,6 +7,17 @@
 //
 
 import Foundation
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 class MockAPIService {
     static let sharedService = MockAPIService()
@@ -18,22 +29,22 @@ class MockAPIService {
         startFeedUdpateSimulation()
     }
     
-    private func _initializeMockFeed(){
+    fileprivate func _initializeMockFeed(){
 
-        if let path = NSBundle.mainBundle().pathForResource("name_list", ofType: "txt")
+        if let path = Bundle.main.path(forResource: "name_list", ofType: "txt")
         {
-            let url = NSURL(fileURLWithPath: path)
+            let url = URL(fileURLWithPath: path)
             do {
                 var feedItems = [PeopleFeedItem]()
-                let fileContents = try NSString(contentsOfURL: url, encoding: NSUTF8StringEncoding)
-                let list = fileContents.componentsSeparatedByString("\n")
+                let fileContents = try NSString(contentsOf: url, encoding: String.Encoding.utf8.rawValue)
+                let list = fileContents.components(separatedBy: "\n")
                 var count = 1
                 for name in list {
                     let item = PeopleFeedItem(name: name, id: count)
                     feedItems.append(item)
                     count += 1
                 }
-                feedItems = feedItems.reverse()
+                feedItems = feedItems.reversed()
                 
                 let numRefreshItems = 100
                 refreshItems = Array(feedItems[0...numRefreshItems-1])
@@ -49,15 +60,15 @@ class MockAPIService {
         _delay(2, closure: { [weak self]()->() in self?._updateFeed() })
     }
     
-    private func _updateFeed(){
+    fileprivate func _updateFeed(){
         if refreshItems.count > 0 {
             let item = refreshItems.removeLast()
-            mockFeed.insert(item, atIndex: 0)
+            mockFeed.insert(item, at: 0)
             _delay(4, closure: { self._updateFeed() })
         }
     }
     
-    func fetchFeed(minId: Int?, maxId: Int?, count: Int, success:([PeopleFeedItem])->()) {
+    func fetchFeed(_ minId: Int?, maxId: Int?, count: Int, success:@escaping ([PeopleFeedItem])->()) {
         if let minId = minId {
             let maxId = maxId != nil ? maxId! : Int.max
             let filteredResults = mockFeed.filter({$0.id < maxId && $0.id > minId})
@@ -74,13 +85,9 @@ class MockAPIService {
     }
     
     
-    private func _delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
+    fileprivate func _delay(_ delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
     
 }
