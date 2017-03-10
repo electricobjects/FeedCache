@@ -198,7 +198,7 @@ class FeedControllerTests: XCTestCase, FeedControllerDelegate {
         self.delegateResponseExpectation?.fulfill()
     }
     
-    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError) {
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: Error) {
         
     }
 }

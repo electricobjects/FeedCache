@@ -25,7 +25,7 @@ public protocol FeedFetchRequest {
      - parameter success: <#success description#>
      - parameter failure: <#failure description#>
      */
-    func fetchItems(success: @escaping ([H])->(), failure: @escaping (NSError)->())
+    func fetchItems(success: @escaping ([H])->(), failure: @escaping (Error)->())
 }
 
 /**
@@ -54,7 +54,7 @@ public protocol FeedControllerDelegate: class {
      - parameter feedController:    The feed controller.
      - parameter feedController:    The error that occured in the FeedFetchRequest.
      */
-    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError)
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: Error)
 }
 
 /**

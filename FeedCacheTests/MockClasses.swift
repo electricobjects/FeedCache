@@ -22,7 +22,7 @@ struct TestFeedRequest: FeedFetchRequest {
         self.itemsPerPage = itemsPerPage
     }
     
-    func fetchItems(success: @escaping ([TestItem]) -> (), failure: @escaping (NSError) -> ()) {
+    func fetchItems(success: @escaping ([TestItem]) -> (), failure: @escaping (Error) -> ()) {
         MockService.fetchItems(page: pageNumber, itemsPerPage: itemsPerPage, parameters: nil, success: { (newItems) -> () in
             success(newItems)
         }) { (error) -> () in

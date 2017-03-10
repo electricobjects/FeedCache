@@ -79,7 +79,7 @@ class TableViewController: UITableViewController, FeedControllerDelegate {
         }
     }
     
-    func feedController(feedController: FeedControllerGeneric, requestFailed error: NSError) {
+    func feedController(feedController: FeedControllerGeneric, requestFailed error: Error) {
         print(error)
     }
 }
