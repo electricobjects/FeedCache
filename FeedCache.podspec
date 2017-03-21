@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "FeedCache"
-  s.version          = "1.1.0"
+  s.version          = "1.1.1"
   s.summary          = "A Swift framework for consuming and displaying feeds in iOS."
 
 # This description is used to generate tags and improve search results.
