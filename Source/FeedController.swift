@@ -93,7 +93,7 @@ open class FeedController <T:FeedItem> : FeedControllerGeneric {
     open var cache: FeedCache<T>?
 
     ///The section in a UITableView or UICollectionView that the Feed Controller corresponds to.
-    let section: Int!
+    public let section: Int!
 
 
     /**
